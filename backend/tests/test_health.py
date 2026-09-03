@@ -3,6 +3,7 @@ from fastapi.testclient import TestClient
 from app.core.config import Settings
 from app.domain.health import DependencyState
 from app.main import create_app
+from app.services.readiness import unconfigured_probe
 
 
 def test_liveness_returns_service_identity() -> None:
@@ -22,7 +23,7 @@ def test_liveness_returns_service_identity() -> None:
 
 
 def test_readiness_is_honest_before_adapters_exist() -> None:
-    app = create_app(settings=Settings(app_env="test"))
+    app = create_app(settings=Settings(app_env="test"), readiness_probe=unconfigured_probe)
 
     with TestClient(app) as client:
         response = client.get("/api/v1/health/ready")
@@ -46,4 +47,3 @@ def test_readiness_succeeds_when_required_dependencies_are_available() -> None:
 
     assert response.status_code == 200
     assert response.json()["status"] == "ready"
-

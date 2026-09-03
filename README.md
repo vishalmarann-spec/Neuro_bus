@@ -39,5 +39,4 @@ Start with [docs/00_PRODUCT_SPEC.md](docs/00_PRODUCT_SPEC.md) and [docs/06_EXECU
 
 ## Current status
 
-Planning baseline is locked. The production foundation has started with configuration and health/readiness endpoints. Connectors and AI extraction are deliberately not implemented until persistence and provenance invariants are tested.
-
+Planning baseline is locked. Milestone 1 implements projects, research questions, analysis runs, sources, immutable document captures, exact passage offsets, SHA-256 provenance, duplicate protection, database readiness, and the first Alembic migration. Connectors and AI extraction remain deliberately deferred until this storage contract is stable.

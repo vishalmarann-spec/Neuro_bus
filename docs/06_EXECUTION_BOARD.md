@@ -17,13 +17,14 @@
 
 Goal: persist a manually submitted source and exact passages with immutable provenance.
 
-- SQLAlchemy models and Alembic baseline
-- Project/question/run APIs
-- Source/document/passage repositories
-- content hashing and URL canonicalization
-- unit and integration tests
+- [x] SQLAlchemy models and Alembic baseline
+- [x] Project/question/run APIs
+- [x] Source/document/passage repositories
+- [x] Content hashing and URL canonicalization
+- [x] Unit and integration tests
+- [ ] Run the migration and integration suite against PostgreSQL/pgvector (Docker is not available in the current Codex runtime).
 
-Exit: restart-safe document/passages with verified hashes and no model dependency.
+Exit: restart-safe document/passages with verified hashes and no model dependency. The SQLite integration and migration-reversibility gates pass; the production PostgreSQL gate remains before deployment.
 
 ## Milestone 2: one-source extraction
 
@@ -93,4 +94,3 @@ For each vertical slice:
 5. Summarize changed files, risks, and the next checkpoint.
 
 Do not ask Codex to "build the whole platform" in one prompt. Work from this board milestone by milestone.
-

@@ -25,7 +25,7 @@ Creating a run accepts optional seed URLs and a source policy. It returns immedi
 
 ## Sources and documents
 
-- `POST /runs/{run_id}/sources`
+- `POST /runs/{run_id}/sources` — manually capture source metadata and immutable text; returns the source, document, exact passages, and duplicate status.
 - `GET /runs/{run_id}/sources`
 - `GET /documents/{document_id}`
 - `GET /documents/{document_id}/passages`
@@ -74,4 +74,4 @@ Creating a run accepts optional seed URLs and a source policy. It returns immedi
 - Scores include their version and component explanation.
 - Timestamps are UTC ISO 8601.
 - An API response never invents absent source metadata; absent data is `null` with a reason when relevant.
-
+- Re-submitting the same canonical URL and content hash within a run is idempotent and returns the existing capture.

@@ -1,0 +1,4 @@
+Database migrations for the Neuro_Bus API.
+
+Run `uv run alembic upgrade head` from the backend directory.
+
