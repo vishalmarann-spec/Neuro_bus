@@ -1,0 +1,100 @@
+# Scoring and reasoning specification
+
+## Why three scores exist
+
+- **Source trust:** prior quality of the publisher/source for this type of claim.
+- **Evidence quality:** how well one passage supports or contradicts one claim.
+- **Claim confidence:** aggregated belief after considering all independent evidence.
+
+These values must not be collapsed into one opaque AI score.
+
+## Source trust v1
+
+Each component is normalized to `[0, 1]` and accompanied by reasons:
+
+| Component | Weight | Meaning |
+|---|---:|---|
+| Identity/accountability | 0.25 | publisher and authorship are identifiable |
+| Primary-source proximity | 0.25 | source directly owns/measures the asserted fact |
+| Method transparency | 0.20 | data collection or basis is explained |
+| Domain relevance | 0.15 | source is competent for this claim type |
+| Historical reliability | 0.15 | reviewed correction/performance history |
+
+`source_trust = weighted mean of known components`
+
+Missing values are excluded from the denominator and reduce a separate completeness flag. Source popularity is never a trust component.
+
+## Evidence quality v1
+
+| Component | Weight |
+|---|---:|
+| Source trust | 0.30 |
+| Directness | 0.25 |
+| Extraction confidence | 0.20 |
+| Claim/passage specificity | 0.15 |
+| Freshness for the claim type | 0.10 |
+
+`evidence_quality = weighted mean of known components`
+
+Freshness decay depends on claim type. A current course price decays quickly; an official programme launch date does not become false merely because it is old.
+
+## Independence and duplicate control
+
+Evidence items share an independence group when they have the same canonical document, syndicate the same text, cite the same upstream study, or come from the same controlled publisher family.
+
+Within a group, the strongest evidence receives weight `1.0`; additional items receive at most `0.25`. This prevents copied articles from masquerading as corroboration.
+
+## Claim aggregation v1
+
+For quality values `q` after independence weighting:
+
+- `support_strength = 1 - product(1 - q_support)`
+- `contradiction_strength = 1 - product(1 - q_contradict)`
+- `claim_confidence = support_strength * (1 - contradiction_strength)`
+
+The API returns the two strengths as well as final confidence so disagreement stays visible.
+
+### Labels
+
+| Condition | Label |
+|---|---|
+| contradiction strength >= 0.55 | disputed |
+| confidence >= 0.75 and at least two independent sources | well_supported |
+| confidence >= 0.55 | supported |
+| confidence >= 0.35 | emerging |
+| otherwise | weak |
+
+A single source cannot receive `well_supported`, regardless of its score.
+
+## Reasoning engine
+
+The reasoning engine is a constrained pipeline, not a free-form chatbot:
+
+1. Retrieve claims relevant to the research question.
+2. Filter invalid/rejected evidence.
+3. Group equivalent and conflicting claims.
+4. Recalculate deterministic confidence.
+5. Select claims using explicit coverage and diversity rules.
+6. Ask the model to draft a conclusion using claim IDs only.
+7. Validate every drafted sentence against cited claim/evidence IDs.
+8. Reject or mark unsupported sentences.
+9. Return an explanation containing score contributions and unresolved conflicts.
+
+## Insight confidence
+
+Insight confidence is the weighted mean of its essential claims, penalized for unresolved contradictions and missing coverage. The model may explain this number but cannot set it.
+
+## Evaluation set
+
+Create at least 100 labelled passage/claim pairs across official university pages, reports, news, job-market material, and discussion content. Label:
+
+- whether a claim is extractable,
+- normalized claim,
+- entities,
+- stance,
+- directness,
+- citation correctness,
+- duplicate/upstream-source group.
+
+Do not tune thresholds on the final holdout set.
+

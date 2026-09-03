@@ -1,0 +1,96 @@
+# Execution board
+
+## Tonight: planning and foundation
+
+- [x] Lock university intelligence as the first vertical.
+- [x] Define MVP/non-goals and measurable success criteria.
+- [x] Choose modular-monolith architecture and stack.
+- [x] Define evidence/domain records and UEO v1.
+- [x] Define scoring, independence, and reasoning rules.
+- [x] Define API surface and failure envelope.
+- [x] Define security and audit boundaries.
+- [x] Create repository structure and local dependency configuration.
+- [ ] Run backend quality checks and tests.
+- [ ] Authenticate/connect the target GitHub repository.
+
+## Milestone 1: trustworthy storage
+
+Goal: persist a manually submitted source and exact passages with immutable provenance.
+
+- SQLAlchemy models and Alembic baseline
+- Project/question/run APIs
+- Source/document/passage repositories
+- content hashing and URL canonicalization
+- unit and integration tests
+
+Exit: restart-safe document/passages with verified hashes and no model dependency.
+
+## Milestone 2: one-source extraction
+
+Goal: convert one captured document into schema-valid claim candidates and UEOs.
+
+- parser and passage segmentation
+- model provider interface and disabled/fake provider
+- structured entity/claim extraction
+- provenance validator
+- model execution log
+- review screen/API
+
+Exit: every accepted claim cites an exact stored passage; invalid model output is quarantined.
+
+## Milestone 3: multi-source reasoning
+
+Goal: combine at least five documents from three independent domains.
+
+- entity resolution
+- claim normalization and clustering
+- duplicate/upstream-source detection
+- support/contradiction classification
+- deterministic scoring explanations
+- conflict review
+
+Exit: the demo topic produces supported, disputed, and weak claims correctly on a labelled sample.
+
+## Milestone 4: cited insight report
+
+Goal: generate an analyst-ready output without unsupported prose.
+
+- evidence retrieval rules
+- constrained synthesis
+- sentence-level citation validation
+- insight confidence and rationale
+- report UI/export
+
+Exit: citation correctness >= 0.95 on the evaluation set.
+
+## Milestone 5: demo hardening
+
+- end-to-end observability
+- retry/idempotency tests
+- source policy and SSRF safeguards
+- accessibility and responsive UI
+- deployment, backups, and demo fixtures
+- evaluation report
+
+## Deferred backlog
+
+- YouTube transcript connector
+- Reddit connector
+- private enterprise connectors
+- continuous monitoring/alerts
+- forecasting
+- Neo4j
+- multi-tenant billing and permissions
+
+## Working method with Codex
+
+For each vertical slice:
+
+1. Restate acceptance criteria.
+2. Inspect existing code and tests.
+3. Implement the smallest complete slice.
+4. Run formatting, static checks, unit tests, and integration tests.
+5. Summarize changed files, risks, and the next checkpoint.
+
+Do not ask Codex to "build the whole platform" in one prompt. Work from this board milestone by milestone.
+
