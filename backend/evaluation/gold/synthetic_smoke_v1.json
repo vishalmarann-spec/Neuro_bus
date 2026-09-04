@@ -1,0 +1,216 @@
+[
+  {
+    "case_id": "synthetic_programme_launch",
+    "fixture_type": "synthetic",
+    "document": {
+      "title": "Synthetic programme launch",
+      "raw_content": "Northstar University launched its AI Security MSc in 2026.",
+      "source_url": null
+    },
+    "gold": {
+      "entities": [
+        {
+          "local_id": "university_1",
+          "entity_type": "university",
+          "canonical_name": "Northstar University",
+          "aliases": [],
+          "mentions": [
+            {
+              "passage_ordinal": 0,
+              "surface_text": "Northstar University",
+              "start_offset": 0,
+              "end_offset": 20,
+              "confidence": 1.0
+            }
+          ]
+        },
+        {
+          "local_id": "programme_1",
+          "entity_type": "programme",
+          "canonical_name": "AI Security MSc",
+          "aliases": [],
+          "mentions": [
+            {
+              "passage_ordinal": 0,
+              "surface_text": "AI Security MSc",
+              "start_offset": 34,
+              "end_offset": 49,
+              "confidence": 1.0
+            }
+          ]
+        }
+      ],
+      "claims": [
+        {
+          "subject_local_id": "university_1",
+          "predicate": "launched_programme",
+          "object_value": {"programme": "AI Security MSc"},
+          "qualifiers": {"year": 2026},
+          "normalized_text": "Northstar University launched an AI Security MSc in 2026.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The synthetic passage states the launch directly."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "case_id": "synthetic_programme_price",
+    "fixture_type": "synthetic",
+    "document": {
+      "title": "Synthetic programme price",
+      "raw_content": "The annual tuition for the Data Science MSc is INR 240000.",
+      "source_url": null
+    },
+    "gold": {
+      "entities": [
+        {
+          "local_id": "programme_1",
+          "entity_type": "programme",
+          "canonical_name": "Data Science MSc",
+          "aliases": [],
+          "mentions": [
+            {
+              "passage_ordinal": 0,
+              "surface_text": "Data Science MSc",
+              "start_offset": 27,
+              "end_offset": 43,
+              "confidence": 1.0
+            }
+          ]
+        },
+        {
+          "local_id": "price_1",
+          "entity_type": "price",
+          "canonical_name": "INR 240000",
+          "aliases": [],
+          "mentions": [
+            {
+              "passage_ordinal": 0,
+              "surface_text": "INR 240000",
+              "start_offset": 47,
+              "end_offset": 57,
+              "confidence": 1.0
+            }
+          ]
+        }
+      ],
+      "claims": [
+        {
+          "subject_local_id": "programme_1",
+          "predicate": "has_annual_tuition",
+          "object_value": {"amount": 240000, "currency": "INR"},
+          "qualifiers": {},
+          "normalized_text": "The Data Science MSc annual tuition is INR 240000.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The synthetic passage states the annual tuition directly."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "case_id": "synthetic_employer_skills",
+    "fixture_type": "synthetic",
+    "document": {
+      "title": "Synthetic employer skills",
+      "raw_content": "Employers request cloud security and incident response skills.",
+      "source_url": null
+    },
+    "gold": {
+      "entities": [
+        {
+          "local_id": "employer_1",
+          "entity_type": "employer",
+          "canonical_name": "Employers",
+          "aliases": [],
+          "mentions": [
+            {
+              "passage_ordinal": 0,
+              "surface_text": "Employers",
+              "start_offset": 0,
+              "end_offset": 9,
+              "confidence": 1.0
+            }
+          ]
+        },
+        {
+          "local_id": "skill_1",
+          "entity_type": "skill",
+          "canonical_name": "Cloud Security",
+          "aliases": [],
+          "mentions": [
+            {
+              "passage_ordinal": 0,
+              "surface_text": "cloud security",
+              "start_offset": 18,
+              "end_offset": 32,
+              "confidence": 1.0
+            }
+          ]
+        },
+        {
+          "local_id": "skill_2",
+          "entity_type": "skill",
+          "canonical_name": "Incident Response",
+          "aliases": [],
+          "mentions": [
+            {
+              "passage_ordinal": 0,
+              "surface_text": "incident response",
+              "start_offset": 37,
+              "end_offset": 54,
+              "confidence": 1.0
+            }
+          ]
+        }
+      ],
+      "claims": [
+        {
+          "subject_local_id": "employer_1",
+          "predicate": "requests_skills",
+          "object_value": {"skills": ["Cloud Security", "Incident Response"]},
+          "qualifiers": {},
+          "normalized_text": "Employers request cloud security and incident response skills.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The synthetic passage states the requested skills directly."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "case_id": "synthetic_no_evidence",
+    "fixture_type": "synthetic",
+    "document": {
+      "title": "Synthetic marketing language",
+      "raw_content": "Build tomorrow with bold ideas and limitless possibilities.",
+      "source_url": null
+    },
+    "gold": {
+      "entities": [],
+      "claims": []
+    }
+  }
+]

@@ -4,7 +4,7 @@ from fastapi.testclient import TestClient
 
 from app.core.config import Settings
 from app.main import create_app
-from app.providers.models import ExtractionRequest, FakeModelProvider
+from app.providers.models import ExtractionModelResponse, ExtractionRequest, FakeModelProvider
 
 RAW_CONTENT = (
     "Example University launched an AI security programme in 2026.\n\n"
@@ -16,7 +16,7 @@ class FailingModelProvider:
     provider_name = "failing-test-provider"
     model_name = "failure-fixture-v1"
 
-    async def extract(self, request: ExtractionRequest) -> str:
+    async def extract(self, request: ExtractionRequest) -> ExtractionModelResponse:
         raise RuntimeError("simulated provider failure")
 
 
@@ -105,7 +105,9 @@ def valid_extraction_output() -> str:
 
 
 def test_valid_extraction_creates_traceable_ueo_and_is_idempotent(session_factory) -> None:
-    provider = FakeModelProvider(valid_extraction_output())
+    provider = FakeModelProvider(
+        valid_extraction_output(), input_tokens=320, output_tokens=140, cost_usd=0.0012
+    )
     app = create_app(
         settings=Settings(app_env="test"),
         session_factory=session_factory,
@@ -162,6 +164,9 @@ def test_valid_extraction_creates_traceable_ueo_and_is_idempotent(session_factor
         assert audit["validation_status"] == "accepted"
         assert audit["provider"] == "fake"
         assert audit["raw_output"] == provider.raw_output
+        assert audit["input_tokens"] == 320
+        assert audit["output_tokens"] == 140
+        assert audit["cost_usd"] == 0.0012
 
 
 def test_broken_mention_provenance_is_quarantined(session_factory) -> None:

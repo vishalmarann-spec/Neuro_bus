@@ -6,6 +6,7 @@ from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator
 
 from app.core.models import (
     ClaimReviewStatus,
+    ClusterLabel,
     EntityType,
     EvidenceStance,
     QuestionStatus,
@@ -148,6 +149,9 @@ class ModelExecutionRead(APIModel):
     validation_status: ValidationStatus
     validation_errors: list[str]
     latency_ms: int | None
+    input_tokens: int | None
+    output_tokens: int | None
+    cost_usd: float | None
     created_at: datetime
 
 
@@ -240,3 +244,23 @@ class ClaimReviewRead(APIModel):
     reason: str
     actor: str
     created_at: datetime
+
+
+class ClaimClusterScoreRead(APIModel):
+    cluster_id: UUID
+    canonical_text: str
+    predicate: str
+    support_strength: float
+    contradiction_strength: float
+    confidence: float
+    label: ClusterLabel
+    supporting_independent_sources: int
+    evidence_count: int
+    scoring_version: str
+    explanation: dict[str, Any]
+    calculated_at: datetime
+
+
+class ReasoningRunRead(APIModel):
+    run_id: UUID
+    clusters: list[ClaimClusterScoreRead]

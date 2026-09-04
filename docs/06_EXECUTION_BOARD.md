@@ -10,8 +10,8 @@
 - [x] Define API surface and failure envelope.
 - [x] Define security and audit boundaries.
 - [x] Create repository structure and local dependency configuration.
-- [ ] Run backend quality checks and tests.
-- [ ] Authenticate/connect the target GitHub repository.
+- [x] Run backend quality checks and tests.
+- [x] Authenticate/connect the target GitHub repository.
 
 ## Milestone 1: trustworthy storage
 
@@ -41,16 +41,30 @@ Goal: convert one captured document into schema-valid claim candidates and UEOs.
 
 Exit: every accepted claim cites an exact stored passage; invalid model output is quarantined. The deterministic provider-independent path meets this gate; live-model selection remains an explicit integration decision.
 
+## Model evaluation checkpoint
+
+- [x] Versioned benchmark schemas and file loaders
+- [x] Synthetic smoke set with no fabricated URLs
+- [x] Provider benchmark runner
+- [x] Entity, mention, claim, evidence, validity, latency, token, and cost metrics
+- [x] Model usage metadata in audit records
+- [x] Offline comparison CLI
+- [ ] Curate the real, reviewable university-domain evaluation set
+- [ ] Run candidate models and select the production adapter
+
 ## Milestone 3: multi-source reasoning
 
 Goal: combine at least five documents from three independent domains.
 
-- entity resolution
-- claim normalization and clustering
-- duplicate/upstream-source detection
-- support/contradiction classification
-- deterministic scoring explanations
-- conflict review
+- [x] Conservative exact-name and exact-alias entity resolution
+- [x] Deterministic claim normalization and clustering
+- [x] Exact-content duplicate detection and same-publisher grouping
+- [ ] Upstream citation and publisher-family detection
+- [x] Support/contradiction aggregation
+- [x] Versioned, deterministic score explanations
+- [x] Disputed-cluster API for conflict review
+- [x] Idempotent reasoning reruns
+- [ ] Validate supported, disputed, and weak labels on the real labelled set
 
 Exit: the demo topic produces supported, disputed, and weak claims correctly on a labelled sample.
 

@@ -1,9 +1,10 @@
 import re
-from typing import Any
+from collections.abc import Sequence
+from typing import Any, Protocol
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from app.core.models import EntityType, EvidenceStance, Passage
+from app.core.models import EntityType, EvidenceStance
 
 
 class ExtractionModel(BaseModel):
@@ -54,13 +55,18 @@ class ExtractionEnvelope(ExtractionModel):
     claims: list[ClaimCandidate] = Field(default_factory=list)
 
 
+class PassageReference(Protocol):
+    ordinal: int
+    exact_text: str
+
+
 def normalized_entity_name(value: str) -> str:
     return re.sub(r"[^a-z0-9]+", " ", value.casefold()).strip()
 
 
 def validate_provenance(
     extraction: ExtractionEnvelope,
-    passages: list[Passage],
+    passages: Sequence[PassageReference],
 ) -> list[str]:
     errors: list[str] = []
     passages_by_ordinal = {passage.ordinal: passage for passage in passages}

@@ -33,12 +33,14 @@ Creating a run accepts optional seed URLs and a source policy. It returns immedi
 ## Evidence and knowledge
 
 - `POST /documents/{document_id}/extract` — run the configured extraction provider; invalid output is audited and quarantined.
+- `POST /runs/{run_id}/reason` — deterministically cluster accepted claims and recalculate versioned evidence/claim scores.
 - `GET /runs/{run_id}/ueos`
 - `GET /claims/{claim_id}`
 - `GET /claims/{claim_id}/evidence`
 - `GET /runs/{run_id}/entities`
 - `GET /runs/{run_id}/relationships`
-- `GET /runs/{run_id}/conflicts`
+- `GET /runs/{run_id}/clusters` — scored claim clusters with component-level explanations.
+- `GET /runs/{run_id}/conflicts` — the disputed subset of scored clusters.
 
 ## Insights
 

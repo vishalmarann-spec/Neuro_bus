@@ -9,7 +9,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.models import (
     Claim,
     Document,
-    Entity,
     EntityMention,
     EvidenceLink,
     ModelExecution,
@@ -17,7 +16,6 @@ from app.core.models import (
 )
 from app.domain.extraction import (
     ExtractionEnvelope,
-    normalized_entity_name,
     validate_provenance,
 )
 from app.domain.provenance import sha256_text
@@ -27,6 +25,7 @@ from app.providers.models import (
     ExtractionRequest,
     ModelProviderUnavailable,
 )
+from app.services.entity_resolution import resolve_entity
 
 EXTRACTION_TASK = "entity_claim_extraction"
 DEFAULT_PROMPT_VERSION = "claim-extractor.v1"
@@ -121,7 +120,7 @@ async def extract_document(
     )
     started = perf_counter()
     try:
-        raw_output = await provider.extract(request)
+        provider_response = await provider.extract(request)
     except ModelProviderUnavailable as exc:
         execution = ModelExecution(
             run_id=document.run_id,
@@ -135,6 +134,9 @@ async def extract_document(
             validation_status=ValidationStatus.UNAVAILABLE,
             validation_errors=[str(exc)],
             latency_ms=round((perf_counter() - started) * 1_000),
+            input_tokens=None,
+            output_tokens=None,
+            cost_usd=None,
         )
         session.add(execution)
         await session.commit()
@@ -153,6 +155,9 @@ async def extract_document(
             validation_status=ValidationStatus.UNAVAILABLE,
             validation_errors=[f"Provider failed with {type(exc).__name__}."],
             latency_ms=round((perf_counter() - started) * 1_000),
+            input_tokens=None,
+            output_tokens=None,
+            cost_usd=None,
         )
         session.add(execution)
         await session.commit()
@@ -160,6 +165,7 @@ async def extract_document(
         return ExtractionOutcome(execution)
 
     latency_ms = round((perf_counter() - started) * 1_000)
+    raw_output = provider_response.raw_output
     try:
         extraction = ExtractionEnvelope.model_validate_json(raw_output)
         validation_errors = validate_provenance(extraction, list(document.passages))
@@ -180,6 +186,9 @@ async def extract_document(
             validation_status=ValidationStatus.INVALID,
             validation_errors=validation_errors,
             latency_ms=latency_ms,
+            input_tokens=provider_response.input_tokens,
+            output_tokens=provider_response.output_tokens,
+            cost_usd=provider_response.cost_usd,
         )
         session.add(execution)
         await session.commit()
@@ -198,32 +207,17 @@ async def extract_document(
         validation_status=ValidationStatus.ACCEPTED,
         validation_errors=[],
         latency_ms=latency_ms,
+        input_tokens=provider_response.input_tokens,
+        output_tokens=provider_response.output_tokens,
+        cost_usd=provider_response.cost_usd,
     )
     session.add(execution)
     await session.flush()
 
     passages_by_ordinal = {passage.ordinal: passage for passage in document.passages}
-    entities_by_local_id: dict[str, Entity] = {}
+    entities_by_local_id = {}
     for candidate in extraction.entities:
-        normalized_name = normalized_entity_name(candidate.canonical_name)
-        entity_result = await session.execute(
-            select(Entity).where(
-                Entity.entity_type == candidate.entity_type,
-                Entity.normalized_name == normalized_name,
-            )
-        )
-        entity = entity_result.scalar_one_or_none()
-        if entity is None:
-            entity = Entity(
-                entity_type=candidate.entity_type,
-                canonical_name=candidate.canonical_name,
-                normalized_name=normalized_name,
-                aliases=candidate.aliases,
-            )
-            session.add(entity)
-            await session.flush()
-        else:
-            entity.aliases = sorted(set([*entity.aliases, *candidate.aliases]))
+        entity = await resolve_entity(session, candidate)
         entities_by_local_id[candidate.local_id] = entity
 
         for mention in candidate.mentions:

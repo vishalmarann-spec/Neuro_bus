@@ -98,6 +98,14 @@ class ValidationStatus(StrEnum):
     UNAVAILABLE = "unavailable"
 
 
+class ClusterLabel(StrEnum):
+    WELL_SUPPORTED = "well_supported"
+    SUPPORTED = "supported"
+    EMERGING = "emerging"
+    WEAK = "weak"
+    DISPUTED = "disputed"
+
+
 class Project(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
     __tablename__ = "projects"
 
@@ -242,6 +250,9 @@ class ModelExecution(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
     )
     validation_errors: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
     latency_ms: Mapped[int | None] = mapped_column(Integer)
+    input_tokens: Mapped[int | None] = mapped_column(Integer)
+    output_tokens: Mapped[int | None] = mapped_column(Integer)
+    cost_usd: Mapped[float | None] = mapped_column(Float)
 
     document: Mapped[Document] = relationship(back_populates="model_executions")
     claims: Mapped[list["Claim"]] = relationship(
@@ -306,6 +317,9 @@ class Claim(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
     model_execution_id: Mapped[UUID] = mapped_column(
         ForeignKey("model_executions.id", ondelete="CASCADE"), nullable=False, index=True
     )
+    cluster_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("claim_clusters.id", ondelete="SET NULL"), index=True
+    )
     subject_entity_id: Mapped[UUID | None] = mapped_column(
         ForeignKey("entities.id", ondelete="SET NULL"), index=True
     )
@@ -328,6 +342,7 @@ class Claim(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
     review_decisions: Mapped[list["ReviewDecision"]] = relationship(
         back_populates="claim", cascade="all, delete-orphan"
     )
+    cluster: Mapped["ClaimCluster | None"] = relationship(back_populates="claims")
 
 
 class EvidenceLink(UUIDPrimaryKeyMixin, Base):
@@ -352,6 +367,8 @@ class EvidenceLink(UUIDPrimaryKeyMixin, Base):
     directness: Mapped[float] = mapped_column(Float, nullable=False)
     extraction_confidence: Mapped[float] = mapped_column(Float, nullable=False)
     rationale: Mapped[str] = mapped_column(Text, nullable=False)
+    quality_score: Mapped[float | None] = mapped_column(Float)
+    quality_components: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
 
     claim: Mapped[Claim] = relationship(back_populates="evidence_links")
     passage: Mapped[Passage] = relationship(back_populates="evidence_links")
@@ -370,3 +387,62 @@ class ReviewDecision(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
     actor: Mapped[str] = mapped_column(String(160), nullable=False, default="local_analyst")
 
     claim: Mapped[Claim] = relationship(back_populates="review_decisions")
+
+
+class ClaimCluster(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
+    __tablename__ = "claim_clusters"
+    __table_args__ = (UniqueConstraint("run_id", "cluster_key", name="uq_run_claim_cluster"),)
+
+    run_id: Mapped[UUID] = mapped_column(
+        ForeignKey("analysis_runs.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    cluster_key: Mapped[str] = mapped_column(String(71), nullable=False)
+    canonical_text: Mapped[str] = mapped_column(Text, nullable=False)
+    subject_entity_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("entities.id", ondelete="SET NULL"), index=True
+    )
+    predicate: Mapped[str] = mapped_column(String(160), nullable=False)
+    object_signature: Mapped[str] = mapped_column(Text, nullable=False)
+    qualifiers_signature: Mapped[str] = mapped_column(Text, nullable=False)
+
+    claims: Mapped[list[Claim]] = relationship(back_populates="cluster")
+    score: Mapped["ClaimClusterScore | None"] = relationship(
+        back_populates="cluster", cascade="all, delete-orphan", uselist=False
+    )
+
+
+class ClaimClusterScore(UUIDPrimaryKeyMixin, Base):
+    __tablename__ = "claim_cluster_scores"
+    __table_args__ = (
+        CheckConstraint(
+            "support_strength >= 0 AND support_strength <= 1",
+            name="ck_cluster_support_strength",
+        ),
+        CheckConstraint(
+            "contradiction_strength >= 0 AND contradiction_strength <= 1",
+            name="ck_cluster_contradiction_strength",
+        ),
+        CheckConstraint("confidence >= 0 AND confidence <= 1", name="ck_cluster_confidence"),
+    )
+
+    cluster_id: Mapped[UUID] = mapped_column(
+        ForeignKey("claim_clusters.id", ondelete="CASCADE"),
+        nullable=False,
+        unique=True,
+        index=True,
+    )
+    support_strength: Mapped[float] = mapped_column(Float, nullable=False)
+    contradiction_strength: Mapped[float] = mapped_column(Float, nullable=False)
+    confidence: Mapped[float] = mapped_column(Float, nullable=False)
+    label: Mapped[ClusterLabel] = mapped_column(
+        Enum(ClusterLabel, native_enum=False, length=32), nullable=False
+    )
+    supporting_independent_sources: Mapped[int] = mapped_column(Integer, nullable=False)
+    evidence_count: Mapped[int] = mapped_column(Integer, nullable=False)
+    scoring_version: Mapped[str] = mapped_column(String(64), nullable=False)
+    explanation: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    calculated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), default=utc_now, nullable=False
+    )
+
+    cluster: Mapped[ClaimCluster] = relationship(back_populates="score")
