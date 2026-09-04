@@ -48,6 +48,5 @@ def test_long_blocks_are_split_without_losing_provenance() -> None:
     assert len(passages) > 1
     assert all(len(item.exact_text) <= 220 for item in passages)
     assert all(
-        raw_content[item.start_offset : item.end_offset] == item.exact_text
-        for item in passages
+        raw_content[item.start_offset : item.end_offset] == item.exact_text for item in passages
     )

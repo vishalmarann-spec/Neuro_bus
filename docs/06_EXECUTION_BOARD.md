@@ -30,14 +30,16 @@ Exit: restart-safe document/passages with verified hashes and no model dependenc
 
 Goal: convert one captured document into schema-valid claim candidates and UEOs.
 
-- parser and passage segmentation
-- model provider interface and disabled/fake provider
-- structured entity/claim extraction
-- provenance validator
-- model execution log
-- review screen/API
+- [x] Parser and passage segmentation
+- [x] Model provider interface and disabled/fake provider
+- [x] Structured entity/claim extraction
+- [x] Provenance validator
+- [x] Model execution log and invalid-output quarantine
+- [x] Append-only claim review API
+- [x] Traceable UEO API
+- [ ] Select and configure a real model-provider adapter after evaluating extraction quality/cost.
 
-Exit: every accepted claim cites an exact stored passage; invalid model output is quarantined.
+Exit: every accepted claim cites an exact stored passage; invalid model output is quarantined. The deterministic provider-independent path meets this gate; live-model selection remains an explicit integration decision.
 
 ## Milestone 3: multi-source reasoning
 

@@ -18,4 +18,3 @@ class DependencyState(BaseModel):
 class ReadyResponse(BaseModel):
     status: Literal["ready", "not_ready"]
     dependencies: list[DependencyState]
-

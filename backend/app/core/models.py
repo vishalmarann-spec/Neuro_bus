@@ -4,8 +4,10 @@ from uuid import UUID, uuid4
 
 from sqlalchemy import (
     JSON,
+    CheckConstraint,
     DateTime,
     Enum,
+    Float,
     ForeignKey,
     Integer,
     String,
@@ -57,6 +59,43 @@ class SourceType(StrEnum):
     INDUSTRY = "industry"
     DISCUSSION = "discussion"
     OTHER = "other"
+
+
+class EntityType(StrEnum):
+    UNIVERSITY = "university"
+    PROGRAMME = "programme"
+    COURSE = "course"
+    SKILL = "skill"
+    TECHNOLOGY = "technology"
+    EMPLOYER = "employer"
+    INDUSTRY = "industry"
+    LOCATION = "location"
+    CREDENTIAL = "credential"
+    PRICE = "price"
+    DATE = "date"
+    METRIC = "metric"
+    ORGANIZATION = "organization"
+
+
+class EvidenceStance(StrEnum):
+    SUPPORTS = "supports"
+    CONTRADICTS = "contradicts"
+    CONTEXTUAL = "contextual"
+    IRRELEVANT = "irrelevant"
+
+
+class ClaimReviewStatus(StrEnum):
+    MACHINE_EXTRACTED = "machine_extracted"
+    ACCEPTED = "accepted"
+    CORRECTED = "corrected"
+    REJECTED = "rejected"
+    NEEDS_REVIEW = "needs_review"
+
+
+class ValidationStatus(StrEnum):
+    ACCEPTED = "accepted"
+    INVALID = "invalid"
+    UNAVAILABLE = "unavailable"
 
 
 class Project(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
@@ -115,9 +154,7 @@ class AnalysisRun(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
 class Source(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
     __tablename__ = "sources"
     __table_args__ = (
-        UniqueConstraint(
-            "canonical_domain", "publisher", "source_type", name="uq_source_identity"
-        ),
+        UniqueConstraint("canonical_domain", "publisher", "source_type", name="uq_source_identity"),
     )
 
     canonical_domain: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
@@ -133,9 +170,7 @@ class Source(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
 class Document(UUIDPrimaryKeyMixin, Base):
     __tablename__ = "documents"
     __table_args__ = (
-        UniqueConstraint(
-            "run_id", "canonical_url", "content_hash", name="uq_document_capture"
-        ),
+        UniqueConstraint("run_id", "canonical_url", "content_hash", name="uq_document_capture"),
     )
 
     run_id: Mapped[UUID] = mapped_column(
@@ -160,6 +195,9 @@ class Document(UUIDPrimaryKeyMixin, Base):
         cascade="all, delete-orphan",
         order_by="Passage.ordinal",
     )
+    model_executions: Mapped[list["ModelExecution"]] = relationship(
+        back_populates="document", cascade="all, delete-orphan"
+    )
 
 
 class Passage(UUIDPrimaryKeyMixin, Base):
@@ -176,3 +214,159 @@ class Passage(UUIDPrimaryKeyMixin, Base):
     text_hash: Mapped[str] = mapped_column(String(71), nullable=False)
 
     document: Mapped[Document] = relationship(back_populates="passages")
+    entity_mentions: Mapped[list["EntityMention"]] = relationship(
+        back_populates="passage", cascade="all, delete-orphan"
+    )
+    evidence_links: Mapped[list["EvidenceLink"]] = relationship(
+        back_populates="passage", cascade="all, delete-orphan"
+    )
+
+
+class ModelExecution(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
+    __tablename__ = "model_executions"
+
+    run_id: Mapped[UUID] = mapped_column(
+        ForeignKey("analysis_runs.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    document_id: Mapped[UUID] = mapped_column(
+        ForeignKey("documents.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    task: Mapped[str] = mapped_column(String(80), nullable=False)
+    provider: Mapped[str] = mapped_column(String(80), nullable=False)
+    model: Mapped[str] = mapped_column(String(160), nullable=False)
+    prompt_version: Mapped[str] = mapped_column(String(64), nullable=False)
+    input_hash: Mapped[str] = mapped_column(String(71), nullable=False, index=True)
+    raw_output: Mapped[str | None] = mapped_column(Text)
+    validation_status: Mapped[ValidationStatus] = mapped_column(
+        Enum(ValidationStatus, native_enum=False, length=32), nullable=False
+    )
+    validation_errors: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
+    latency_ms: Mapped[int | None] = mapped_column(Integer)
+
+    document: Mapped[Document] = relationship(back_populates="model_executions")
+    claims: Mapped[list["Claim"]] = relationship(
+        back_populates="model_execution", cascade="all, delete-orphan"
+    )
+    entity_mentions: Mapped[list["EntityMention"]] = relationship(
+        back_populates="model_execution", cascade="all, delete-orphan"
+    )
+
+
+class Entity(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
+    __tablename__ = "entities"
+    __table_args__ = (
+        UniqueConstraint("entity_type", "normalized_name", name="uq_entity_identity"),
+    )
+
+    entity_type: Mapped[EntityType] = mapped_column(
+        Enum(EntityType, native_enum=False, length=32), nullable=False, index=True
+    )
+    canonical_name: Mapped[str] = mapped_column(String(500), nullable=False)
+    normalized_name: Mapped[str] = mapped_column(String(500), nullable=False)
+    aliases: Mapped[list] = mapped_column(JSON, nullable=False, default=list)
+
+    mentions: Mapped[list["EntityMention"]] = relationship(back_populates="entity")
+    subject_claims: Mapped[list["Claim"]] = relationship(back_populates="subject_entity")
+
+
+class EntityMention(UUIDPrimaryKeyMixin, Base):
+    __tablename__ = "entity_mentions"
+    __table_args__ = (
+        CheckConstraint("confidence >= 0 AND confidence <= 1", name="ck_mention_confidence"),
+    )
+
+    entity_id: Mapped[UUID] = mapped_column(
+        ForeignKey("entities.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    passage_id: Mapped[UUID] = mapped_column(
+        ForeignKey("passages.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    model_execution_id: Mapped[UUID] = mapped_column(
+        ForeignKey("model_executions.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    surface_text: Mapped[str] = mapped_column(String(500), nullable=False)
+    start_offset: Mapped[int] = mapped_column(Integer, nullable=False)
+    end_offset: Mapped[int] = mapped_column(Integer, nullable=False)
+    confidence: Mapped[float] = mapped_column(Float, nullable=False)
+
+    entity: Mapped[Entity] = relationship(back_populates="mentions")
+    passage: Mapped[Passage] = relationship(back_populates="entity_mentions")
+    model_execution: Mapped[ModelExecution] = relationship(back_populates="entity_mentions")
+
+
+class Claim(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
+    __tablename__ = "claims"
+    __table_args__ = (
+        CheckConstraint(
+            "extraction_confidence >= 0 AND extraction_confidence <= 1",
+            name="ck_claim_extraction_confidence",
+        ),
+    )
+
+    model_execution_id: Mapped[UUID] = mapped_column(
+        ForeignKey("model_executions.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    subject_entity_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("entities.id", ondelete="SET NULL"), index=True
+    )
+    predicate: Mapped[str] = mapped_column(String(160), nullable=False)
+    object_value: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    qualifiers: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    normalized_text: Mapped[str] = mapped_column(Text, nullable=False)
+    extraction_confidence: Mapped[float] = mapped_column(Float, nullable=False)
+    review_status: Mapped[ClaimReviewStatus] = mapped_column(
+        Enum(ClaimReviewStatus, native_enum=False, length=32),
+        nullable=False,
+        default=ClaimReviewStatus.MACHINE_EXTRACTED,
+    )
+
+    model_execution: Mapped[ModelExecution] = relationship(back_populates="claims")
+    subject_entity: Mapped[Entity | None] = relationship(back_populates="subject_claims")
+    evidence_links: Mapped[list["EvidenceLink"]] = relationship(
+        back_populates="claim", cascade="all, delete-orphan"
+    )
+    review_decisions: Mapped[list["ReviewDecision"]] = relationship(
+        back_populates="claim", cascade="all, delete-orphan"
+    )
+
+
+class EvidenceLink(UUIDPrimaryKeyMixin, Base):
+    __tablename__ = "evidence_links"
+    __table_args__ = (
+        CheckConstraint("directness >= 0 AND directness <= 1", name="ck_evidence_directness"),
+        CheckConstraint(
+            "extraction_confidence >= 0 AND extraction_confidence <= 1",
+            name="ck_evidence_extraction_confidence",
+        ),
+    )
+
+    claim_id: Mapped[UUID] = mapped_column(
+        ForeignKey("claims.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    passage_id: Mapped[UUID] = mapped_column(
+        ForeignKey("passages.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    stance: Mapped[EvidenceStance] = mapped_column(
+        Enum(EvidenceStance, native_enum=False, length=32), nullable=False
+    )
+    directness: Mapped[float] = mapped_column(Float, nullable=False)
+    extraction_confidence: Mapped[float] = mapped_column(Float, nullable=False)
+    rationale: Mapped[str] = mapped_column(Text, nullable=False)
+
+    claim: Mapped[Claim] = relationship(back_populates="evidence_links")
+    passage: Mapped[Passage] = relationship(back_populates="evidence_links")
+
+
+class ReviewDecision(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
+    __tablename__ = "review_decisions"
+
+    claim_id: Mapped[UUID] = mapped_column(
+        ForeignKey("claims.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    action: Mapped[ClaimReviewStatus] = mapped_column(
+        Enum(ClaimReviewStatus, native_enum=False, length=32), nullable=False
+    )
+    reason: Mapped[str] = mapped_column(Text, nullable=False)
+    actor: Mapped[str] = mapped_column(String(160), nullable=False, default="local_analyst")
+
+    claim: Mapped[Claim] = relationship(back_populates="review_decisions")

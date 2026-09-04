@@ -32,6 +32,7 @@ Creating a run accepts optional seed URLs and a source policy. It returns immedi
 
 ## Evidence and knowledge
 
+- `POST /documents/{document_id}/extract` — run the configured extraction provider; invalid output is audited and quarantined.
 - `GET /runs/{run_id}/ueos`
 - `GET /claims/{claim_id}`
 - `GET /claims/{claim_id}/evidence`
@@ -48,9 +49,14 @@ Creating a run accepts optional seed URLs and a source policy. It returns immedi
 ## Review
 
 - `POST /review/claims/{claim_id}`
+- `GET /claims/{claim_id}/reviews`
 - `POST /review/entities/{entity_id}/merge`
 - `POST /review/evidence/{evidence_link_id}`
 - `GET /audit-events`
+
+## Model audit
+
+- `GET /model-executions/{execution_id}` — provider/model/prompt/input identifiers, latency, validation result, raw output, and errors.
 
 ## Error envelope
 

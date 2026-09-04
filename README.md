@@ -39,4 +39,4 @@ Start with [docs/00_PRODUCT_SPEC.md](docs/00_PRODUCT_SPEC.md) and [docs/06_EXECU
 
 ## Current status
 
-Planning baseline is locked. Milestone 1 implements projects, research questions, analysis runs, sources, immutable document captures, exact passage offsets, SHA-256 provenance, duplicate protection, database readiness, and the first Alembic migration. Connectors and AI extraction remain deliberately deferred until this storage contract is stable.
+Planning baseline is locked. Milestone 1 provides trustworthy evidence storage. Milestone 2 adds a provider-independent extraction contract, schema and provenance validation, entities, mentions, claims, evidence links, UEO retrieval, model audit records, invalid-output quarantine, idempotent reruns, and append-only analyst review decisions. A real model provider and source connectors remain deliberately separate adapters.

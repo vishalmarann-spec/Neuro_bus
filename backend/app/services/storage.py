@@ -107,4 +107,3 @@ async def capture_document(
     for item in [source, document, *passages]:
         await session.refresh(item)
     return source, document, passages, False
-

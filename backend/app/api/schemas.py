@@ -4,7 +4,15 @@ from uuid import UUID
 
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator
 
-from app.core.models import QuestionStatus, RunState, SourceType
+from app.core.models import (
+    ClaimReviewStatus,
+    EntityType,
+    EvidenceStance,
+    QuestionStatus,
+    RunState,
+    SourceType,
+    ValidationStatus,
+)
 
 
 class APIModel(BaseModel):
@@ -116,3 +124,119 @@ class DocumentCaptureRead(APIModel):
     passages: list[PassageRead]
     duplicate: bool
 
+
+class ExtractionRunRead(APIModel):
+    execution_id: UUID
+    status: ValidationStatus
+    entities_count: int = 0
+    claims_count: int = 0
+    evidence_links_count: int = 0
+    idempotent: bool = False
+    validation_errors: list[str] = Field(default_factory=list)
+
+
+class ModelExecutionRead(APIModel):
+    id: UUID
+    run_id: UUID
+    document_id: UUID
+    task: str
+    provider: str
+    model: str
+    prompt_version: str
+    input_hash: str
+    raw_output: str | None
+    validation_status: ValidationStatus
+    validation_errors: list[str]
+    latency_ms: int | None
+    created_at: datetime
+
+
+class UEOEntityRead(APIModel):
+    id: UUID
+    entity_type: EntityType
+    canonical_name: str
+
+
+class UEOClaimRead(APIModel):
+    id: UUID
+    normalized_text: str
+    subject: UEOEntityRead | None
+    predicate: str
+    object_value: dict[str, Any]
+    qualifiers: dict[str, Any]
+    extraction_confidence: float
+    review_status: ClaimReviewStatus
+
+
+class UEOEvidenceRead(APIModel):
+    link_id: UUID
+    stance: EvidenceStance
+    passage_id: UUID
+    quote: str
+    directness: float
+    extraction_confidence: float
+    rationale: str
+
+
+class UEOProvenanceRead(APIModel):
+    url: str
+    publisher: str
+    published_at: datetime | None
+    retrieved_at: datetime
+    document_hash: str
+
+
+class UEOScoresRead(APIModel):
+    source_trust: float | None = None
+    evidence_quality: float | None = None
+    extraction_confidence: float
+
+
+class UEOVersionsRead(APIModel):
+    schema_version: str = "ueo.v1"
+    extractor_version: str
+    scoring_version: str | None = None
+
+
+class UEORead(APIModel):
+    id: str
+    claim: UEOClaimRead
+    evidence: UEOEvidenceRead
+    provenance: UEOProvenanceRead
+    scores: UEOScoresRead
+    versions: UEOVersionsRead
+
+
+class ClaimReviewCreate(APIModel):
+    action: ClaimReviewStatus
+    reason: str = Field(min_length=3)
+    actor: str = Field(default="local_analyst", min_length=1, max_length=160)
+
+    @field_validator("action")
+    @classmethod
+    def validate_review_action(cls, value: ClaimReviewStatus) -> ClaimReviewStatus:
+        allowed = {
+            ClaimReviewStatus.ACCEPTED,
+            ClaimReviewStatus.REJECTED,
+            ClaimReviewStatus.NEEDS_REVIEW,
+        }
+        if value not in allowed:
+            raise ValueError("action must be accepted, rejected, or needs_review")
+        return value
+
+    @field_validator("reason", "actor")
+    @classmethod
+    def strip_review_text(cls, value: str) -> str:
+        normalized = value.strip()
+        if not normalized:
+            raise ValueError("value cannot be blank")
+        return normalized
+
+
+class ClaimReviewRead(APIModel):
+    decision_id: UUID
+    claim_id: UUID
+    action: ClaimReviewStatus
+    reason: str
+    actor: str
+    created_at: datetime

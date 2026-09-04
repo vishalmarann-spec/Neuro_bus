@@ -24,4 +24,3 @@ async def get_session(request: Request) -> AsyncIterator[AsyncSession]:
 
 
 DatabaseSession = Annotated[AsyncSession, Depends(get_session)]
-

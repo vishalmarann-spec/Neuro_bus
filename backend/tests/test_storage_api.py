@@ -50,9 +50,7 @@ def test_complete_storage_vertical_slice_is_traceable_and_idempotent(client: Tes
     document_id = capture["document"]["id"]
     assert capture["duplicate"] is False
     assert capture["source"]["canonical_domain"] == "example.edu"
-    assert capture["document"]["canonical_url"] == (
-        "https://example.edu/programmes/ai-security"
-    )
+    assert capture["document"]["canonical_url"] == ("https://example.edu/programmes/ai-security")
     assert capture["document"]["content_hash"] == sha256_text(raw_content)
     assert len(capture["passages"]) == 2
 
@@ -92,4 +90,3 @@ def test_missing_parent_returns_explicit_not_found(client: TestClient) -> None:
 
     assert response.status_code == 404
     assert response.json()["detail"]["code"] == "RESOURCE_NOT_FOUND"
-

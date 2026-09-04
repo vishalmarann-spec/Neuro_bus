@@ -73,9 +73,7 @@ def upgrade() -> None:
         sa.ForeignKeyConstraint(["project_id"], ["projects.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
     )
-    op.create_index(
-        "ix_research_questions_project_id", "research_questions", ["project_id"]
-    )
+    op.create_index("ix_research_questions_project_id", "research_questions", ["project_id"])
     op.create_table(
         "analysis_runs",
         sa.Column("question_id", sa.Uuid(), nullable=False),
@@ -86,9 +84,7 @@ def upgrade() -> None:
         sa.Column("finished_at", sa.DateTime(timezone=True), nullable=True),
         sa.Column("id", sa.Uuid(), nullable=False),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False),
-        sa.ForeignKeyConstraint(
-            ["question_id"], ["research_questions.id"], ondelete="CASCADE"
-        ),
+        sa.ForeignKeyConstraint(["question_id"], ["research_questions.id"], ondelete="CASCADE"),
         sa.PrimaryKeyConstraint("id"),
     )
     op.create_index("ix_analysis_runs_question_id", "analysis_runs", ["question_id"])
@@ -108,9 +104,7 @@ def upgrade() -> None:
         sa.ForeignKeyConstraint(["run_id"], ["analysis_runs.id"], ondelete="CASCADE"),
         sa.ForeignKeyConstraint(["source_id"], ["sources.id"], ondelete="RESTRICT"),
         sa.PrimaryKeyConstraint("id"),
-        sa.UniqueConstraint(
-            "run_id", "canonical_url", "content_hash", name="uq_document_capture"
-        ),
+        sa.UniqueConstraint("run_id", "canonical_url", "content_hash", name="uq_document_capture"),
     )
     op.create_index("ix_documents_content_hash", "documents", ["content_hash"])
     op.create_index("ix_documents_run_id", "documents", ["run_id"])
@@ -145,4 +139,3 @@ def downgrade() -> None:
     op.drop_index("ix_sources_canonical_domain", table_name="sources")
     op.drop_table("sources")
     op.drop_table("projects")
-

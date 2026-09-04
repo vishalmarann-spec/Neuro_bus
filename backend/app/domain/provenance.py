@@ -111,4 +111,3 @@ def segment_passages(raw_content: str, max_characters: int = 1_200) -> list[Pass
                 chunk_start += 1
 
     return spans
-
