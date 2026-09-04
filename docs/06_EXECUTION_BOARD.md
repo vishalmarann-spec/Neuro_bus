@@ -72,11 +72,15 @@ Exit: the demo topic produces supported, disputed, and weak claims correctly on 
 
 Goal: generate an analyst-ready output without unsupported prose.
 
-- evidence retrieval rules
-- constrained synthesis
-- sentence-level citation validation
-- insight confidence and rationale
-- report UI/export
+- [x] Deterministic evidence retrieval rules
+- [x] Constrained synthesis from stored normalized claims only
+- [x] Sentence-level citation validation
+- [x] Derived insight confidence and rationale
+- [x] Immutable, idempotent report persistence and APIs
+- [x] Explicit reasoning-required and insufficient-evidence failures
+- [ ] Optional model-written narrative behind the same citation validator
+- [ ] Analyst report UI/export
+- [ ] Validate citation correctness >= 0.95 on the real evaluation set
 
 Exit: citation correctness >= 0.95 on the evaluation set.
 

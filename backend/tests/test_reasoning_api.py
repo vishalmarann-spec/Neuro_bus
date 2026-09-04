@@ -135,6 +135,11 @@ def test_multi_source_support_and_contradiction_create_disputed_cluster(
         assert cluster["supporting_independent_sources"] == 2
         assert cluster["evidence_count"] == 3
         assert len(cluster["explanation"]["contributions"]) == 3
+        metrics = client.get(f"/api/v1/runs/{run_id}").json()["metrics"]["reasoning"]
+        assert metrics["scoring_version"] == "claim-confidence.v1"
+        assert metrics["cluster_count"] == 1
+        assert metrics["included_claim_count"] == 3
+        assert metrics["evidence_link_count"] == 3
 
         conflicts = client.get(f"/api/v1/runs/{run_id}/conflicts").json()
         assert [item["cluster_id"] for item in conflicts] == [cluster["cluster_id"]]

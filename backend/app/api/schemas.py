@@ -9,6 +9,7 @@ from app.core.models import (
     ClusterLabel,
     EntityType,
     EvidenceStance,
+    InsightStatus,
     QuestionStatus,
     RunState,
     SourceType,
@@ -264,3 +265,49 @@ class ClaimClusterScoreRead(APIModel):
 class ReasoningRunRead(APIModel):
     run_id: UUID
     clusters: list[ClaimClusterScoreRead]
+
+
+class InsightRead(APIModel):
+    id: UUID
+    run_id: UUID
+    title: str
+    conclusion: str
+    confidence: float
+    status: InsightStatus
+    generation_version: str
+    fingerprint: str
+    explanation: dict[str, Any]
+    created_at: datetime
+
+
+class InsightGenerationRead(InsightRead):
+    idempotent: bool
+
+
+class InsightCitationRead(APIModel):
+    evidence_link_id: UUID
+    stance: EvidenceStance
+    passage_id: UUID
+    quote: str
+    canonical_url: str
+    publisher: str
+    published_at: datetime | None
+    retrieved_at: datetime
+    document_hash: str
+    evidence_quality: float | None
+
+
+class InsightStatementRead(APIModel):
+    id: UUID
+    cluster_id: UUID | None
+    claim_id: UUID | None
+    text: str
+    label: ClusterLabel
+    confidence: float
+    display_order: int
+    citations: list[InsightCitationRead]
+
+
+class InsightReportRead(APIModel):
+    insight: InsightRead
+    statements: list[InsightStatementRead]

@@ -80,9 +80,11 @@ The reasoning engine is a constrained pipeline, not a free-form chatbot:
 8. Reject or mark unsupported sentences.
 9. Return an explanation containing score contributions and unresolved conflicts.
 
+The current `cited-report.v1` implementation deliberately stops before steps 6–8: it uses stored normalized claim text verbatim and validates deterministic citation rules. A future drafting model may improve readability only after its output can pass the same sentence-level evidence gate.
+
 ## Insight confidence
 
-Insight confidence is the weighted mean of its essential claims, penalized for unresolved contradictions and missing coverage. The model may explain this number but cannot set it.
+In `cited-report.v1`, insight confidence is the unweighted mean of included cluster confidence values. Each cluster confidence already carries the deterministic contradiction penalty. Coverage counts and excluded weak clusters remain explicit rather than being hidden in a model-selected weight. A future version may add versioned importance weights, but a model cannot set the score.
 
 ## Evaluation set
 
@@ -97,4 +99,3 @@ Create at least 100 labelled passage/claim pairs across official university page
 - duplicate/upstream-source group.
 
 Do not tune thresholds on the final holdout set.
-

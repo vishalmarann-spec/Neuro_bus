@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncEngine
 
 from app.api.routes.extraction import router as extraction_router
 from app.api.routes.health import router as health_router
+from app.api.routes.insights import router as insights_router
 from app.api.routes.reasoning import router as reasoning_router
 from app.api.routes.storage import router as storage_router
 from app.core.config import Settings, get_settings
@@ -49,6 +50,7 @@ def create_app(
     application.include_router(storage_router, prefix=resolved_settings.api_v1_prefix)
     application.include_router(extraction_router, prefix=resolved_settings.api_v1_prefix)
     application.include_router(reasoning_router, prefix=resolved_settings.api_v1_prefix)
+    application.include_router(insights_router, prefix=resolved_settings.api_v1_prefix)
     return application
 
 

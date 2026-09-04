@@ -7,6 +7,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.models import (
+    AnalysisRun,
     Claim,
     ClaimCluster,
     ClaimClusterScore,
@@ -95,7 +96,8 @@ async def reason_over_run(session: AsyncSession, run_id) -> list[ReasoningRecord
         .where(Document.run_id == run_id)
     )
     active_claim_ids = {claim.id for claim, *_ in rows}
-    for claim in all_claims_result.scalars():
+    all_claims = list(all_claims_result.scalars())
+    for claim in all_claims:
         if claim.id not in active_claim_ids:
             claim.cluster_id = None
     await session.flush()
@@ -120,6 +122,9 @@ async def reason_over_run(session: AsyncSession, run_id) -> list[ReasoningRecord
             )
             session.add(cluster)
             await session.flush()
+        else:
+            cluster.canonical_text = first_claim.normalized_text
+            cluster.subject_entity_id = first_subject.id if first_subject else None
 
         evidence_inputs: list[EvidenceInput] = []
         seen_claims = set()
@@ -192,6 +197,19 @@ async def reason_over_run(session: AsyncSession, run_id) -> list[ReasoningRecord
                 setattr(score, name, value)
         records.append(ReasoningRecord(cluster=cluster, score=score))
 
+    run = await session.get(AnalysisRun, run_id)
+    if run is not None:
+        run.metrics = {
+            **run.metrics,
+            "reasoning": {
+                "scoring_version": SCORING_VERSION,
+                "cluster_count": len(records),
+                "included_claim_count": len(active_claim_ids),
+                "excluded_claim_count": len(all_claims) - len(active_claim_ids),
+                "evidence_link_count": len(rows),
+                "calculated_at": datetime.now(UTC).isoformat(),
+            },
+        }
     await session.commit()
     for record in records:
         await session.refresh(record.cluster)

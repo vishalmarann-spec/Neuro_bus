@@ -106,6 +106,11 @@ class ClusterLabel(StrEnum):
     DISPUTED = "disputed"
 
 
+class InsightStatus(StrEnum):
+    READY = "ready"
+    NEEDS_REVIEW = "needs_review"
+
+
 class Project(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
     __tablename__ = "projects"
 
@@ -155,6 +160,9 @@ class AnalysisRun(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
 
     question: Mapped[ResearchQuestion] = relationship(back_populates="runs")
     documents: Mapped[list["Document"]] = relationship(
+        back_populates="run", cascade="all, delete-orphan"
+    )
+    insights: Mapped[list["Insight"]] = relationship(
         back_populates="run", cascade="all, delete-orphan"
     )
 
@@ -446,3 +454,82 @@ class ClaimClusterScore(UUIDPrimaryKeyMixin, Base):
     )
 
     cluster: Mapped[ClaimCluster] = relationship(back_populates="score")
+
+
+class Insight(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
+    __tablename__ = "insights"
+    __table_args__ = (
+        CheckConstraint("confidence >= 0 AND confidence <= 1", name="ck_insight_confidence"),
+        UniqueConstraint("run_id", "fingerprint", name="uq_run_insight_fingerprint"),
+    )
+
+    run_id: Mapped[UUID] = mapped_column(
+        ForeignKey("analysis_runs.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    title: Mapped[str] = mapped_column(String(500), nullable=False)
+    conclusion: Mapped[str] = mapped_column(Text, nullable=False)
+    confidence: Mapped[float] = mapped_column(Float, nullable=False)
+    status: Mapped[InsightStatus] = mapped_column(
+        Enum(InsightStatus, native_enum=False, length=32), nullable=False
+    )
+    generation_version: Mapped[str] = mapped_column(String(64), nullable=False)
+    fingerprint: Mapped[str] = mapped_column(String(71), nullable=False)
+    explanation: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+
+    run: Mapped[AnalysisRun] = relationship(back_populates="insights")
+    statements: Mapped[list["InsightStatement"]] = relationship(
+        back_populates="insight",
+        cascade="all, delete-orphan",
+        order_by="InsightStatement.display_order",
+    )
+
+
+class InsightStatement(UUIDPrimaryKeyMixin, Base):
+    __tablename__ = "insight_statements"
+    __table_args__ = (
+        CheckConstraint(
+            "confidence >= 0 AND confidence <= 1", name="ck_insight_statement_confidence"
+        ),
+        UniqueConstraint("insight_id", "display_order", name="uq_insight_statement_order"),
+    )
+
+    insight_id: Mapped[UUID] = mapped_column(
+        ForeignKey("insights.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    cluster_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("claim_clusters.id", ondelete="SET NULL"), index=True
+    )
+    claim_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("claims.id", ondelete="SET NULL"), index=True
+    )
+    text: Mapped[str] = mapped_column(Text, nullable=False)
+    label: Mapped[ClusterLabel] = mapped_column(
+        Enum(ClusterLabel, native_enum=False, length=32), nullable=False
+    )
+    confidence: Mapped[float] = mapped_column(Float, nullable=False)
+    display_order: Mapped[int] = mapped_column(Integer, nullable=False)
+
+    insight: Mapped[Insight] = relationship(back_populates="statements")
+    citations: Mapped[list["InsightCitation"]] = relationship(
+        back_populates="statement",
+        cascade="all, delete-orphan",
+        order_by="InsightCitation.display_order",
+    )
+
+
+class InsightCitation(UUIDPrimaryKeyMixin, Base):
+    __tablename__ = "insight_citations"
+    __table_args__ = (
+        UniqueConstraint("statement_id", "evidence_link_id", name="uq_statement_evidence_citation"),
+        UniqueConstraint("statement_id", "display_order", name="uq_statement_citation_order"),
+    )
+
+    statement_id: Mapped[UUID] = mapped_column(
+        ForeignKey("insight_statements.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    evidence_link_id: Mapped[UUID] = mapped_column(
+        ForeignKey("evidence_links.id", ondelete="RESTRICT"), nullable=False, index=True
+    )
+    display_order: Mapped[int] = mapped_column(Integer, nullable=False)
+
+    statement: Mapped[InsightStatement] = relationship(back_populates="citations")

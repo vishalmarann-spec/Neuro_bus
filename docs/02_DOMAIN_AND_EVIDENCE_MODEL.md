@@ -17,7 +17,8 @@
 | Relationship | id, from_entity_id, type, to_entity_id, evidence_link_id |
 | ClaimCluster | id, canonical_claim_id, topic, cluster_version |
 | Insight | id, run_id, title, conclusion, confidence, explanation, status |
-| InsightClaim | insight_id, claim_id, role, display_order |
+| InsightStatement | insight_id, cluster_id, claim_id, text, label, confidence, display_order |
+| InsightCitation | statement_id, evidence_link_id, display_order |
 | ReviewDecision | id, target_type, target_id, action, reason, actor, timestamp |
 | ModelExecution | id, task, provider, model, prompt_version, input_hash, validation_status, latency, token/cost metadata |
 
@@ -86,4 +87,5 @@ The UEO exposed through APIs contains:
 - Deleting a source must not silently remove audit history.
 - Insight confidence is derived from linked claims; it is not accepted directly from a language model.
 - Duplicate documents are linked but not counted as independent corroboration.
-
+- Every report statement has supporting evidence; a disputed statement also has contradicting evidence.
+- Evidence links referenced by a persisted report cannot be deleted, preserving historical citation provenance.

@@ -3,6 +3,7 @@ from collections.abc import Iterator
 
 import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy import event
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 
 from app.core.config import Settings
@@ -14,6 +15,14 @@ from app.main import create_app
 def session_factory(tmp_path):
     database_path = tmp_path / "neuro_bus_test.db"
     engine = create_async_engine(f"sqlite+aiosqlite:///{database_path}")
+
+    @event.listens_for(engine.sync_engine, "connect")
+    def enable_sqlite_foreign_keys(dbapi_connection, connection_record) -> None:
+        del connection_record
+        cursor = dbapi_connection.cursor()
+        cursor.execute("PRAGMA foreign_keys=ON")
+        cursor.close()
+
     factory = async_sessionmaker(engine, expire_on_commit=False)
 
     async def create_schema() -> None:
