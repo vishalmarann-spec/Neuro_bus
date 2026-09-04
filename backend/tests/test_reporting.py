@@ -6,6 +6,7 @@ from app.domain.reporting import (
     calculate_report_status,
     validate_statement_citations,
 )
+from app.services.report_exports import compact_text, escape_markdown, quote_markdown
 
 
 def test_supported_statement_requires_supporting_evidence() -> None:
@@ -47,3 +48,9 @@ def test_report_confidence_and_review_status_are_deterministic() -> None:
         calculate_report_status([ClusterLabel.SUPPORTED, ClusterLabel.EMERGING])
         == InsightStatus.NEEDS_REVIEW
     )
+
+
+def test_markdown_export_escapes_untrusted_source_text() -> None:
+    assert escape_markdown("<script>*claim*</script>") == ("\\<script\\>\\*claim\\*\\</script\\>")
+    assert compact_text("Title\n# injected heading") == "Title # injected heading"
+    assert quote_markdown("Evidence\n# not a heading") == ("> Evidence\n> \\# not a heading")

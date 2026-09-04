@@ -41,9 +41,16 @@ Reasoning executions record scoring version, calculation time, included/excluded
 - `POST /api/v1/runs/{run_id}/insights`
 - `GET /api/v1/insights/{insight_id}`
 - `GET /api/v1/insights/{insight_id}/report`
+- `GET /api/v1/insights/{insight_id}/report.md`
 
 The report response includes each citation's evidence-link ID, stance, exact stored passage, canonical URL, publisher, publication/retrieval timestamps, document hash, and evidence-quality score.
 
+## Analyst workspace
+
+The React workspace loads a report by insight UUID or the `?insight=` query parameter. It shows report and finding confidence, review state, exclusion counts, every cited passage, stance, evidence quality, publisher, timestamps, canonical URL, and document hash. The workspace contains no fabricated preview data. It provides deterministic Markdown download and a print stylesheet.
+
+For local development, Vite proxies `/api` to `http://127.0.0.1:8000`. A separately hosted frontend must set `VITE_API_BASE_URL` to the public API origin and the API must explicitly allow that origin. Same-origin deployment needs no frontend override.
+
 ## Next boundary
 
-The analyst UI and export formats are not implemented yet. A future narrative model may only transform the stored statements if every resulting sentence maps back to the same permitted claim and evidence identifiers and passes citation validation.
+The next report gate is citation correctness on the real evaluation set. A future narrative model may only transform the stored statements if every resulting sentence maps back to the same permitted claim and evidence identifiers and passes citation validation.

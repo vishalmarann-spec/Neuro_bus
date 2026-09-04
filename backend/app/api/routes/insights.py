@@ -19,6 +19,7 @@ from app.services.insights import (
     generate_insight,
     load_insight_bundle,
 )
+from app.services.report_exports import render_report_markdown
 
 router = APIRouter(tags=["cited-insights"])
 ResourceID = Annotated[UUID, Path()]
@@ -108,3 +109,18 @@ async def read_insight_report(
     if bundle is None:
         raise not_found("Insight")
     return render_report(bundle)
+
+
+@router.get("/insights/{insight_id}/report.md", response_class=Response)
+async def export_insight_report(
+    insight_id: ResourceID,
+    session: DatabaseSession,
+) -> Response:
+    bundle = await load_insight_bundle(session, insight_id)
+    if bundle is None:
+        raise not_found("Insight")
+    return Response(
+        content=render_report_markdown(bundle),
+        media_type="text/markdown",
+        headers={"Content-Disposition": f'attachment; filename="neuro-bus-report-{insight_id}.md"'},
+    )

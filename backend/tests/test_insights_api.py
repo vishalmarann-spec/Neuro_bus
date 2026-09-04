@@ -174,6 +174,15 @@ def test_cited_report_is_traceable_disputed_and_idempotent(session_factory) -> N
         assert all(item["document_hash"].startswith("sha256:") for item in statement["citations"])
         assert all(item["evidence_link_id"] for item in statement["citations"])
 
+        exported = client.get(f"/api/v1/insights/{insight['id']}/report.md")
+        assert exported.status_code == 200
+        assert exported.headers["content-type"].startswith("text/markdown")
+        assert "attachment; filename=" in exported.headers["content-disposition"]
+        assert "## Finding 1: Disputed" in exported.text
+        assert insight["conclusion"] in exported.text
+        assert all(url in exported.text for url, _, _ in fixtures)
+        assert all(content in exported.text for _, _, content in fixtures)
+
         repeated = client.post(f"/api/v1/runs/{run_id}/insights")
         assert repeated.status_code == 200
         assert repeated.json()["idempotent"] is True

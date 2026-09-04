@@ -79,7 +79,9 @@ Goal: generate an analyst-ready output without unsupported prose.
 - [x] Immutable, idempotent report persistence and APIs
 - [x] Explicit reasoning-required and insufficient-evidence failures
 - [ ] Optional model-written narrative behind the same citation validator
-- [ ] Analyst report UI/export
+- [x] Deterministic Markdown report export
+- [x] Responsive analyst report UI with loading, empty, and failure states
+- [x] Print-ready report presentation
 - [ ] Validate citation correctness >= 0.95 on the real evaluation set
 
 Exit: citation correctness >= 0.95 on the evaluation set.

@@ -47,6 +47,7 @@ Creating a run accepts optional seed URLs and a source policy. It returns immedi
 - `POST /runs/{run_id}/insights` — create an immutable cited report from the current scored clusters; unchanged evidence returns the existing report with `idempotent: true`.
 - `GET /insights/{insight_id}` — report metadata, confidence, status, fingerprint, and deterministic conclusion text.
 - `GET /insights/{insight_id}/report` — ordered statements with exact passage, evidence-link, publisher, URL, timestamp, and document-hash citations.
+- `GET /insights/{insight_id}/report.md` — deterministic Markdown download containing the same findings and citation provenance.
 
 Insight generation returns `409 REASONING_REQUIRED` before scoring and `409 INSUFFICIENT_EVIDENCE` when scoring completed but no cluster satisfies the citation rules.
 
