@@ -9,7 +9,12 @@ from app.evaluation.metrics import score_models
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Score Neuro_Bus extraction predictions.")
     parser.add_argument("--gold", required=True, action="append", type=Path)
-    parser.add_argument("--predictions", required=True, type=Path)
+    parser.add_argument(
+        "--predictions",
+        required=True,
+        type=Path,
+        help="ModelPrediction array/JSONL or a benchmark-run.v1 artifact.",
+    )
     parser.add_argument("--output", type=Path)
     return parser
 

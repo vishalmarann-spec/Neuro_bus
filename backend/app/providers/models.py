@@ -2,6 +2,8 @@ from dataclasses import dataclass
 from typing import Protocol
 from uuid import UUID
 
+DEFAULT_EXTRACTION_PROMPT_VERSION = "claim-extractor.v1"
+
 
 @dataclass(frozen=True, slots=True)
 class ExtractionPassage:
@@ -37,12 +39,16 @@ class ExtractionModelProvider(Protocol):
     @property
     def model_name(self) -> str: ...
 
+    @property
+    def prompt_version(self) -> str: ...
+
     async def extract(self, request: ExtractionRequest) -> ExtractionModelResponse: ...
 
 
 class DisabledModelProvider:
     provider_name = "disabled"
     model_name = "disabled"
+    prompt_version = DEFAULT_EXTRACTION_PROMPT_VERSION
 
     async def extract(self, request: ExtractionRequest) -> ExtractionModelResponse:
         raise ModelProviderUnavailable(
@@ -55,6 +61,7 @@ class FakeModelProvider:
 
     provider_name = "fake"
     model_name = "fixture-v1"
+    prompt_version = DEFAULT_EXTRACTION_PROMPT_VERSION
 
     def __init__(
         self,

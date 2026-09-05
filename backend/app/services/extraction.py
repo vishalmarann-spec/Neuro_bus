@@ -20,6 +20,7 @@ from app.domain.extraction import (
 )
 from app.domain.provenance import sha256_text
 from app.providers.models import (
+    DEFAULT_EXTRACTION_PROMPT_VERSION,
     ExtractionModelProvider,
     ExtractionPassage,
     ExtractionRequest,
@@ -28,7 +29,7 @@ from app.providers.models import (
 from app.services.entity_resolution import resolve_entity
 
 EXTRACTION_TASK = "entity_claim_extraction"
-DEFAULT_PROMPT_VERSION = "claim-extractor.v1"
+DEFAULT_PROMPT_VERSION = DEFAULT_EXTRACTION_PROMPT_VERSION
 
 
 @dataclass(frozen=True, slots=True)
@@ -86,16 +87,17 @@ async def extract_document(
     session: AsyncSession,
     document: Document,
     provider: ExtractionModelProvider,
-    prompt_version: str = DEFAULT_PROMPT_VERSION,
+    prompt_version: str | None = None,
 ) -> ExtractionOutcome:
-    input_hash = extraction_input_hash(document, prompt_version)
+    resolved_prompt_version = prompt_version or provider.prompt_version
+    input_hash = extraction_input_hash(document, resolved_prompt_version)
     previous_result = await session.execute(
         select(ModelExecution).where(
             ModelExecution.document_id == document.id,
             ModelExecution.task == EXTRACTION_TASK,
             ModelExecution.provider == provider.provider_name,
             ModelExecution.model == provider.model_name,
-            ModelExecution.prompt_version == prompt_version,
+            ModelExecution.prompt_version == resolved_prompt_version,
             ModelExecution.input_hash == input_hash,
             ModelExecution.validation_status == ValidationStatus.ACCEPTED,
         )
@@ -128,7 +130,7 @@ async def extract_document(
             task=EXTRACTION_TASK,
             provider=provider.provider_name,
             model=provider.model_name,
-            prompt_version=prompt_version,
+            prompt_version=resolved_prompt_version,
             input_hash=input_hash,
             raw_output=None,
             validation_status=ValidationStatus.UNAVAILABLE,
@@ -149,7 +151,7 @@ async def extract_document(
             task=EXTRACTION_TASK,
             provider=provider.provider_name,
             model=provider.model_name,
-            prompt_version=prompt_version,
+            prompt_version=resolved_prompt_version,
             input_hash=input_hash,
             raw_output=None,
             validation_status=ValidationStatus.UNAVAILABLE,
@@ -180,7 +182,7 @@ async def extract_document(
             task=EXTRACTION_TASK,
             provider=provider.provider_name,
             model=provider.model_name,
-            prompt_version=prompt_version,
+            prompt_version=resolved_prompt_version,
             input_hash=input_hash,
             raw_output=raw_output,
             validation_status=ValidationStatus.INVALID,
@@ -201,7 +203,7 @@ async def extract_document(
         task=EXTRACTION_TASK,
         provider=provider.provider_name,
         model=provider.model_name,
-        prompt_version=prompt_version,
+        prompt_version=resolved_prompt_version,
         input_hash=input_hash,
         raw_output=raw_output,
         validation_status=ValidationStatus.ACCEPTED,

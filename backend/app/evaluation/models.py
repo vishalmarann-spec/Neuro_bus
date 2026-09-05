@@ -132,6 +132,58 @@ class ModelPrediction(EvaluationModel):
     cost_usd: float | None = Field(default=None, ge=0)
 
 
+class BenchmarkRunFailure(EvaluationModel):
+    case_id: str
+    error_code: Literal["provider_unavailable", "provider_error"]
+    message: str = Field(min_length=1, max_length=500)
+    latency_ms: int = Field(ge=0)
+
+
+class BenchmarkRunArtifact(EvaluationModel):
+    schema_version: Literal["benchmark-run.v1"] = "benchmark-run.v1"
+    provider: str = Field(min_length=1, max_length=80)
+    model: str = Field(min_length=1, max_length=160)
+    prompt_version: str = Field(min_length=1, max_length=160)
+    started_at: AwareDatetime
+    completed_at: AwareDatetime
+    diagnostic_only: bool
+    pricing_basis: str | None = Field(default=None, min_length=1, max_length=500)
+    case_fingerprints: dict[str, str]
+    predictions: list[ModelPrediction]
+    failures: list[BenchmarkRunFailure]
+
+    @model_validator(mode="after")
+    def validate_run_integrity(self) -> "BenchmarkRunArtifact":
+        if self.completed_at < self.started_at:
+            raise ValueError("completed_at cannot precede started_at.")
+        if not self.case_fingerprints:
+            raise ValueError("A benchmark run requires at least one case fingerprint.")
+        if any(
+            re.fullmatch(r"sha256:[0-9a-f]{64}", value) is None
+            for value in self.case_fingerprints.values()
+        ):
+            raise ValueError("Benchmark case fingerprints must be SHA-256 values.")
+
+        prediction_ids = [prediction.case_id for prediction in self.predictions]
+        failure_ids = [failure.case_id for failure in self.failures]
+        if len(set(prediction_ids)) != len(prediction_ids):
+            raise ValueError("Prediction case IDs must be unique within a benchmark run.")
+        if len(set(failure_ids)) != len(failure_ids):
+            raise ValueError("Failure case IDs must be unique within a benchmark run.")
+        if set(prediction_ids) & set(failure_ids):
+            raise ValueError("A benchmark case cannot be both successful and failed.")
+        if set(prediction_ids) | set(failure_ids) != set(self.case_fingerprints):
+            raise ValueError("Every fingerprinted benchmark case requires a result or failure.")
+
+        expected_model_id = f"{self.provider}/{self.model}"
+        if any(prediction.model_id != expected_model_id for prediction in self.predictions):
+            raise ValueError("Prediction model IDs must match the benchmark provider and model.")
+        if any(prediction.cost_usd is not None for prediction in self.predictions):
+            if self.pricing_basis is None:
+                raise ValueError("Runs with estimated cost require a pricing_basis.")
+        return self
+
+
 class PRFScore(EvaluationModel):
     precision: float
     recall: float

@@ -10,6 +10,7 @@ from app.providers.models import ExtractionModelResponse, ExtractionRequest
 class PassageAwareProvider:
     provider_name = "fake"
     model_name = "multi-source-fixture-v1"
+    prompt_version = "claim-extractor.multi-source-fixture.v1"
 
     async def extract(self, request: ExtractionRequest) -> ExtractionModelResponse:
         passage = request.passages[0]

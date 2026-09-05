@@ -15,6 +15,7 @@ RAW_CONTENT = (
 class FailingModelProvider:
     provider_name = "failing-test-provider"
     model_name = "failure-fixture-v1"
+    prompt_version = "claim-extractor.failure-fixture.v1"
 
     async def extract(self, request: ExtractionRequest) -> ExtractionModelResponse:
         raise RuntimeError("simulated provider failure")
@@ -246,3 +247,6 @@ def test_unexpected_provider_failure_is_audited_without_leaking_error_details(
         errors = response.json()["validation_errors"]
         assert errors == ["Provider failed with RuntimeError."]
         assert "simulated provider failure" not in errors[0]
+        execution_id = response.json()["execution_id"]
+        audit = client.get(f"/api/v1/model-executions/{execution_id}").json()
+        assert audit["prompt_version"] == "claim-extractor.failure-fixture.v1"

@@ -32,6 +32,7 @@ Goal: convert one captured document into schema-valid claim candidates and UEOs.
 
 - [x] Parser and passage segmentation
 - [x] Model provider interface and disabled/fake provider
+- [x] Opt-in OpenAI Responses adapter with sanitized failures, usage capture, and explicit live-cost authorization
 - [x] Structured entity/claim extraction
 - [x] Provenance validator
 - [x] Model execution log and invalid-output quarantine
@@ -49,6 +50,7 @@ Exit: every accepted claim cites an exact stored passage; invalid model output i
 - [x] Entity, mention, claim, evidence, validity, latency, token, and cost metrics
 - [x] Model usage metadata in audit records
 - [x] Offline comparison CLI
+- [x] Live diagnostic benchmark CLI with fingerprinted run artifacts and partial-failure preservation
 - [x] Curate a 10-case assistant-verified public-source pilot with integrity checks
 - [x] Expand to 20 assistant-verified public cases with task/difficulty coverage labels
 - [x] Expand to 40 assistant-verified public cases across admissions, accreditation, employer demand, research methods, and negative controls

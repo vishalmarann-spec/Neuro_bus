@@ -4,7 +4,7 @@ from typing import TypeVar
 
 from pydantic import BaseModel
 
-from app.evaluation.models import GoldCase, ModelPrediction
+from app.evaluation.models import BenchmarkRunArtifact, GoldCase, ModelPrediction
 
 ModelT = TypeVar("ModelT", bound=BaseModel)
 
@@ -38,9 +38,30 @@ def load_gold_case_files(paths: list[Path]) -> list[GoldCase]:
 
 
 def load_predictions(path: Path) -> list[ModelPrediction]:
+    text = path.read_text(encoding="utf-8").strip()
+    if text.startswith("{"):
+        loaded = json.loads(text)
+        if isinstance(loaded, dict) and loaded.get("schema_version") == "benchmark-run.v1":
+            return BenchmarkRunArtifact.model_validate(loaded).predictions
     return _validate_records(path, ModelPrediction)
 
 
 def save_predictions(path: Path, predictions: list[ModelPrediction]) -> None:
     payload = [prediction.model_dump(mode="json") for prediction in predictions]
     path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
+
+def load_benchmark_run(path: Path) -> BenchmarkRunArtifact:
+    return BenchmarkRunArtifact.model_validate_json(path.read_text(encoding="utf-8"))
+
+
+def save_benchmark_run(
+    path: Path,
+    artifact: BenchmarkRunArtifact,
+    *,
+    overwrite: bool = False,
+) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    mode = "w" if overwrite else "x"
+    with path.open(mode, encoding="utf-8") as destination:
+        destination.write(artifact.model_dump_json(indent=2) + "\n")

@@ -134,7 +134,27 @@ Record exact provider, model version, date, prompt version, pricing basis, and a
 
 ## Running the scorer
 
-Prediction files may be JSON arrays or JSONL records following `ModelPrediction`.
+Generate predictions only after deliberately configuring a provider. Live requests require the explicit cost-confirmation flag. Until the review ledger contains exact human approvals, the assistant-verified corpus can be used only with the diagnostic override:
+
+```bash
+cd backend
+MODEL_PROVIDER=openai \
+MODEL_NAME='your-pinned-model-id' \
+MODEL_API_KEY='your-server-side-api-key' \
+uv run python -m app.evaluation.run_cli \
+  --gold evaluation/gold/public_pilot_v1.json \
+  --limit 5 \
+  --output evaluation/openai_diagnostic_run.json \
+  --pricing-basis "OpenAI pricing page, checked YYYY-MM-DD" \
+  --allow-assistant-verified-diagnostic \
+  --confirm-live-api-cost
+```
+
+The generator writes a `benchmark-run.v1` artifact containing provider, exact model identifier, prompt version, timestamps, diagnostic status, case fingerprints, successful predictions, sanitized per-case failures, token usage, and configured cost estimates. It refuses to overwrite an existing artifact without `--overwrite`; a partial run is saved and exits non-zero.
+
+After human review, pass the append-only ledger with `--reviews` and omit the diagnostic override. Start with a small development slice before running the full corpus. Never use validation or holdout cases for prompt tuning.
+
+The scorer accepts a `benchmark-run.v1` artifact or legacy JSON array/JSONL records following `ModelPrediction`.
 
 ```bash
 cd backend
@@ -147,6 +167,6 @@ uv run python -m app.evaluation.cli \
   --output evaluation/scorecards.json
 ```
 
-`--gold` is repeatable, and duplicate case IDs across files fail closed. For the synthetic smoke run, use only `evaluation/gold/synthetic_smoke_v1.json`. Candidate scores from the public batches are diagnostic only and must not be used as the production selection decision.
+`--gold` is repeatable, and duplicate case IDs across files fail closed. For the synthetic smoke run, use only `evaluation/gold/synthetic_smoke_v1.json`. Candidate scores from assistant-verified public batches are diagnostic only and must not be used as the production selection decision.
 
 Generated predictions and scorecards should be kept out of production evidence tables. Commit only small, intentional benchmark artifacts with no secrets or restricted content.

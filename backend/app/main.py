@@ -12,7 +12,8 @@ from app.api.routes.reasoning import router as reasoning_router
 from app.api.routes.storage import router as storage_router
 from app.core.config import Settings, get_settings
 from app.core.database import SessionFactory, create_database
-from app.providers.models import DisabledModelProvider, ExtractionModelProvider
+from app.providers.factory import create_model_provider
+from app.providers.models import ExtractionModelProvider
 from app.services.evaluation_review import (
     BenchmarkReviewWorkspace,
     default_benchmark_review_workspace,
@@ -39,7 +40,7 @@ def create_app(
         app.state.settings = resolved_settings
         app.state.session_factory = resolved_session_factory
         app.state.readiness_probe = readiness_probe or database_probe(resolved_session_factory)
-        app.state.model_provider = model_provider or DisabledModelProvider()
+        app.state.model_provider = model_provider or create_model_provider(resolved_settings)
         app.state.benchmark_review_workspace = (
             benchmark_review_workspace
             if benchmark_review_workspace is not None

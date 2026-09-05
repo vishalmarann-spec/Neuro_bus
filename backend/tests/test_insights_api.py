@@ -10,6 +10,7 @@ from app.providers.models import ExtractionModelResponse, ExtractionRequest
 class ReportFixtureProvider:
     provider_name = "fake"
     model_name = "report-fixture-v1"
+    prompt_version = "claim-extractor.report-fixture.v1"
 
     async def extract(self, request: ExtractionRequest) -> ExtractionModelResponse:
         passage = request.passages[0]

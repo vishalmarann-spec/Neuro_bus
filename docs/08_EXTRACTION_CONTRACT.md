@@ -4,7 +4,23 @@
 
 The extraction model receives document metadata and numbered passages. It returns candidate entities, exact entity mentions, normalized claims, and evidence references. The model never writes to storage directly and never assigns source-trust or claim-confidence scores.
 
-Production configuration currently defaults to the disabled adapter. Tests use the deterministic fake adapter. A real provider adapter must implement the same protocol and return the JSON shape below; choosing a hosted or local model does not change persistence or validation.
+Production configuration defaults to the disabled adapter. Tests use the deterministic fake adapter. An opt-in OpenAI Responses API adapter implements the same protocol; choosing it does not change persistence or validation. It requests JSON output, disables provider-side response storage for the request, records token usage, and leaves final schema and provenance enforcement to Neuro_Bus.
+
+## Provider configuration
+
+Keep secrets in the server environment, never in frontend code or committed files:
+
+```dotenv
+MODEL_PROVIDER=openai
+MODEL_NAME=your-pinned-model-id
+MODEL_API_KEY=your-server-side-api-key
+MODEL_TIMEOUT_SECONDS=60
+MODEL_MAX_OUTPUT_TOKENS=4096
+```
+
+The application fails during provider construction when `MODEL_PROVIDER=openai` lacks a key or model name. HTTP errors, timeouts, refusals, incomplete responses, malformed provider responses, and missing output are reported as explicit unavailable results. Provider response bodies and API keys are not copied into client-facing errors.
+
+Optional `MODEL_INPUT_COST_PER_MILLION_USD` and `MODEL_OUTPUT_COST_PER_MILLION_USD` values enable a per-call cost estimate from reported token counts. Configure both or neither, and record the pricing source and date with every benchmark run.
 
 ## Input
 
@@ -91,4 +107,3 @@ The input hash contains the document hash, ordered passage hashes, and prompt ve
 ## Human review
 
 An analyst can set an extracted claim to `accepted`, `rejected`, or `needs_review`. Each decision appends a `review_decisions` record with reason, actor, and timestamp. The original extraction remains unchanged.
-
