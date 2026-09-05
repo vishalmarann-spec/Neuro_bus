@@ -9,7 +9,7 @@ This directory contains versioned extraction benchmarks. They are evaluation inp
 | `synthetic_smoke_v1.json` | 4 | Synthetic | Contract, parser, provenance, and metric smoke tests |
 | `public_pilot_v1.json` | 10 | Assistant-verified | Real-source schema and curation pilot only |
 
-The public pilot samples official programme, course, labour-market, skills-report, and fellowship pages. Its source mix is intentionally small and uneven. It has no train/validation/holdout split, no double annotation, no inter-reviewer agreement measurement, and no candidate-model results. It cannot support production-model selection.
+The public pilot samples official programme, course, labour-market, skills-report, and fellowship pages. Its source mix is intentionally small and uneven. It has no selection-grade development/validation/holdout manifest, no double annotation, no inter-reviewer agreement measurement, and no candidate-model results. It cannot support production-model selection.
 
 ## Integrity contract
 
@@ -25,4 +25,6 @@ Public excerpts are capped at 25 words. `GoldCase` validation fails closed if re
 
 ## Promotion path
 
-Before any case enters a selection-grade dataset, a named human reviewer must revisit the official URL, compare the exact excerpt, adjudicate the entities and claims, and change the status to `human_verified`. The full benchmark then needs at least 100 examples split before tuning into development, validation, and untouched holdout sets, including negative and difficult cases.
+Before any case enters a selection-grade dataset, a named human reviewer must revisit the official URL, compare the exact excerpt, and adjudicate the entities, claims, and evidence offsets. The review CLI records these attestations in an append-only JSONL ledger bound to the exact case fingerprint. It does not edit the gold fixture or silently claim approval.
+
+The selection-manifest command applies only the latest decision for each exact case. A changed fingerprint, later rejection, synthetic case, assistant-only case, or dataset below 100 cases fails the selection gate. Eligible cases are assigned deterministically to 60% development, 20% validation, and 20% untouched holdout splits.

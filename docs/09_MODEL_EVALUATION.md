@@ -42,6 +42,44 @@ Split the data before tuning:
 - validation set for model comparison,
 - untouched holdout set for the final decision.
 
+## Human-review workflow
+
+Review decisions live in append-only JSONL ledgers and are separate from the gold files. An approval is valid only when the reviewer confirms that the official URL was opened, the excerpt matches it, and the entities, claims, and evidence offsets were checked. The record stores the source URL, content hash, exact case fingerprint, named reviewer, decision, notes, and timezone-aware timestamp.
+
+The tool rejects approvals with an incomplete checklist or non-human labels such as `codex`. Changing any review-bound document or gold-label field changes the fingerprint and makes the prior approval stale. The latest `changes_requested` or `rejected` decision also prevents promotion.
+
+```bash
+cd backend
+uv run python -m app.evaluation.review_cli \
+  --gold evaluation/gold/public_pilot_v1.json \
+  --case-id public_cmu_msaii_requirements \
+  --ledger evaluation/reviews/public_pilot_v1.jsonl \
+  --reviewer "Reviewer full name" \
+  --decision approved \
+  --notes "Checked source, excerpt, labels, and offsets." \
+  --source-url-opened \
+  --excerpt-matches-source \
+  --entities-and-claims-checked
+```
+
+Do not use another person's name or check an attestation that was not actually performed. No human review records are committed yet.
+
+## Selection-manifest workflow
+
+The manifest command combines one or more gold files with the latest review ledger. It fails closed unless there are at least 100 unique, non-synthetic, currently human-verified cases. Eligible cases are deterministically assigned by a recorded seed to 60% development, 20% validation, and 20% untouched holdout splits; each assignment is bound to its case fingerprint.
+
+```bash
+uv run python -m app.evaluation.dataset_cli \
+  --gold evaluation/gold/university_programmes_v1.json \
+  --gold evaluation/gold/university_market_signals_v1.json \
+  --reviews evaluation/reviews/university_selection_v1.jsonl \
+  --dataset-id university-selection-v1 \
+  --seed neuro-bus-selection-v1 \
+  --output evaluation/manifests/university_selection_v1.json
+```
+
+Create and commit the manifest before prompt tuning. Never change the seed or case membership after viewing validation or holdout results; create a new dataset version instead.
+
 ## Metrics
 
 The benchmark reports per model:
