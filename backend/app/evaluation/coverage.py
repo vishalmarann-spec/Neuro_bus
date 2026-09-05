@@ -61,12 +61,8 @@ def selection_coverage_failures(cases: list[GoldCase]) -> list[str]:
     source_types = {case.document.source_type for case in cases if case.document.source_type}
     task_tags = {tag for case in cases for tag in case.task_tags}
     publishers = {case.document.publisher for case in cases if case.document.publisher}
-    negative_count = sum(
-        BenchmarkTaskTag.NEGATIVE_NO_CLAIM in case.task_tags for case in cases
-    )
-    adversarial_count = sum(
-        case.difficulty == BenchmarkDifficulty.ADVERSARIAL for case in cases
-    )
+    negative_count = sum(BenchmarkTaskTag.NEGATIVE_NO_CLAIM in case.task_tags for case in cases)
+    adversarial_count = sum(case.difficulty == BenchmarkDifficulty.ADVERSARIAL for case in cases)
     required_negative = max(
         1,
         math.ceil(case_count * MINIMUM_NEGATIVE_SHARE),
@@ -110,19 +106,13 @@ def selection_coverage_failures(cases: list[GoldCase]) -> list[str]:
 def summarize_benchmark_coverage(cases: list[GoldCase]) -> BenchmarkCoverageReport:
     failures = selection_coverage_failures(cases)
     case_count = len(cases)
-    negative_count = sum(
-        BenchmarkTaskTag.NEGATIVE_NO_CLAIM in case.task_tags for case in cases
-    )
-    adversarial_count = sum(
-        case.difficulty == BenchmarkDifficulty.ADVERSARIAL for case in cases
-    )
+    negative_count = sum(BenchmarkTaskTag.NEGATIVE_NO_CLAIM in case.task_tags for case in cases)
+    adversarial_count = sum(case.difficulty == BenchmarkDifficulty.ADVERSARIAL for case in cases)
     required_negative = max(1, math.ceil(case_count * MINIMUM_NEGATIVE_SHARE))
     required_adversarial = max(1, math.ceil(case_count * MINIMUM_ADVERSARIAL_SHARE))
 
     source_type_counts = Counter(
-        case.document.source_type.value
-        for case in cases
-        if case.document.source_type is not None
+        case.document.source_type.value for case in cases if case.document.source_type is not None
     )
     task_tag_counts = Counter(tag.value for case in cases for tag in case.task_tags)
     difficulty_counts = Counter(case.difficulty.value for case in cases)

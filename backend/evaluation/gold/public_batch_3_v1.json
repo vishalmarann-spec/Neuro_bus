@@ -1,0 +1,640 @@
+[
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_gt_omscs_application_terms",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T12:02:13Z",
+    "difficulty": "adversarial",
+    "task_tags": ["admissions", "programme_status"],
+    "document": {
+      "title": "Deadlines, Decisions, Requirements, and Guidelines",
+      "raw_content": "The OMSCS program accepts applications year-round for both Fall and Spring matriculations (there are no Summer admissions).",
+      "source_url": "https://www.omscs.gatech.edu/deadlines-decisions-requirements-and-guidelines",
+      "publisher": "Georgia Institute of Technology",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T12:02:13Z",
+      "content_hash": "sha256:ec9012d296a2db9b786e33c44c432ba0f0ed8a6bd8d3c211dc6d4a58f126b854"
+    },
+    "gold": {
+      "entities": [{
+        "local_id": "programme_1", "entity_type": "programme", "canonical_name": "OMSCS", "aliases": [],
+        "mentions": [{"passage_ordinal": 0, "surface_text": "OMSCS", "start_offset": 4, "end_offset": 9, "confidence": 1.0}]
+      }],
+      "claims": [{
+        "subject_local_id": "programme_1", "predicate": "accepts_applications_for_terms",
+        "object_value": {"terms": ["Fall", "Spring"], "summer_admissions": false}, "qualifiers": {"frequency": "year-round"},
+        "normalized_text": "OMSCS accepts applications year-round for Fall and Spring, with no Summer admissions.", "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The excerpt directly states the application cadence and eligible terms."}]
+      }]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_mit_eecs_no_gre",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T12:02:13Z",
+    "difficulty": "adversarial",
+    "task_tags": ["admissions"],
+    "document": {
+      "title": "Graduate Admissions Information Letter",
+      "raw_content": "The Electrical Engineering and Computer Science Department does NOT require GRE scores for admission purposes.",
+      "source_url": "https://www.eecs.mit.edu/graduate-admissions-information-letter/",
+      "publisher": "MIT EECS",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T12:02:13Z",
+      "content_hash": "sha256:bbc957e7ea4b1b44f2e8e40e41b966bbff67704780ccdc52f01195b4731ccae8"
+    },
+    "gold": {
+      "entities": [
+        {
+          "local_id": "organization_1", "entity_type": "organization", "canonical_name": "MIT Electrical Engineering and Computer Science Department", "aliases": ["MIT EECS"],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "Electrical Engineering and Computer Science Department", "start_offset": 4, "end_offset": 58, "confidence": 1.0}]
+        },
+        {
+          "local_id": "credential_1", "entity_type": "credential", "canonical_name": "GRE", "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "GRE", "start_offset": 76, "end_offset": 79, "confidence": 1.0}]
+        }
+      ],
+      "claims": [{
+        "subject_local_id": "organization_1", "predicate": "does_not_require_admission_test",
+        "object_value": {"test": "GRE"}, "qualifiers": {"purpose": "admission"},
+        "normalized_text": "MIT EECS does not require GRE scores for admission.", "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The excerpt explicitly negates the GRE admission requirement."}]
+      }]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_ucl_entry_math_knowledge",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T12:02:13Z",
+    "difficulty": "intermediate",
+    "task_tags": ["admissions", "skills_demand"],
+    "document": {
+      "title": "MSc Entry Procedure",
+      "raw_content": "Knowledge of mathematical methods and linear algebra at university level is required",
+      "source_url": "https://www.ucl.ac.uk/mathematical-physical-sciences/statistics/prospective-postgraduates/msc-entry-procedure",
+      "publisher": "University College London",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T12:02:13Z",
+      "content_hash": "sha256:7811b798d57e09f27b74e3ce160742e4696ee4236e4a7ac6ce46b28cd8d9c292"
+    },
+    "gold": {
+      "entities": [
+        {
+          "local_id": "skill_1", "entity_type": "skill", "canonical_name": "Mathematical Methods", "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "mathematical methods", "start_offset": 13, "end_offset": 33, "confidence": 1.0}]
+        },
+        {
+          "local_id": "skill_2", "entity_type": "skill", "canonical_name": "Linear Algebra", "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "linear algebra", "start_offset": 38, "end_offset": 52, "confidence": 1.0}]
+        }
+      ],
+      "claims": [{
+        "subject_local_id": null, "predicate": "admission_requires_knowledge",
+        "object_value": {"subjects": ["mathematical methods", "linear algebra"], "level": "university"}, "qualifiers": {},
+        "normalized_text": "Admission requires university-level knowledge of mathematical methods and linear algebra.", "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The excerpt directly names both required knowledge areas and their level."}]
+      }]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_oxford_dphil_gpa_entry",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T12:02:13Z",
+    "difficulty": "basic",
+    "task_tags": ["admissions"],
+    "document": {
+      "title": "DPhil in Computer Science",
+      "raw_content": "the minimum overall GPA that is normally required to meet the undergraduate-level requirement is 3.5 out of 4.0.",
+      "source_url": "https://www.ox.ac.uk/admissions/graduate/courses/dphil-computer-science",
+      "publisher": "University of Oxford",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T12:02:13Z",
+      "content_hash": "sha256:e821eb4ebd6e44583fee1ebcf1b54d86fa0748b95414376b0878caf510d12b9d"
+    },
+    "gold": {
+      "entities": [{
+        "local_id": "metric_1", "entity_type": "metric", "canonical_name": "3.5 out of 4.0 GPA", "aliases": [],
+        "mentions": [{"passage_ordinal": 0, "surface_text": "3.5 out of 4.0", "start_offset": 97, "end_offset": 111, "confidence": 1.0}]
+      }],
+      "claims": [{
+        "subject_local_id": null, "predicate": "admission_requires_minimum_gpa",
+        "object_value": {"minimum_gpa": 3.5, "scale": 4.0}, "qualifiers": {"applicant_degree_country": "United States"},
+        "normalized_text": "Applicants with a U.S. degree normally require a minimum overall GPA of 3.5 out of 4.0.", "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The excerpt states the normal minimum GPA and scale for the identified applicant group."}]
+      }]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_abet_curriculum_flexibility",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T12:02:13Z",
+    "difficulty": "intermediate",
+    "task_tags": ["accreditation", "curriculum"],
+    "document": {
+      "title": "Criteria for Accrediting Computing Programs, 2025–2026",
+      "raw_content": "The curriculum requirements specify topics, but do not prescribe specific courses.",
+      "source_url": "https://www.abet.org/accreditation/accreditation-criteria/criteria-for-accrediting-computing-programs-2025-2026/",
+      "publisher": "ABET",
+      "source_type": "other",
+      "retrieved_at": "2026-09-05T12:02:13Z",
+      "content_hash": "sha256:d402bb8091e70337d1e6a178413f0394249945d4caf016c6ba4462fa1fb533da"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [{
+        "subject_local_id": null, "predicate": "accreditation_criteria_specify_topics",
+        "object_value": {"prescribes_specific_courses": false}, "qualifiers": {"scope": "curriculum requirements"},
+        "normalized_text": "The accreditation curriculum requirements specify topics without prescribing particular courses.", "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The excerpt directly distinguishes required topics from prescribed courses."}]
+      }]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_american_data_science_accreditation",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T12:02:13Z",
+    "difficulty": "intermediate",
+    "task_tags": ["accreditation", "programme_status"],
+    "document": {
+      "title": "BS Data Science",
+      "raw_content": "This program has been accredited by the Applied and Natural Sciences Commission (ANSAC) of ABET",
+      "source_url": "https://www.american.edu/cas/mathstat/data-undergrad/",
+      "publisher": "American University",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T12:02:13Z",
+      "content_hash": "sha256:9cf01760c699d254dbc86dde7b0ef6edfc7443c40e1b5c4581dee49be65eff2a"
+    },
+    "gold": {
+      "entities": [{
+        "local_id": "organization_1", "entity_type": "organization", "canonical_name": "Applied and Natural Sciences Commission", "aliases": ["ANSAC"],
+        "mentions": [
+          {"passage_ordinal": 0, "surface_text": "Applied and Natural Sciences Commission", "start_offset": 40, "end_offset": 79, "confidence": 1.0},
+          {"passage_ordinal": 0, "surface_text": "ANSAC", "start_offset": 81, "end_offset": 86, "confidence": 1.0}
+        ]
+      }],
+      "claims": [{
+        "subject_local_id": null, "predicate": "programme_is_accredited",
+        "object_value": {"commission": "Applied and Natural Sciences Commission", "accreditor": "ABET"}, "qualifiers": {},
+        "normalized_text": "The BS Data Science program is accredited by ABET's Applied and Natural Sciences Commission.", "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The excerpt directly identifies the programme's commission and accreditor."}]
+      }]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_harvard_extension_graduate_tuition",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T12:02:13Z",
+    "difficulty": "basic",
+    "task_tags": ["fee"],
+    "document": {
+      "title": "Paying for School",
+      "raw_content": "Graduate credit $3,580 ($895 per credit)",
+      "source_url": "https://extension.harvard.edu/paying-for-school/",
+      "publisher": "Harvard Extension School",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T12:02:13Z",
+      "content_hash": "sha256:20ac8d6be3b721351eb6e2c248d0097d8c1380e91faec18d46793f14515afcab"
+    },
+    "gold": {
+      "entities": [
+        {
+          "local_id": "price_1", "entity_type": "price", "canonical_name": "$3,580", "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "$3,580", "start_offset": 16, "end_offset": 22, "confidence": 1.0}]
+        },
+        {
+          "local_id": "price_2", "entity_type": "price", "canonical_name": "$895", "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "$895", "start_offset": 24, "end_offset": 28, "confidence": 1.0}]
+        }
+      ],
+      "claims": [{
+        "subject_local_id": null, "predicate": "graduate_tuition_rate",
+        "object_value": {"listed_rate_usd": 3580, "per_credit_usd": 895}, "qualifiers": {"credit_level": "graduate"},
+        "normalized_text": "The graduate-credit tuition row lists $3,580 and $895 per credit.", "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The table excerpt directly supplies both listed graduate-credit amounts."}]
+      }]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_stanford_ms_completion_limit",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T12:02:13Z",
+    "difficulty": "adversarial",
+    "task_tags": ["duration"],
+    "document": {
+      "title": "MS Degree Requirements",
+      "raw_content": "MS CS students have 3 years or 9 non-summer quarters to complete degree requirements, which begin when the student’s MS CS plan is active.",
+      "source_url": "https://www.cs.stanford.edu/masters-degree-requirements",
+      "publisher": "Stanford University",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T12:02:13Z",
+      "content_hash": "sha256:726345fc6d8f21920410f08642c59ebb5b9c3f6be51d6a16500ba09c2095a9a6"
+    },
+    "gold": {
+      "entities": [{
+        "local_id": "programme_1", "entity_type": "programme", "canonical_name": "MS CS", "aliases": [],
+        "mentions": [
+          {"passage_ordinal": 0, "surface_text": "MS CS", "start_offset": 0, "end_offset": 5, "confidence": 1.0},
+          {"passage_ordinal": 0, "surface_text": "MS CS", "start_offset": 117, "end_offset": 122, "confidence": 1.0}
+        ]
+      }],
+      "claims": [{
+        "subject_local_id": "programme_1", "predicate": "has_completion_time_limit",
+        "object_value": {"years": 3, "non_summer_quarters": 9}, "qualifiers": {"clock_starts": "when the MS CS plan is active"},
+        "normalized_text": "MS CS students have three years or nine non-summer quarters to complete degree requirements.", "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The excerpt states both equivalent limits and when the clock begins."}]
+      }]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_stanford_ms_units",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T12:02:13Z",
+    "difficulty": "basic",
+    "task_tags": ["curriculum"],
+    "document": {
+      "title": "MS Program Sheets",
+      "raw_content": "The central requirement for the MS CS degree is completion of at least 45 units that represent an approved academic plan.",
+      "source_url": "https://www.cs.stanford.edu/masters-specializations/ms-program-sheets",
+      "publisher": "Stanford University",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T12:02:13Z",
+      "content_hash": "sha256:f940fb52b11872b5942f267f858922a4e10866f8f0c0218e4cffc4628c132300"
+    },
+    "gold": {
+      "entities": [
+        {
+          "local_id": "programme_1", "entity_type": "programme", "canonical_name": "MS CS", "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "MS CS", "start_offset": 32, "end_offset": 37, "confidence": 1.0}]
+        },
+        {
+          "local_id": "metric_1", "entity_type": "metric", "canonical_name": "45 Units", "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "45 units", "start_offset": 71, "end_offset": 79, "confidence": 1.0}]
+        }
+      ],
+      "claims": [{
+        "subject_local_id": "programme_1", "predicate": "requires_minimum_units",
+        "object_value": {"units": 45}, "qualifiers": {"plan": "approved academic plan"},
+        "normalized_text": "The MS CS degree requires at least 45 units in an approved academic plan.", "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The excerpt directly states the unit total and plan condition."}]
+      }]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_gt_omscs_specialization_requirement",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T12:02:13Z",
+    "difficulty": "basic",
+    "task_tags": ["curriculum"],
+    "document": {
+      "title": "Degree Requirements",
+      "raw_content": "The OMSCS degree requires students to complete the requirements of one specialization.",
+      "source_url": "https://omscs.gatech.edu/degree-requirements",
+      "publisher": "Georgia Institute of Technology",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T12:02:13Z",
+      "content_hash": "sha256:0b44da8de0e310835b2eed9b1dd95048ca555824665a52f6c5c334e260eed473"
+    },
+    "gold": {
+      "entities": [{
+        "local_id": "programme_1", "entity_type": "programme", "canonical_name": "OMSCS", "aliases": [],
+        "mentions": [{"passage_ordinal": 0, "surface_text": "OMSCS", "start_offset": 4, "end_offset": 9, "confidence": 1.0}]
+      }],
+      "claims": [{
+        "subject_local_id": "programme_1", "predicate": "requires_specialization",
+        "object_value": {"specializations_required": 1}, "qualifiers": {},
+        "normalized_text": "The OMSCS degree requires completion of one specialization.", "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The excerpt directly states the number of required specializations."}]
+      }]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_mit_eecs_residence_requirement",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T12:02:13Z",
+    "difficulty": "intermediate",
+    "task_tags": ["duration", "curriculum"],
+    "document": {
+      "title": "Graduate Program Requirements",
+      "raw_content": "A minimum residence requirement of four terms of full time graduate work.",
+      "source_url": "https://www.eecs.mit.edu/academics/graduate-programs/graduate-program-requirements/",
+      "publisher": "MIT EECS",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T12:02:13Z",
+      "content_hash": "sha256:19e033d9332b32d13bc7724a43771a6b08a279d5821a1f7ee08a9e22e0cbcfc2"
+    },
+    "gold": {
+      "entities": [{
+        "local_id": "metric_1", "entity_type": "metric", "canonical_name": "Four Terms", "aliases": [],
+        "mentions": [{"passage_ordinal": 0, "surface_text": "four terms", "start_offset": 35, "end_offset": 45, "confidence": 1.0}]
+      }],
+      "claims": [{
+        "subject_local_id": null, "predicate": "requires_minimum_residence",
+        "object_value": {"terms": 4}, "qualifiers": {"attendance": "full time graduate work"},
+        "normalized_text": "A minimum residence of four terms of full-time graduate work is required.", "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The excerpt states the minimum residence length and study mode."}]
+      }]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_openai_ml_engineer_skills",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T12:02:13Z",
+    "difficulty": "intermediate",
+    "task_tags": ["employer_demand", "skills_demand"],
+    "document": {
+      "title": "Machine Learning Engineer, Multimodal Perception and Authentication",
+      "raw_content": "Are proficient in Python and PyTorch and comfortable with C++ or systems integration.",
+      "source_url": "https://openai.com/careers/machine-learning-engineer-multimodal-perception-and-authentication-san-francisco/",
+      "publisher": "OpenAI",
+      "source_type": "industry",
+      "retrieved_at": "2026-09-05T12:02:13Z",
+      "content_hash": "sha256:36e810d48852bdc7361523f70fa6ac5a09f1370533d37b1d3529f29d3c03734e"
+    },
+    "gold": {
+      "entities": [
+        {"local_id": "technology_1", "entity_type": "technology", "canonical_name": "Python", "aliases": [], "mentions": [{"passage_ordinal": 0, "surface_text": "Python", "start_offset": 18, "end_offset": 24, "confidence": 1.0}]},
+        {"local_id": "technology_2", "entity_type": "technology", "canonical_name": "PyTorch", "aliases": [], "mentions": [{"passage_ordinal": 0, "surface_text": "PyTorch", "start_offset": 29, "end_offset": 36, "confidence": 1.0}]},
+        {"local_id": "technology_3", "entity_type": "technology", "canonical_name": "C++", "aliases": [], "mentions": [{"passage_ordinal": 0, "surface_text": "C++", "start_offset": 58, "end_offset": 61, "confidence": 1.0}]}
+      ],
+      "claims": [{
+        "subject_local_id": null, "predicate": "employer_seeks_technical_skills",
+        "object_value": {"proficient": ["Python", "PyTorch"], "comfortable": ["C++", "systems integration"]}, "qualifiers": {"role": "machine learning engineer"},
+        "normalized_text": "The machine-learning role seeks Python and PyTorch proficiency plus comfort with C++ or systems integration.", "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The job criterion directly names the desired technologies and proficiency levels."}]
+      }]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_amazon_applied_scientist_languages",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T12:02:13Z",
+    "difficulty": "intermediate",
+    "task_tags": ["employer_demand", "skills_demand"],
+    "document": {
+      "title": "Applied Scientist I, CMT",
+      "raw_content": "Experience programming in Java, C++, Python or related language",
+      "source_url": "https://www.amazon.jobs/en-gb/jobs/10507927/applied-scientist-i-cmt",
+      "publisher": "Amazon",
+      "source_type": "industry",
+      "retrieved_at": "2026-09-05T12:02:13Z",
+      "content_hash": "sha256:4acde4ef33d1a3f1d7913e5a970b8ab46e748f22624fc6a4f4e43f2a3e61af4d"
+    },
+    "gold": {
+      "entities": [
+        {"local_id": "technology_1", "entity_type": "technology", "canonical_name": "Java", "aliases": [], "mentions": [{"passage_ordinal": 0, "surface_text": "Java", "start_offset": 26, "end_offset": 30, "confidence": 1.0}]},
+        {"local_id": "technology_2", "entity_type": "technology", "canonical_name": "C++", "aliases": [], "mentions": [{"passage_ordinal": 0, "surface_text": "C++", "start_offset": 32, "end_offset": 35, "confidence": 1.0}]},
+        {"local_id": "technology_3", "entity_type": "technology", "canonical_name": "Python", "aliases": [], "mentions": [{"passage_ordinal": 0, "surface_text": "Python", "start_offset": 37, "end_offset": 43, "confidence": 1.0}]}
+      ],
+      "claims": [{
+        "subject_local_id": null, "predicate": "employer_requires_programming_experience",
+        "object_value": {"languages": ["Java", "C++", "Python", "related language"]}, "qualifiers": {"role": "applied scientist"},
+        "normalized_text": "The applied-scientist role requires programming experience in Java, C++, Python, or a related language.", "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The basic qualification directly lists acceptable programming languages."}]
+      }]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_census_data_scientist_task",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T12:02:13Z",
+    "difficulty": "intermediate",
+    "task_tags": ["employer_demand", "labour_market"],
+    "document": {
+      "title": "Data Scientist",
+      "raw_content": "Applying text analytics and supervised machine learning to predict survey nonresponse through free-form text.",
+      "source_url": "https://www.census.gov/about/census-careers/jobs/headquarters/data-scientist.html",
+      "publisher": "U.S. Census Bureau",
+      "source_type": "government",
+      "retrieved_at": "2026-09-05T12:02:13Z",
+      "content_hash": "sha256:70bc1a7c1c470b19d3c4491f8b9d79049a402e49745488b18d232c2241f37b39"
+    },
+    "gold": {
+      "entities": [
+        {"local_id": "skill_1", "entity_type": "skill", "canonical_name": "Text Analytics", "aliases": [], "mentions": [{"passage_ordinal": 0, "surface_text": "text analytics", "start_offset": 9, "end_offset": 23, "confidence": 1.0}]},
+        {"local_id": "technology_1", "entity_type": "technology", "canonical_name": "Supervised Machine Learning", "aliases": [], "mentions": [{"passage_ordinal": 0, "surface_text": "supervised machine learning", "start_offset": 28, "end_offset": 55, "confidence": 1.0}]}
+      ],
+      "claims": [{
+        "subject_local_id": null, "predicate": "data_scientist_applies_methods",
+        "object_value": {"methods": ["text analytics", "supervised machine learning"], "purpose": "predict survey nonresponse"}, "qualifiers": {"input": "free-form text"},
+        "normalized_text": "Census data scientists apply text analytics and supervised machine learning to predict survey nonresponse.", "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The role description directly connects both methods to a stated task."}]
+      }]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_bls_occupational_employment_definition",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T12:02:13Z",
+    "difficulty": "intermediate",
+    "task_tags": ["labour_market"],
+    "document": {
+      "title": "Technical Notes for May 2025 OEWS Estimates",
+      "raw_content": "Occupational employment is the estimate of total wage and salary employment in an occupation.",
+      "source_url": "https://www.bls.gov/oes/current/oes_tec.htm",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "source_type": "government",
+      "retrieved_at": "2026-09-05T12:02:13Z",
+      "content_hash": "sha256:1f3c3e7a4bf7ada70affe43f5ac698d569c0fed81f10867e7de9df5cb6c95b8a"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [{
+        "subject_local_id": null, "predicate": "defines_occupational_employment",
+        "object_value": {"measure": "total wage and salary employment", "unit": "occupation"}, "qualifiers": {},
+        "normalized_text": "Occupational employment estimates total wage and salary employment in an occupation.", "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The technical note explicitly defines the measure."}]
+      }]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_bls_oews_time_series_caveat",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T12:02:13Z",
+    "difficulty": "adversarial",
+    "task_tags": ["methodology_caveat", "labour_market"],
+    "document": {
+      "title": "Occupational Employment and Wage Statistics Frequently Asked Questions",
+      "raw_content": "While there are significant advantages, there are also limitations associated with this estimation procedure in that it requires \"updating\" for the earlier years of data.",
+      "source_url": "https://www.bls.gov/oes/oes_ques.htm",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "source_type": "government",
+      "retrieved_at": "2026-09-05T12:02:13Z",
+      "content_hash": "sha256:29953b6af7df115e6136da4a89245004e907d2006a8fba974084f72713714000"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [{
+        "subject_local_id": null, "predicate": "estimation_procedure_has_limitation",
+        "object_value": {"limitation": "requires updating earlier years of data"}, "qualifiers": {},
+        "normalized_text": "The estimation procedure is limited by its need to update earlier years of data.", "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The FAQ explicitly labels the updating requirement as a limitation."}]
+      }]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_nsf_degree_growth",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T12:02:13Z",
+    "difficulty": "intermediate",
+    "task_tags": ["research_trend", "education_trend"],
+    "document": {
+      "title": "The State of U.S. Science and Engineering 2026 — Executive Summary",
+      "raw_content": "Between 2014 and 2024, U.S. institutions of higher education continued to expand S&E degree output, with particularly rapid growth in computer and information science degrees.",
+      "source_url": "https://www.ncses.nsf.gov/pubs/nsbsep20261/executive-summary",
+      "publisher": "National Science Board",
+      "source_type": "research",
+      "retrieved_at": "2026-09-05T12:02:13Z",
+      "content_hash": "sha256:78e172bb06f3eaee4070950f3cb83842c6bca806ba3d17378f14405433e68827"
+    },
+    "gold": {
+      "entities": [
+        {"local_id": "date_1", "entity_type": "date", "canonical_name": "2014", "aliases": [], "mentions": [{"passage_ordinal": 0, "surface_text": "2014", "start_offset": 8, "end_offset": 12, "confidence": 1.0}]},
+        {"local_id": "date_2", "entity_type": "date", "canonical_name": "2024", "aliases": [], "mentions": [{"passage_ordinal": 0, "surface_text": "2024", "start_offset": 17, "end_offset": 21, "confidence": 1.0}]}
+      ],
+      "claims": [{
+        "subject_local_id": null, "predicate": "degree_output_grew_rapidly",
+        "object_value": {"field": "computer and information science", "start_year": 2014, "end_year": 2024}, "qualifiers": {"geography": "United States"},
+        "normalized_text": "U.S. computer and information science degree output grew particularly rapidly between 2014 and 2024.", "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The summary directly states the interval, geography, field, and growth characterization."}]
+      }]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_nsf_international_comparison_basis",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T12:02:13Z",
+    "difficulty": "adversarial",
+    "task_tags": ["methodology_caveat", "research_trend"],
+    "document": {
+      "title": "The State of U.S. Science and Engineering 2026 — Figure 11",
+      "raw_content": "To facilitate international comparison, data for the United States are those reported to the Organisation for Economic Co-operation and Development",
+      "source_url": "https://www.ncses.nsf.gov/pubs/nsbsep20261/figure/11",
+      "publisher": "National Science Board",
+      "source_type": "research",
+      "retrieved_at": "2026-09-05T12:02:13Z",
+      "content_hash": "sha256:d21178696578f6b2e3e264f410845ca1d8711e29c9d4c5cfdb0bc93c6264f49f"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [{
+        "subject_local_id": null, "predicate": "international_comparison_uses_reported_data",
+        "object_value": {"country": "United States", "reporting_organization": "Organisation for Economic Co-operation and Development"}, "qualifiers": {"purpose": "international comparison"},
+        "normalized_text": "The international comparison uses U.S. data reported to the OECD.", "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The note states which U.S. data basis is used for international comparison."}]
+      }]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_harvard_higher_education_tagline",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T12:02:13Z",
+    "difficulty": "adversarial",
+    "task_tags": ["negative_no_claim"],
+    "document": {
+      "title": "Online Master's in Education: Higher Education",
+      "raw_content": "Higher education has the power to transform lives, strengthen communities, and expand opportunity.",
+      "source_url": "https://www.gse.harvard.edu/degrees/masters/online/higher-education-pathway",
+      "publisher": "Harvard Graduate School of Education",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T12:02:13Z",
+      "content_hash": "sha256:fb82f5c7fbd8aa2f216456a29afdb2f18707683ad06a32c24b77b3419f35bc5e"
+    },
+    "gold": {"entities": [], "claims": []}
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_gt_omscs_marketing_words",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T12:02:13Z",
+    "difficulty": "adversarial",
+    "task_tags": ["negative_no_claim"],
+    "document": {
+      "title": "About OMSCS",
+      "raw_content": "Affordable. Accessible. Transformational.",
+      "source_url": "https://omscs.gatech.edu/about-omscs",
+      "publisher": "Georgia Institute of Technology",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T12:02:13Z",
+      "content_hash": "sha256:00bdf0674d1d5becbfb6313430c49b89935c524b7039c41687462f280f0b5702"
+    },
+    "gold": {"entities": [], "claims": []}
+  }
+]

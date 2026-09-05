@@ -51,6 +51,7 @@ Exit: every accepted claim cites an exact stored passage; invalid model output i
 - [x] Offline comparison CLI
 - [x] Curate a 10-case assistant-verified public-source pilot with integrity checks
 - [x] Expand to 20 assistant-verified public cases with task/difficulty coverage labels
+- [x] Expand to 40 assistant-verified public cases across admissions, accreditation, employer demand, research methods, and negative controls
 - [x] Add deterministic coverage audit and selection-grade diversity gates
 - [x] Fingerprint-bound append-only human-review ledger and CLI
 - [x] Local benchmark human-review API and responsive workspace

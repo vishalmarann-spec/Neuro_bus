@@ -17,6 +17,7 @@ from app.evaluation.review import GoldReviewRecord, apply_latest_reviews, gold_c
 
 logger = logging.getLogger(__name__)
 
+
 class DatasetSplit(StrEnum):
     DEVELOPMENT = "development"
     VALIDATION = "validation"

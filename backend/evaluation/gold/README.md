@@ -9,8 +9,9 @@ This directory contains versioned extraction benchmarks. They are evaluation inp
 | `synthetic_smoke_v1.json` | 4 | Synthetic | Contract, parser, provenance, and metric smoke tests |
 | `public_pilot_v1.json` | 10 | Assistant-verified | Real-source schema and curation pilot only |
 | `public_batch_2_v1.json` | 10 | Assistant-verified | Coverage expansion with research, labour-market, temporal, and negative cases |
+| `public_batch_3_v1.json` | 20 | Assistant-verified | Admissions, accreditation, employer-demand, methodology, research-trend, pricing, and negative coverage |
 
-The two public batches contain 20 official excerpts from 19 publishers/domains across university, government, research, and industry sources. They cover ten task categories, three difficulty levels, five adversarial cases, and two promotion-only passages with no testable claim. The corpus still has no selection-grade development/validation/holdout manifest, double annotation, inter-reviewer agreement measurement, or candidate-model results. It cannot support production-model selection.
+The three public batches contain 40 official excerpts from 27 publishers across 29 domains and five source types. They cover 15 task categories, three difficulty levels, 12 adversarial cases, and four promotion-only passages with no testable claim. The corpus still has no selection-grade development/validation/holdout manifest, double annotation, inter-reviewer agreement measurement, or candidate-model results. It cannot support production-model selection.
 
 ## Integrity contract
 
@@ -33,7 +34,8 @@ The audit accepts one or more gold files and emits deterministic coverage counts
 cd backend
 uv run python -m app.evaluation.coverage_cli \
   --gold evaluation/gold/public_pilot_v1.json \
-  --gold evaluation/gold/public_batch_2_v1.json
+  --gold evaluation/gold/public_batch_2_v1.json \
+  --gold evaluation/gold/public_batch_3_v1.json
 ```
 
 Add `--require-selection-ready` in CI when auditing a candidate selection corpus. Selection readiness requires at least 100 cases, three source types, six task tags, ten publishers, and at least 10% each adversarial and `negative_no_claim` cases.

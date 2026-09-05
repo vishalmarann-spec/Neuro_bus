@@ -20,6 +20,8 @@ class BenchmarkDifficulty(StrEnum):
 
 
 class BenchmarkTaskTag(StrEnum):
+    ADMISSIONS = "admissions"
+    ACCREDITATION = "accreditation"
     CURRICULUM = "curriculum"
     PROGRAMME_STATUS = "programme_status"
     FEE = "fee"
@@ -29,6 +31,9 @@ class BenchmarkTaskTag(StrEnum):
     SKILLS_DEMAND = "skills_demand"
     PUBLIC_INITIATIVE = "public_initiative"
     EDUCATION_TREND = "education_trend"
+    EMPLOYER_DEMAND = "employer_demand"
+    METHODOLOGY_CAVEAT = "methodology_caveat"
+    RESEARCH_TREND = "research_trend"
     NEGATIVE_NO_CLAIM = "negative_no_claim"
 
 

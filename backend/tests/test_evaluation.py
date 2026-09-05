@@ -14,9 +14,8 @@ from app.providers.models import FakeModelProvider
 
 GOLD_PATH = Path(__file__).parents[1] / "evaluation" / "gold" / "synthetic_smoke_v1.json"
 PUBLIC_PILOT_PATH = Path(__file__).parents[1] / "evaluation" / "gold" / "public_pilot_v1.json"
-PUBLIC_BATCH_2_PATH = (
-    Path(__file__).parents[1] / "evaluation" / "gold" / "public_batch_2_v1.json"
-)
+PUBLIC_BATCH_2_PATH = Path(__file__).parents[1] / "evaluation" / "gold" / "public_batch_2_v1.json"
+PUBLIC_BATCH_3_PATH = Path(__file__).parents[1] / "evaluation" / "gold" / "public_batch_3_v1.json"
 
 
 def test_synthetic_gold_set_is_explicit_and_provenance_valid() -> None:
@@ -65,6 +64,28 @@ def test_second_public_batch_includes_difficult_and_negative_cases() -> None:
     assert sum("negative_no_claim" in case.task_tags for case in cases) == 2
     for case in cases:
         assert case.review_status == "assistant_verified"
+        assert case.document.content_hash == sha256_text(case.document.raw_content)
+        assert len(case.document.raw_content.split()) <= 25
+        assert validate_provenance(case.gold, segment_passages(case.document.raw_content)) == []
+
+
+def test_third_public_batch_expands_decision_and_methodology_coverage() -> None:
+    cases = load_gold_cases(PUBLIC_BATCH_3_PATH)
+
+    assert len(cases) == 20
+    assert len({case.document.source_url for case in cases}) == 20
+    assert sum(case.difficulty.value == "adversarial" for case in cases) == 7
+    assert sum("negative_no_claim" in case.task_tags for case in cases) == 2
+    assert {tag.value for case in cases for tag in case.task_tags} >= {
+        "accreditation",
+        "admissions",
+        "employer_demand",
+        "methodology_caveat",
+        "research_trend",
+    }
+    for case in cases:
+        assert case.review_status == "assistant_verified"
+        assert case.reviewer == "codex_web_verification"
         assert case.document.content_hash == sha256_text(case.document.raw_content)
         assert len(case.document.raw_content.split()) <= 25
         assert validate_provenance(case.gold, segment_passages(case.document.raw_content)) == []

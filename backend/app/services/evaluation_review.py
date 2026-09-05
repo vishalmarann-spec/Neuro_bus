@@ -97,9 +97,7 @@ class BenchmarkReviewWorkspace:
     ) -> list[BenchmarkReviewCase]:
         cases, records = self._load()
         latest_by_case_id = {record.case_id: record for record in records}
-        snapshots = [
-            self._snapshot(case, latest_by_case_id.get(case.case_id)) for case in cases
-        ]
+        snapshots = [self._snapshot(case, latest_by_case_id.get(case.case_id)) for case in cases]
         if state is not None:
             snapshots = [snapshot for snapshot in snapshots if snapshot.state == state]
         return snapshots
@@ -163,6 +161,7 @@ def default_benchmark_review_workspace() -> BenchmarkReviewWorkspace:
         gold_paths=[
             backend_root / "evaluation" / "gold" / "public_pilot_v1.json",
             backend_root / "evaluation" / "gold" / "public_batch_2_v1.json",
+            backend_root / "evaluation" / "gold" / "public_batch_3_v1.json",
         ],
         ledger_path=backend_root / "evaluation" / "reviews" / "public_corpus_v1.jsonl",
     )

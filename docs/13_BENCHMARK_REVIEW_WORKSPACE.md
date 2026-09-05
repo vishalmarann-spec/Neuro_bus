@@ -26,6 +26,7 @@ The default development workspace loads:
 
 - `backend/evaluation/gold/public_pilot_v1.json`
 - `backend/evaluation/gold/public_batch_2_v1.json`
+- `backend/evaluation/gold/public_batch_3_v1.json`
 
 Decisions are appended to `backend/evaluation/reviews/public_corpus_v1.jsonl`. This file is not created until a human submits a decision.
 
