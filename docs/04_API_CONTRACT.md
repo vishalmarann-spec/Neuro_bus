@@ -55,6 +55,9 @@ Insight generation returns `409 REASONING_REQUIRED` before scoring and `409 INSU
 
 - `POST /review/claims/{claim_id}`
 - `GET /claims/{claim_id}/reviews`
+- `GET /benchmark-reviews/cases` — local human-review queue with aggregate status counts; optional `state` filter.
+- `GET /benchmark-reviews/cases/{case_id}` — exact source excerpt, gold labels, current fingerprint, and latest ledger decision.
+- `POST /benchmark-reviews/cases/{case_id}/decisions` — append a fingerprint-bound human decision and checklist.
 - `POST /review/entities/{entity_id}/merge`
 - `POST /review/evidence/{evidence_link_id}`
 - `GET /audit-events`
@@ -86,3 +89,4 @@ Insight generation returns `409 REASONING_REQUIRED` before scoring and `409 INSU
 - Timestamps are UTC ISO 8601.
 - An API response never invents absent source metadata; absent data is `null` with a reason when relevant.
 - Re-submitting the same canonical URL and content hash within a run is idempotent and returns the existing capture.
+- Benchmark approvals require all checklist attestations and the current case fingerprint. These local file-writing routes are disabled outside development unless explicitly injected.

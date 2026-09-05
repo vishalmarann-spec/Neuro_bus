@@ -74,6 +74,8 @@ uv run python -m app.evaluation.review_cli \
 
 Do not use another person's name or check an attestation that was not actually performed. No human review records are committed yet.
 
+For the same workflow in a reviewer-friendly interface, start the local API and frontend and open `http://localhost:5173/?workspace=review`. The workspace shows queue status, official source links, exact excerpts and hashes, gold entities and offsets, structured claims and evidence, the latest decision, and the required attestations. It writes the same append-only record format as the CLI. The web routes are deliberately disabled outside local development; see `docs/13_BENCHMARK_REVIEW_WORKSPACE.md`.
+
 ## Selection-manifest workflow
 
 The manifest command combines one or more gold files with the latest review ledger. It fails closed unless there are at least 100 unique, non-synthetic, currently human-verified cases. Eligible cases are deterministically assigned by a recorded seed to 60% development, 20% validation, and 20% untouched holdout splits; each assignment is bound to its case fingerprint.

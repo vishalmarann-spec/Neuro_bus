@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 
 import { ApiError, fetchInsightReport, insightExportPath } from "./api";
+import ReviewWorkspace from "./ReviewWorkspace";
 import type {
   ClusterLabel,
   EvidenceStance,
@@ -216,7 +217,14 @@ function ReportWorkspace({ report }: { report: InsightReport }) {
 }
 
 export default function App() {
-  const initialInsightId = new URLSearchParams(window.location.search).get("insight") ?? "";
+  const searchParams = new URLSearchParams(window.location.search);
+  if (searchParams.get("workspace") === "review") {
+    return <ReviewWorkspace />;
+  }
+  return <ReportApp initialInsightId={searchParams.get("insight") ?? ""} />;
+}
+
+function ReportApp({ initialInsightId }: { initialInsightId: string }) {
   const [insightId, setInsightId] = useState(initialInsightId);
   const [report, setReport] = useState<InsightReport | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -291,6 +299,9 @@ export default function App() {
         </form>
 
         <div className="topbar-actions">
+          <a className="button-secondary" href="?workspace=review">
+            Gold review
+          </a>
           {report ? (
             <>
               <a className="button-secondary" href={insightExportPath(report.insight.id)} download>

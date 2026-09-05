@@ -53,6 +53,7 @@ Exit: every accepted claim cites an exact stored passage; invalid model output i
 - [x] Expand to 20 assistant-verified public cases with task/difficulty coverage labels
 - [x] Add deterministic coverage audit and selection-grade diversity gates
 - [x] Fingerprint-bound append-only human-review ledger and CLI
+- [x] Local benchmark human-review API and responsive workspace
 - [x] Deterministic 60/20/20 split manifest with 100-case and human-review gates
 - [ ] Obtain human sign-off for the public-source pilot
 - [ ] Curate the real, reviewable university-domain evaluation set

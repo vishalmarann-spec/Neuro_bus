@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from sqlalchemy.ext.asyncio import AsyncEngine
 
+from app.api.routes.benchmark_reviews import router as benchmark_reviews_router
 from app.api.routes.extraction import router as extraction_router
 from app.api.routes.health import router as health_router
 from app.api.routes.insights import router as insights_router
@@ -12,6 +13,10 @@ from app.api.routes.storage import router as storage_router
 from app.core.config import Settings, get_settings
 from app.core.database import SessionFactory, create_database
 from app.providers.models import DisabledModelProvider, ExtractionModelProvider
+from app.services.evaluation_review import (
+    BenchmarkReviewWorkspace,
+    default_benchmark_review_workspace,
+)
 from app.services.readiness import ReadinessProbe, database_probe
 
 
@@ -20,6 +25,7 @@ def create_app(
     readiness_probe: ReadinessProbe | None = None,
     session_factory: SessionFactory | None = None,
     model_provider: ExtractionModelProvider | None = None,
+    benchmark_review_workspace: BenchmarkReviewWorkspace | None = None,
 ) -> FastAPI:
     resolved_settings = settings or get_settings()
     owned_engine: AsyncEngine | None = None
@@ -34,6 +40,15 @@ def create_app(
         app.state.session_factory = resolved_session_factory
         app.state.readiness_probe = readiness_probe or database_probe(resolved_session_factory)
         app.state.model_provider = model_provider or DisabledModelProvider()
+        app.state.benchmark_review_workspace = (
+            benchmark_review_workspace
+            if benchmark_review_workspace is not None
+            else (
+                default_benchmark_review_workspace()
+                if resolved_settings.app_env == "development"
+                else None
+            )
+        )
         try:
             yield
         finally:
@@ -51,6 +66,7 @@ def create_app(
     application.include_router(extraction_router, prefix=resolved_settings.api_v1_prefix)
     application.include_router(reasoning_router, prefix=resolved_settings.api_v1_prefix)
     application.include_router(insights_router, prefix=resolved_settings.api_v1_prefix)
+    application.include_router(benchmark_reviews_router, prefix=resolved_settings.api_v1_prefix)
     return application
 
 

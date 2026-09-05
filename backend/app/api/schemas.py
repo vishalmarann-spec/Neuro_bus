@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Any
 from uuid import UUID
 
-from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator
+from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator, model_validator
 
 from app.core.models import (
     ClaimReviewStatus,
@@ -15,6 +15,14 @@ from app.core.models import (
     SourceType,
     ValidationStatus,
 )
+from app.evaluation.models import GoldCase
+from app.evaluation.review import (
+    RESERVED_NON_HUMAN_REVIEWERS,
+    GoldReviewRecord,
+    ReviewChecklist,
+    ReviewDecision,
+)
+from app.services.evaluation_review import BenchmarkReviewState
 
 
 class APIModel(BaseModel):
@@ -311,3 +319,54 @@ class InsightStatementRead(APIModel):
 class InsightReportRead(APIModel):
     insight: InsightRead
     statements: list[InsightStatementRead]
+
+
+class BenchmarkReviewCaseRead(APIModel):
+    case: GoldCase
+    case_fingerprint: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    state: BenchmarkReviewState
+    latest_review: GoldReviewRecord | None
+
+
+class BenchmarkReviewSummaryRead(APIModel):
+    total: int = Field(ge=0)
+    pending: int = Field(ge=0)
+    approved: int = Field(ge=0)
+    changes_requested: int = Field(ge=0)
+    rejected: int = Field(ge=0)
+    stale: int = Field(ge=0)
+
+
+class BenchmarkReviewQueueRead(APIModel):
+    summary: BenchmarkReviewSummaryRead
+    cases: list[BenchmarkReviewCaseRead]
+
+
+class BenchmarkReviewDecisionCreate(APIModel):
+    case_fingerprint: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    reviewer: str = Field(min_length=2, max_length=160)
+    decision: ReviewDecision
+    checklist: ReviewChecklist
+    notes: str = Field(min_length=3, max_length=2_000)
+
+    @field_validator("reviewer")
+    @classmethod
+    def validate_human_reviewer(cls, value: str) -> str:
+        normalized = " ".join(value.split())
+        if normalized.casefold() in RESERVED_NON_HUMAN_REVIEWERS:
+            raise ValueError("reviewer must identify the human who performed the review")
+        return normalized
+
+    @field_validator("notes")
+    @classmethod
+    def strip_notes(cls, value: str) -> str:
+        normalized = value.strip()
+        if not normalized:
+            raise ValueError("notes cannot be blank")
+        return normalized
+
+    @model_validator(mode="after")
+    def validate_approval_checklist(self) -> "BenchmarkReviewDecisionCreate":
+        if self.decision == "approved" and not self.checklist.complete:
+            raise ValueError("Approved reviews require every checklist item to be confirmed.")
+        return self
