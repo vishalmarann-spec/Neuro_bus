@@ -78,6 +78,8 @@ def gold_case_fingerprint(case: GoldCase) -> str:
         "case_id": case.case_id,
         "fixture_type": case.fixture_type,
         "excerpt_policy": case.excerpt_policy,
+        "difficulty": case.difficulty,
+        "task_tags": case.task_tags,
         "document": case.document.model_dump(mode="json"),
         "gold": case.gold.model_dump(mode="json"),
     }

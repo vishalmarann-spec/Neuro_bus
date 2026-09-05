@@ -42,3 +42,8 @@
 
 **Reason:** The product must prove evidence quality independently of fragile platform APIs.
 
+## ADR-008: Coverage labels are review-bound selection inputs
+
+**Decision:** Every non-synthetic gold case declares a controlled task category and difficulty. Selection-grade corpora require at least 100 cases, three source types, six task categories, ten publishers, and 10% each adversarial and no-claim negative cases.
+
+**Reason:** Aggregate extraction scores can hide overfitting to easy university descriptions. Binding coverage labels into the case fingerprint makes label changes invalidate earlier approvals and keeps dataset composition auditable.

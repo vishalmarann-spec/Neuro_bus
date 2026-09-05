@@ -7,6 +7,8 @@
     "review_status": "assistant_verified",
     "reviewer": "codex_web_verification",
     "reviewed_at": "2026-09-04T00:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": ["curriculum"],
     "document": {
       "title": "Master of Science in Artificial Intelligence and Innovation",
       "raw_content": "To earn the MSAII degree, you must pass courses in the Core Curriculum, the Knowledge Requirements and Electives.",
@@ -59,6 +61,8 @@
     "review_status": "assistant_verified",
     "reviewer": "codex_web_verification",
     "reviewed_at": "2026-09-04T00:00:00Z",
+    "difficulty": "adversarial",
+    "task_tags": ["programme_status"],
     "document": {
       "title": "MSc in Advanced Computer Science",
       "raw_content": "This course was previously known as the MSc in Computer Science",
@@ -95,6 +99,8 @@
     "review_status": "assistant_verified",
     "reviewer": "codex_web_verification",
     "reviewed_at": "2026-09-04T00:00:00Z",
+    "difficulty": "basic",
+    "task_tags": ["learning_outcome"],
     "document": {
       "title": "Data Science MSc",
       "raw_content": "Data science brings together computational and statistical skills for data-driven problem solving.",
@@ -140,6 +146,8 @@
     "review_status": "assistant_verified",
     "reviewer": "codex_web_verification",
     "reviewed_at": "2026-09-04T00:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": ["learning_outcome"],
     "document": {
       "title": "Computing (Artificial Intelligence and Machine Learning) MSc",
       "raw_content": "This course will develop your expertise in AI, ensuring you understand the state-of-the-art and can apply techniques to solve problems and develop applications.",
@@ -176,6 +184,8 @@
     "review_status": "assistant_verified",
     "reviewer": "codex_web_verification",
     "reviewed_at": "2026-09-04T00:00:00Z",
+    "difficulty": "basic",
+    "task_tags": ["learning_outcome"],
     "document": {
       "title": "Artificial Intelligence MSc",
       "raw_content": "We aim to give you the fundamental knowledge and practical skills needed to design, build, and apply AI systems in your chosen area of specialisation.",
@@ -212,6 +222,8 @@
     "review_status": "assistant_verified",
     "reviewer": "codex_web_verification",
     "reviewed_at": "2026-09-04T00:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": ["curriculum"],
     "document": {
       "title": "Specialization in Machine Learning",
       "raw_content": "For a Master of Science in Computer Science, Specialization in Machine Learning (15 hours), students must select from the following:",
@@ -264,6 +276,8 @@
     "review_status": "assistant_verified",
     "reviewer": "codex_web_verification",
     "reviewed_at": "2026-09-04T00:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": ["fee", "duration"],
     "document": {
       "title": "Applied AI Bundle - Generative and Agentic AI",
       "raw_content": "Course Length\n\n16 Weeks\n\nCourse Fee\n\n$5,610",
@@ -320,6 +334,8 @@
     "review_status": "assistant_verified",
     "reviewer": "codex_web_verification",
     "reviewed_at": "2026-09-04T00:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": ["labour_market"],
     "document": {
       "title": "Data Scientists: Occupational Outlook Handbook",
       "raw_content": "Employment of data scientists is projected to grow 34 percent from 2024 to 2034, much faster than the average for all occupations.",
@@ -365,6 +381,8 @@
     "review_status": "assistant_verified",
     "reviewer": "codex_web_verification",
     "reviewed_at": "2026-09-04T00:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": ["skills_demand"],
     "document": {
       "title": "The Future of Jobs Report 2025: Skills Outlook",
       "raw_content": "Among these, AI and big data top the list as the fastest-growing skills, followed closely by networks and cybersecurity and technological literacy.",
@@ -417,6 +435,8 @@
     "review_status": "assistant_verified",
     "reviewer": "codex_web_verification",
     "reviewed_at": "2026-09-04T00:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": ["public_initiative"],
     "document": {
       "title": "IndiaAI Fellowship",
       "raw_content": "It’s a student-focused initiative under the IndiaAI Mission to support students involved in AI related projects/research studies and to build an AI-skilled workforce.",

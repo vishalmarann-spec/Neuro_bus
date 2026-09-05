@@ -8,9 +8,11 @@ Neuro_Bus selects an extraction model using measured evidence quality, not reput
 
 `backend/evaluation/gold/synthetic_smoke_v1.json` contains four synthetic contract tests. Synthetic cases have `source_url: null` and must never appear as product evidence. They verify benchmark mechanics, exact mention offsets, negative/no-claim behaviour, and metric correctness.
 
-`backend/evaluation/gold/public_pilot_v1.json` contains 10 short excerpts manually checked against official pages on 4 September 2026. It covers seven university publishers, two government publishers, and one industry report publisher. Each case is labelled `assistant_verified`; no case claims human approval.
+`backend/evaluation/gold/public_pilot_v1.json` contains 10 short excerpts checked against official pages on 4 September 2026. `backend/evaluation/gold/public_batch_2_v1.json` adds 10 excerpts checked on 5 September 2026. Together they cover 20 cases from 19 publishers and domains across university, government, research, and industry sources. Each case is labelled `assistant_verified`; no case claims human approval.
 
-The schema rejects a non-synthetic case when its URL, publisher, source type, retrieval timestamp, reviewer, review timestamp, or SHA-256 content hash is missing. It also rejects changed text with a stale hash, public excerpts over 25 words, and gold entity mentions or evidence links that do not resolve to the exact stored passage.
+The combined corpus declares ten task categories and basic/intermediate/adversarial difficulty. Five cases are adversarial, including temporal or historical facts, and two are promotion-only negative passages with no testable claim. These proportions meet the coverage mix but not the 100-case or human-review gates.
+
+The schema rejects a non-synthetic case when its URL, publisher, source type, retrieval timestamp, reviewer, review timestamp, SHA-256 content hash, or task tag is missing. It also rejects changed text with a stale hash, public excerpts over 25 words, contradictory no-claim labels, and gold entity mentions or evidence links that do not resolve to the exact stored passage. Difficulty and task labels are included in the human-review fingerprint.
 
 Neither the smoke set nor the pilot is sufficient to select a production model. The pilot exists to prove that real-source curation and integrity enforcement work before paying for candidate-model runs.
 
@@ -35,6 +37,14 @@ Build a versioned set of at least 100 labelled passage/claim examples:
 - negative passages that contain promotion but no testable claim.
 
 For non-synthetic cases, record the verified source URL, retrieval date, permitted excerpt, content hash, and reviewer. Never invent URLs or present synthetic text as collected evidence.
+
+Before promotion, run the deterministic coverage audit. A selection corpus must contain at least three source types, six task tags, ten publishers, and at least 10% each adversarial and `negative_no_claim` cases. These are minimum anti-overfitting gates, not target weights; future dataset versions may strengthen them based on observed error slices.
+
+```bash
+uv run python -m app.evaluation.coverage_cli \
+  --gold evaluation/gold/public_pilot_v1.json \
+  --gold evaluation/gold/public_batch_2_v1.json
+```
 
 Split the data before tuning:
 
@@ -125,11 +135,12 @@ Prediction files may be JSON arrays or JSONL records following `ModelPrediction`
 ```bash
 cd backend
 uv run python -m app.evaluation.cli \
-  --gold evaluation/gold/synthetic_smoke_v1.json \
+  --gold evaluation/gold/public_pilot_v1.json \
+  --gold evaluation/gold/public_batch_2_v1.json \
   --predictions evaluation/predictions.json \
   --output evaluation/scorecards.json
 ```
 
-To exercise the real-source pilot, replace the `--gold` value with `evaluation/gold/public_pilot_v1.json`. Candidate scores from this pilot are diagnostic only and must not be used as the production selection decision.
+`--gold` is repeatable, and duplicate case IDs across files fail closed. For the synthetic smoke run, use only `evaluation/gold/synthetic_smoke_v1.json`. Candidate scores from the public batches are diagnostic only and must not be used as the production selection decision.
 
 Generated predictions and scorecards should be kept out of production evidence tables. Commit only small, intentional benchmark artifacts with no secrets or restricted content.

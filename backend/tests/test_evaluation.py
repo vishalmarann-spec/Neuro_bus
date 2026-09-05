@@ -14,6 +14,9 @@ from app.providers.models import FakeModelProvider
 
 GOLD_PATH = Path(__file__).parents[1] / "evaluation" / "gold" / "synthetic_smoke_v1.json"
 PUBLIC_PILOT_PATH = Path(__file__).parents[1] / "evaluation" / "gold" / "public_pilot_v1.json"
+PUBLIC_BATCH_2_PATH = (
+    Path(__file__).parents[1] / "evaluation" / "gold" / "public_batch_2_v1.json"
+)
 
 
 def test_synthetic_gold_set_is_explicit_and_provenance_valid() -> None:
@@ -53,6 +56,20 @@ def test_public_pilot_has_verified_metadata_hashes_and_provenance() -> None:
         assert validate_provenance(case.gold, spans) == []
 
 
+def test_second_public_batch_includes_difficult_and_negative_cases() -> None:
+    cases = load_gold_cases(PUBLIC_BATCH_2_PATH)
+
+    assert len(cases) == 10
+    assert len({case.document.source_url for case in cases}) == 10
+    assert sum(case.difficulty.value == "adversarial" for case in cases) == 4
+    assert sum("negative_no_claim" in case.task_tags for case in cases) == 2
+    for case in cases:
+        assert case.review_status == "assistant_verified"
+        assert case.document.content_hash == sha256_text(case.document.raw_content)
+        assert len(case.document.raw_content.split()) <= 25
+        assert validate_provenance(case.gold, segment_passages(case.document.raw_content)) == []
+
+
 def test_public_case_rejects_changed_excerpt_with_stale_hash() -> None:
     payload = load_gold_cases(PUBLIC_PILOT_PATH)[0].model_dump(mode="json")
     payload["document"]["raw_content"] += " Changed."
@@ -66,6 +83,22 @@ def test_public_case_rejects_missing_verification_metadata() -> None:
     payload["document"]["retrieved_at"] = None
 
     with pytest.raises(ValidationError, match="retrieved_at"):
+        GoldCase.model_validate(payload)
+
+
+def test_public_case_rejects_missing_task_tags() -> None:
+    payload = load_gold_cases(PUBLIC_PILOT_PATH)[0].model_dump(mode="json")
+    payload["task_tags"] = []
+
+    with pytest.raises(ValidationError, match="at least one benchmark task tag"):
+        GoldCase.model_validate(payload)
+
+
+def test_negative_tag_and_gold_claims_are_mutually_exclusive() -> None:
+    payload = load_gold_cases(PUBLIC_PILOT_PATH)[0].model_dump(mode="json")
+    payload["task_tags"] = ["negative_no_claim"]
+
+    with pytest.raises(ValidationError, match="must not contain gold claims"):
         GoldCase.model_validate(payload)
 
 

@@ -50,6 +50,8 @@ Exit: every accepted claim cites an exact stored passage; invalid model output i
 - [x] Model usage metadata in audit records
 - [x] Offline comparison CLI
 - [x] Curate a 10-case assistant-verified public-source pilot with integrity checks
+- [x] Expand to 20 assistant-verified public cases with task/difficulty coverage labels
+- [x] Add deterministic coverage audit and selection-grade diversity gates
 - [x] Fingerprint-bound append-only human-review ledger and CLI
 - [x] Deterministic 60/20/20 split manifest with 100-case and human-review gates
 - [ ] Obtain human sign-off for the public-source pilot

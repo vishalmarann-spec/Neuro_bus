@@ -9,7 +9,7 @@ from app.evaluation.dataset import (
     build_selection_manifest,
     deterministic_split_assignments,
 )
-from app.evaluation.io import load_gold_cases
+from app.evaluation.io import load_gold_case_files, load_gold_cases
 from app.evaluation.models import GoldCase
 from app.evaluation.review import (
     GoldReviewRecord,
@@ -23,6 +23,9 @@ from app.evaluation.review import (
 )
 
 PUBLIC_PILOT_PATH = Path(__file__).parents[1] / "evaluation" / "gold" / "public_pilot_v1.json"
+PUBLIC_BATCH_2_PATH = (
+    Path(__file__).parents[1] / "evaluation" / "gold" / "public_batch_2_v1.json"
+)
 REVIEWED_AT = datetime(2026, 9, 5, 9, 0, tzinfo=UTC)
 
 
@@ -51,10 +54,10 @@ def review_record(
 
 
 def reviewable_cases(count: int) -> list[GoldCase]:
-    base = load_gold_cases(PUBLIC_PILOT_PATH)[0]
+    bases = load_gold_case_files([PUBLIC_PILOT_PATH, PUBLIC_BATCH_2_PATH])
     cases = []
     for index in range(count):
-        payload = base.model_dump(mode="json")
+        payload = bases[index % len(bases)].model_dump(mode="json")
         payload["case_id"] = f"reviewed_case_{index:03d}"
         cases.append(GoldCase.model_validate(payload))
     return cases
@@ -132,6 +135,16 @@ def test_stale_review_does_not_promote_changed_gold_case() -> None:
 
     assert gold_case_fingerprint(changed_case) != record.case_fingerprint
     assert result.review_status == "assistant_verified"
+
+
+def test_coverage_label_change_invalidates_review_fingerprint() -> None:
+    case = load_gold_cases(PUBLIC_PILOT_PATH)[0]
+    original_fingerprint = gold_case_fingerprint(case)
+    payload = case.model_dump(mode="json")
+    payload["difficulty"] = "adversarial"
+    changed_case = GoldCase.model_validate(payload)
+
+    assert gold_case_fingerprint(changed_case) != original_fingerprint
 
 
 def test_latest_non_approval_revokes_promotion() -> None:
@@ -220,3 +233,5 @@ def test_selection_manifest_locks_case_fingerprints_and_split_counts() -> None:
         DatasetSplit.HOLDOUT: 20,
     }
     assert all(item.case_fingerprint.startswith("sha256:") for item in manifest.assignments)
+    assert manifest.coverage.selection_ready
+    assert manifest.coverage.negative_case_count == 10

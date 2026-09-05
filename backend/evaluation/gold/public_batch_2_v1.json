@@ -1,0 +1,428 @@
+[
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_stanford_ai_specialization_scope",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T05:17:34Z",
+    "difficulty": "basic",
+    "task_tags": ["curriculum"],
+    "document": {
+      "title": "Master's Specializations",
+      "raw_content": "Artificial Intelligence includes the study of AI principles and techniques, as well as foundational material on topics such as logic, probability, and language.",
+      "source_url": "https://www.cs.stanford.edu/masters-specializations",
+      "publisher": "Stanford University",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T05:17:34Z",
+      "content_hash": "sha256:02d0f74a1dd0ade74114ce87100591b31a1af271d75dedebbf8328c6acdc5e6b"
+    },
+    "gold": {
+      "entities": [
+        {
+          "local_id": "technology_1",
+          "entity_type": "technology",
+          "canonical_name": "Artificial Intelligence",
+          "aliases": ["AI"],
+          "mentions": [
+            {"passage_ordinal": 0, "surface_text": "Artificial Intelligence", "start_offset": 0, "end_offset": 23, "confidence": 1.0},
+            {"passage_ordinal": 0, "surface_text": "AI", "start_offset": 46, "end_offset": 48, "confidence": 1.0}
+          ]
+        }
+      ],
+      "claims": [
+        {
+          "subject_local_id": "technology_1",
+          "predicate": "specialization_covers_foundations",
+          "object_value": {"topics": ["principles", "techniques", "logic", "probability", "language"]},
+          "qualifiers": {},
+          "normalized_text": "The Artificial Intelligence specialization covers AI principles, techniques, logic, probability, and language.",
+          "extraction_confidence": 1.0,
+          "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The excerpt directly lists the specialization's subject matter."}]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_tufts_shape_the_future_tagline",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T05:17:34Z",
+    "difficulty": "adversarial",
+    "task_tags": ["negative_no_claim"],
+    "document": {
+      "title": "MS in Artificial Intelligence",
+      "raw_content": "Shape the future",
+      "source_url": "https://grad.tufts.edu/soe-msai/",
+      "publisher": "Tufts University",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T05:17:34Z",
+      "content_hash": "sha256:b1e11d08e840b40ac7b2ee6a965e50a6bf8a955785f3dd2068853149218bdcbb"
+    },
+    "gold": {
+      "entities": [],
+      "claims": []
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_nus_ai_last_intake",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T05:17:34Z",
+    "difficulty": "adversarial",
+    "task_tags": ["programme_status"],
+    "document": {
+      "title": "Master of Computing (Artificial Intelligence Specialisation)",
+      "raw_content": "Last Intake: January 2025 (AY2024/2025, Semester 2)",
+      "source_url": "https://www.comp.nus.edu.sg/programmes/pg/mai/",
+      "publisher": "National University of Singapore",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T05:17:34Z",
+      "content_hash": "sha256:d8eeb32b12f88bda1c6fce52b241ef2b6545c8acf3611b89fe71a7fa6af2529d"
+    },
+    "gold": {
+      "entities": [
+        {
+          "local_id": "date_1",
+          "entity_type": "date",
+          "canonical_name": "January 2025",
+          "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "January 2025", "start_offset": 13, "end_offset": 25, "confidence": 1.0}]
+        }
+      ],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "has_last_intake",
+          "object_value": {"month": "January", "year": 2025, "academic_year": "AY2024/2025", "semester": 2},
+          "qualifiers": {},
+          "normalized_text": "The programme's last intake was January 2025, AY2024/2025 Semester 2.",
+          "extraction_confidence": 1.0,
+          "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The excerpt explicitly marks January 2025 as the last intake."}]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_toronto_ai_coursework_fces",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T05:17:34Z",
+    "difficulty": "intermediate",
+    "task_tags": ["curriculum"],
+    "document": {
+      "title": "Computer Science: Applied Computing MScAC — Artificial Intelligence",
+      "raw_content": "Coursework. Students must successfully complete a total of 3.0 full-course equivalents (FCEs) as follows:",
+      "source_url": "https://sgs.calendar.utoronto.ca/computer-science-applied-computing-mscac-concentration-artificial-intelligence",
+      "publisher": "University of Toronto",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T05:17:34Z",
+      "content_hash": "sha256:2e16489b3226c3c60538da5b66f55a080d7740418e1502aa1531312a5b4733ba"
+    },
+    "gold": {
+      "entities": [
+        {
+          "local_id": "metric_1",
+          "entity_type": "metric",
+          "canonical_name": "3.0 Full-Course Equivalents",
+          "aliases": ["3.0 FCEs"],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "3.0 full-course equivalents", "start_offset": 59, "end_offset": 86, "confidence": 1.0}]
+        }
+      ],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "requires_coursework_total",
+          "object_value": {"full_course_equivalents": 3.0},
+          "qualifiers": {},
+          "normalized_text": "Students must complete 3.0 full-course equivalents of coursework.",
+          "extraction_confidence": 1.0,
+          "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The excerpt directly states the coursework total."}]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_bls_information_security_outlook",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T05:17:34Z",
+    "difficulty": "intermediate",
+    "task_tags": ["labour_market"],
+    "document": {
+      "title": "Information Security Analysts",
+      "raw_content": "Employment of information security analysts is projected to grow 21 percent from 2025 to 2035, much faster than the average for all occupations.",
+      "source_url": "https://www.bls.gov/ooh/computer-and-information-technology/information-security-analysts.htm",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "source_type": "government",
+      "retrieved_at": "2026-09-05T05:17:34Z",
+      "content_hash": "sha256:d2282d5c4e799c5041e9c620f3a47407bc22f2ece0b0057b602c4209557db262"
+    },
+    "gold": {
+      "entities": [
+        {
+          "local_id": "metric_1",
+          "entity_type": "metric",
+          "canonical_name": "21 Percent",
+          "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "21 percent", "start_offset": 65, "end_offset": 75, "confidence": 1.0}]
+        }
+      ],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "employment_projected_growth",
+          "object_value": {"occupation": "information security analysts", "growth_percent": 21, "start_year": 2025, "end_year": 2035},
+          "qualifiers": {"comparison": "much faster than average"},
+          "normalized_text": "Information security analyst employment is projected to grow 21 percent from 2025 to 2035.",
+          "extraction_confidence": 1.0,
+          "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The excerpt states the occupation, projection interval, and growth rate."}]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_onet_data_scientist_task",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T05:17:34Z",
+    "difficulty": "intermediate",
+    "task_tags": ["labour_market"],
+    "document": {
+      "title": "15-2051.00 — Data Scientists",
+      "raw_content": "Develop and implement a set of techniques or analytics applications to transform raw data into meaningful information using data-oriented programming languages and visualization software.",
+      "source_url": "https://www.onetonline.org/link/result/15-2051.00",
+      "publisher": "O*NET OnLine",
+      "source_type": "government",
+      "retrieved_at": "2026-09-05T05:17:34Z",
+      "content_hash": "sha256:3abbabcb7efa718941d5c21e496c4e07b6245fd366db34f90e3e054770789fdf"
+    },
+    "gold": {
+      "entities": [
+        {
+          "local_id": "technology_1",
+          "entity_type": "technology",
+          "canonical_name": "Data-Oriented Programming Languages",
+          "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "data-oriented programming languages", "start_offset": 124, "end_offset": 159, "confidence": 1.0}]
+        },
+        {
+          "local_id": "technology_2",
+          "entity_type": "technology",
+          "canonical_name": "Visualization Software",
+          "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "visualization software", "start_offset": 164, "end_offset": 186, "confidence": 1.0}]
+        }
+      ],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "occupation_task",
+          "object_value": {"occupation": "data scientists", "task": "transform raw data into meaningful information"},
+          "qualifiers": {"tools": ["data-oriented programming languages", "visualization software"]},
+          "normalized_text": "Data scientists develop analytics applications that transform raw data into meaningful information.",
+          "extraction_confidence": 1.0,
+          "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The occupational description directly states the task and tool categories."}]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_oecd_ai_vacancy_share",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T05:17:34Z",
+    "difficulty": "intermediate",
+    "task_tags": ["skills_demand"],
+    "document": {
+      "title": "Emerging trends in AI skill demand across 14 OECD countries",
+      "raw_content": "AI-related online vacancies comprised less than 1% of all job postings and were predominantly found in sectors such as ICT and Professional Services.",
+      "source_url": "https://www.oecd.org/en/publications/emerging-trends-in-ai-skill-demand-across-14-oecd-countries_7c691b9a-en.html",
+      "publisher": "OECD",
+      "source_type": "research",
+      "retrieved_at": "2026-09-05T05:17:34Z",
+      "content_hash": "sha256:502a32288b00e945e3d51ab8628d557f6c428cce53905b89930490b638be9559"
+    },
+    "gold": {
+      "entities": [
+        {
+          "local_id": "technology_1",
+          "entity_type": "technology",
+          "canonical_name": "Artificial Intelligence",
+          "aliases": ["AI"],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "AI", "start_offset": 0, "end_offset": 2, "confidence": 1.0}]
+        },
+        {
+          "local_id": "metric_1",
+          "entity_type": "metric",
+          "canonical_name": "Less Than 1 Percent",
+          "aliases": ["<1%"],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "less than 1%", "start_offset": 38, "end_offset": 50, "confidence": 1.0}]
+        }
+      ],
+      "claims": [
+        {
+          "subject_local_id": "technology_1",
+          "predicate": "vacancy_share_and_sector_concentration",
+          "object_value": {"share": "less than 1%", "sectors": ["ICT", "Professional Services"]},
+          "qualifiers": {"vacancy_type": "online"},
+          "normalized_text": "AI-related online vacancies were less than 1 percent of postings and concentrated in ICT and Professional Services.",
+          "extraction_confidence": 1.0,
+          "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The excerpt directly gives the share and predominant sectors."}]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_govuk_ai_demand_trend",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T05:17:34Z",
+    "difficulty": "adversarial",
+    "task_tags": ["labour_market"],
+    "document": {
+      "title": "AI Skills for Life and Work: Job Vacancy Analysis",
+      "raw_content": "Demand for AI (Artificial Intelligence) professionals grew across all categories from 2021 to mid-2022 but reduced in 2023.",
+      "source_url": "https://www.gov.uk/government/publications/ai-skills-for-life-and-work-job-vacancy-analysis/ai-skills-for-life-and-work-job-vacancy-analysis--2",
+      "publisher": "UK Department for Education",
+      "source_type": "government",
+      "retrieved_at": "2026-09-05T05:17:34Z",
+      "content_hash": "sha256:0276e2d5226cb403577778c1660c329388fc0d6ccb7db3b4bd291e4bf6df4e30"
+    },
+    "gold": {
+      "entities": [
+        {
+          "local_id": "technology_1",
+          "entity_type": "technology",
+          "canonical_name": "Artificial Intelligence",
+          "aliases": ["AI"],
+          "mentions": [
+            {"passage_ordinal": 0, "surface_text": "AI", "start_offset": 11, "end_offset": 13, "confidence": 1.0},
+            {"passage_ordinal": 0, "surface_text": "Artificial Intelligence", "start_offset": 15, "end_offset": 38, "confidence": 1.0}
+          ]
+        }
+      ],
+      "claims": [
+        {
+          "subject_local_id": "technology_1",
+          "predicate": "professional_demand_changed",
+          "object_value": {"grew_from": "2021", "grew_until": "mid-2022", "reduced_in": "2023"},
+          "qualifiers": {"scope": "all categories"},
+          "normalized_text": "Demand for AI professionals grew from 2021 to mid-2022 and declined in 2023.",
+          "extraction_confidence": 1.0,
+          "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The excerpt directly states both the increase and later reduction."}]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_stanford_hai_ai_phd_growth",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T05:17:34Z",
+    "difficulty": "intermediate",
+    "task_tags": ["education_trend"],
+    "document": {
+      "title": "2026 AI Index Report",
+      "raw_content": "The number of new AI PhDs in the U.S. and Canada increased 22% from 2022 to 2024",
+      "source_url": "https://hai.stanford.edu/ai-index/2026-ai-index-report",
+      "publisher": "Stanford Institute for Human-Centered Artificial Intelligence",
+      "source_type": "research",
+      "retrieved_at": "2026-09-05T05:17:34Z",
+      "content_hash": "sha256:bdd98a18bc74a688855030c8f084593efb8915ae00c0b931f3a3752f2ea6510b"
+    },
+    "gold": {
+      "entities": [
+        {
+          "local_id": "metric_1",
+          "entity_type": "metric",
+          "canonical_name": "22 Percent",
+          "aliases": ["22%"],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "22%", "start_offset": 59, "end_offset": 62, "confidence": 1.0}]
+        },
+        {
+          "local_id": "location_1",
+          "entity_type": "location",
+          "canonical_name": "United States",
+          "aliases": ["U.S."],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "U.S.", "start_offset": 33, "end_offset": 37, "confidence": 1.0}]
+        },
+        {
+          "local_id": "location_2",
+          "entity_type": "location",
+          "canonical_name": "Canada",
+          "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "Canada", "start_offset": 42, "end_offset": 48, "confidence": 1.0}]
+        }
+      ],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "new_ai_phds_increased",
+          "object_value": {"increase_percent": 22, "start_year": 2022, "end_year": 2024},
+          "qualifiers": {"locations": ["United States", "Canada"]},
+          "normalized_text": "New AI PhDs in the United States and Canada increased 22 percent from 2022 to 2024.",
+          "extraction_confidence": 1.0,
+          "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The excerpt states the geography, period, and percentage increase."}]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_harvard_data_science_tagline",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T05:17:34Z",
+    "difficulty": "adversarial",
+    "task_tags": ["negative_no_claim"],
+    "document": {
+      "title": "Data Science and Artificial Intelligence Master's Degree Program",
+      "raw_content": "Master the art of data discovery and analysis.",
+      "source_url": "https://coursebrowser.dce.harvard.edu/program/data-science-masters-degree-program/",
+      "publisher": "Harvard Extension School",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T05:17:34Z",
+      "content_hash": "sha256:5859fde36a571e00300d6488273aef273effc21b4a0ca4e871ad398466febd25"
+    },
+    "gold": {
+      "entities": [
+        {
+          "local_id": "skill_1",
+          "entity_type": "skill",
+          "canonical_name": "Data Discovery and Analysis",
+          "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "data discovery and analysis", "start_offset": 18, "end_offset": 45, "confidence": 1.0}]
+        }
+      ],
+      "claims": []
+    }
+  }
+]

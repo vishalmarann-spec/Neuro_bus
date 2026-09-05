@@ -4,7 +4,7 @@ import logging
 from pathlib import Path
 
 from app.evaluation.dataset import build_selection_manifest
-from app.evaluation.io import load_gold_cases
+from app.evaluation.io import load_gold_case_files
 from app.evaluation.review import load_review_records
 
 
@@ -24,7 +24,7 @@ def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
     parser = build_parser()
     args = parser.parse_args()
-    cases = [case for path in args.gold for case in load_gold_cases(path)]
+    cases = load_gold_case_files(args.gold)
     try:
         manifest = build_selection_manifest(
             cases,

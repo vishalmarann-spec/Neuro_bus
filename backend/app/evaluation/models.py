@@ -1,4 +1,5 @@
 import re
+from enum import StrEnum
 from typing import Literal
 
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, field_validator, model_validator
@@ -10,6 +11,25 @@ from app.domain.provenance import canonicalize_url, segment_passages, sha256_tex
 
 class EvaluationModel(BaseModel):
     model_config = ConfigDict(extra="forbid")
+
+
+class BenchmarkDifficulty(StrEnum):
+    BASIC = "basic"
+    INTERMEDIATE = "intermediate"
+    ADVERSARIAL = "adversarial"
+
+
+class BenchmarkTaskTag(StrEnum):
+    CURRICULUM = "curriculum"
+    PROGRAMME_STATUS = "programme_status"
+    FEE = "fee"
+    DURATION = "duration"
+    LEARNING_OUTCOME = "learning_outcome"
+    LABOUR_MARKET = "labour_market"
+    SKILLS_DEMAND = "skills_demand"
+    PUBLIC_INITIATIVE = "public_initiative"
+    EDUCATION_TREND = "education_trend"
+    NEGATIVE_NO_CLAIM = "negative_no_claim"
 
 
 class BenchmarkDocument(EvaluationModel):
@@ -38,6 +58,8 @@ class GoldCase(EvaluationModel):
     review_status: Literal["synthetic", "assistant_verified", "human_verified"] = "synthetic"
     reviewer: str | None = Field(default=None, min_length=1, max_length=160)
     reviewed_at: AwareDatetime | None = None
+    difficulty: BenchmarkDifficulty = BenchmarkDifficulty.BASIC
+    task_tags: list[BenchmarkTaskTag] = Field(default_factory=list, max_length=4)
     document: BenchmarkDocument
     gold: ExtractionEnvelope
 
@@ -49,6 +71,8 @@ class GoldCase(EvaluationModel):
             if self.excerpt_policy != "synthetic" or self.review_status != "synthetic":
                 raise ValueError("Synthetic cases must retain synthetic policy labels.")
         else:
+            if not self.task_tags:
+                raise ValueError("Non-synthetic cases require at least one benchmark task tag.")
             required_metadata = {
                 "source_url": self.document.source_url,
                 "publisher": self.document.publisher,
@@ -75,6 +99,14 @@ class GoldCase(EvaluationModel):
                 raise ValueError("Public benchmark excerpts may contain at most 25 words.")
         elif self.fixture_type == "licensed" and self.excerpt_policy != "licensed":
             raise ValueError("Licensed fixtures require the licensed excerpt policy.")
+
+        if len(set(self.task_tags)) != len(self.task_tags):
+            raise ValueError("Benchmark task tags must be unique within a case.")
+        is_negative = BenchmarkTaskTag.NEGATIVE_NO_CLAIM in self.task_tags
+        if is_negative and self.gold.claims:
+            raise ValueError("negative_no_claim cases must not contain gold claims.")
+        if not self.gold.claims and self.fixture_type != "synthetic" and not is_negative:
+            raise ValueError("Non-synthetic cases without claims require negative_no_claim.")
 
         provenance_errors = validate_provenance(
             self.gold,

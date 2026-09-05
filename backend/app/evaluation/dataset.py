@@ -7,13 +7,15 @@ from typing import Literal
 
 from pydantic import AwareDatetime, Field, model_validator
 
+from app.evaluation.coverage import (
+    MINIMUM_SELECTION_CASES,
+    BenchmarkCoverageReport,
+    summarize_benchmark_coverage,
+)
 from app.evaluation.models import EvaluationModel, GoldCase
 from app.evaluation.review import GoldReviewRecord, apply_latest_reviews, gold_case_fingerprint
 
 logger = logging.getLogger(__name__)
-
-MINIMUM_SELECTION_CASES = 100
-
 
 class DatasetSplit(StrEnum):
     DEVELOPMENT = "development"
@@ -35,6 +37,7 @@ class SelectionDatasetManifest(EvaluationModel):
     minimum_cases: int = MINIMUM_SELECTION_CASES
     case_count: int = Field(ge=MINIMUM_SELECTION_CASES)
     split_counts: dict[DatasetSplit, int]
+    coverage: BenchmarkCoverageReport
     assignments: list[SplitAssignment]
 
     @model_validator(mode="after")
@@ -51,6 +54,10 @@ class SelectionDatasetManifest(EvaluationModel):
             raise ValueError("split_counts do not match the assignments.")
         if any(expected_counts[split] == 0 for split in DatasetSplit):
             raise ValueError("Every dataset split must contain at least one case.")
+        if not self.coverage.selection_ready:
+            raise ValueError("Selection manifest coverage must pass every coverage gate.")
+        if self.coverage.case_count != self.case_count:
+            raise ValueError("Selection manifest coverage case_count must match the manifest.")
         return self
 
 
@@ -128,6 +135,12 @@ def build_selection_manifest(
         suffix = "..." if len(unverified) > 5 else ""
         raise ValueError(f"Selection datasets require human verification: {preview}{suffix}")
 
+    coverage = summarize_benchmark_coverage(reviewed_cases)
+    if not coverage.selection_ready:
+        raise ValueError(
+            "Selection dataset coverage requirements not met: " + "; ".join(coverage.failures)
+        )
+
     assignments = deterministic_split_assignments(reviewed_cases, seed=seed)
     counts = Counter(assignment.split for assignment in assignments)
     manifest = SelectionDatasetManifest(
@@ -136,6 +149,7 @@ def build_selection_manifest(
         seed=seed,
         case_count=len(cases),
         split_counts={split: counts[split] for split in DatasetSplit},
+        coverage=coverage,
         assignments=assignments,
     )
     logger.info(
