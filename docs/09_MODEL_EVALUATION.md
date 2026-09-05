@@ -8,13 +8,13 @@ Neuro_Bus selects an extraction model using measured evidence quality, not reput
 
 `backend/evaluation/gold/synthetic_smoke_v1.json` contains four synthetic contract tests. Synthetic cases have `source_url: null` and must never appear as product evidence. They verify benchmark mechanics, exact mention offsets, negative/no-claim behaviour, and metric correctness.
 
-`backend/evaluation/gold/public_pilot_v1.json` contains 10 short excerpts checked against official pages on 4 September 2026. `backend/evaluation/gold/public_batch_2_v1.json` adds 10 excerpts checked on 5 September 2026, and `backend/evaluation/gold/public_batch_3_v1.json` adds 20 more checked the same day. Together they cover 40 cases from 27 publishers across 29 domains and university, government, research, industry, and accreditation-body sources. Each case is labelled `assistant_verified`; no case claims human approval.
+`backend/evaluation/gold/public_pilot_v1.json` contains 10 short excerpts checked against official pages on 4 September 2026. `backend/evaluation/gold/public_batch_2_v1.json` adds 10 excerpts checked on 5 September 2026, `backend/evaluation/gold/public_batch_3_v1.json` adds 20, and `backend/evaluation/gold/public_batch_4_v1.json` adds 60 more checked the same day. Together they cover 100 cases from 40 publishers across 45 domains and university, government, research, industry, and accreditation-body sources. Each case is labelled `assistant_verified`; no case claims human approval.
 
-The combined corpus declares 15 task categories and basic/intermediate/adversarial difficulty. Twelve cases are adversarial, including temporal, negated, and methodology-sensitive facts, and four are promotion-only negative passages with no testable claim. These proportions meet the coverage mix but not the 100-case or human-review gates.
+The combined corpus declares 15 task categories and basic/intermediate/adversarial difficulty. Twenty-seven cases are adversarial, including temporal, negated, and methodology-sensitive facts, and 10 are promotion-only negative passages with no testable claim. The corpus passes the automated size and diversity gate. Promotion remains blocked until all selected cases have current, fingerprint-bound human approvals.
 
 The schema rejects a non-synthetic case when its URL, publisher, source type, retrieval timestamp, reviewer, review timestamp, SHA-256 content hash, or task tag is missing. It also rejects changed text with a stale hash, public excerpts over 25 words, contradictory no-claim labels, and gold entity mentions or evidence links that do not resolve to the exact stored passage. Difficulty and task labels are included in the human-review fingerprint.
 
-Neither the smoke set nor the pilot is sufficient to select a production model. The pilot exists to prove that real-source curation and integrity enforcement work before paying for candidate-model runs.
+Neither the smoke set nor the assistant-verified public corpus is sufficient to select a production model. The 100-case corpus proves that real-source curation, integrity enforcement, and coverage gating work before human review and paid candidate-model runs.
 
 ### Pilot source policy
 
@@ -44,7 +44,8 @@ Before promotion, run the deterministic coverage audit. A selection corpus must 
 uv run python -m app.evaluation.coverage_cli \
   --gold evaluation/gold/public_pilot_v1.json \
   --gold evaluation/gold/public_batch_2_v1.json \
-  --gold evaluation/gold/public_batch_3_v1.json
+  --gold evaluation/gold/public_batch_3_v1.json \
+  --gold evaluation/gold/public_batch_4_v1.json
 ```
 
 Split the data before tuning:
@@ -141,6 +142,7 @@ uv run python -m app.evaluation.cli \
   --gold evaluation/gold/public_pilot_v1.json \
   --gold evaluation/gold/public_batch_2_v1.json \
   --gold evaluation/gold/public_batch_3_v1.json \
+  --gold evaluation/gold/public_batch_4_v1.json \
   --predictions evaluation/predictions.json \
   --output evaluation/scorecards.json
 ```

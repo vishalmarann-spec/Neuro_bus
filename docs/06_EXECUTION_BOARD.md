@@ -52,12 +52,13 @@ Exit: every accepted claim cites an exact stored passage; invalid model output i
 - [x] Curate a 10-case assistant-verified public-source pilot with integrity checks
 - [x] Expand to 20 assistant-verified public cases with task/difficulty coverage labels
 - [x] Expand to 40 assistant-verified public cases across admissions, accreditation, employer demand, research methods, and negative controls
+- [x] Expand to 100 assistant-verified public cases with 10% negative controls and automated selection-coverage readiness
 - [x] Add deterministic coverage audit and selection-grade diversity gates
 - [x] Fingerprint-bound append-only human-review ledger and CLI
 - [x] Local benchmark human-review API and responsive workspace
 - [x] Deterministic 60/20/20 split manifest with 100-case and human-review gates
 - [ ] Obtain human sign-off for the public-source pilot
-- [ ] Curate the real, reviewable university-domain evaluation set
+- [x] Curate the real, reviewable university-domain evaluation set
 - [ ] Run candidate models and select the production adapter
 
 ## Milestone 3: multi-source reasoning

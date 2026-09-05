@@ -16,6 +16,7 @@ GOLD_PATH = Path(__file__).parents[1] / "evaluation" / "gold" / "synthetic_smoke
 PUBLIC_PILOT_PATH = Path(__file__).parents[1] / "evaluation" / "gold" / "public_pilot_v1.json"
 PUBLIC_BATCH_2_PATH = Path(__file__).parents[1] / "evaluation" / "gold" / "public_batch_2_v1.json"
 PUBLIC_BATCH_3_PATH = Path(__file__).parents[1] / "evaluation" / "gold" / "public_batch_3_v1.json"
+PUBLIC_BATCH_4_PATH = Path(__file__).parents[1] / "evaluation" / "gold" / "public_batch_4_v1.json"
 
 
 def test_synthetic_gold_set_is_explicit_and_provenance_valid() -> None:
@@ -82,6 +83,31 @@ def test_third_public_batch_expands_decision_and_methodology_coverage() -> None:
         "employer_demand",
         "methodology_caveat",
         "research_trend",
+    }
+    for case in cases:
+        assert case.review_status == "assistant_verified"
+        assert case.reviewer == "codex_web_verification"
+        assert case.document.content_hash == sha256_text(case.document.raw_content)
+        assert len(case.document.raw_content.split()) <= 25
+        assert validate_provenance(case.gold, segment_passages(case.document.raw_content)) == []
+
+
+def test_fourth_public_batch_reaches_selection_coverage_floor() -> None:
+    cases = load_gold_cases(PUBLIC_BATCH_4_PATH)
+
+    assert len(cases) == 60
+    assert len({case.document.source_url for case in cases}) == 60
+    assert sum(case.difficulty.value == "adversarial" for case in cases) == 15
+    assert sum("negative_no_claim" in case.task_tags for case in cases) == 6
+    assert {tag.value for case in cases for tag in case.task_tags} >= {
+        "admissions",
+        "curriculum",
+        "employer_demand",
+        "labour_market",
+        "methodology_caveat",
+        "negative_no_claim",
+        "research_trend",
+        "skills_demand",
     }
     for case in cases:
         assert case.review_status == "assistant_verified"

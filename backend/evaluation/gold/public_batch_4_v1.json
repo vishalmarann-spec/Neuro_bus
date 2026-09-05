@@ -1,0 +1,2830 @@
+[
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_uiuc_mcs_credit_hours",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "basic",
+    "task_tags": [
+      "curriculum",
+      "programme_status"
+    ],
+    "document": {
+      "title": "MCS Degree Requirements",
+      "raw_content": "The Siebel School of Computing and Data Science's Master of Computer Science (MCS) consists of 32 credit hours of coursework and no thesis.",
+      "source_url": "https://www.cs.illinois.edu/academics/graduate/professional-mcs-program/mcs-degree-requirements",
+      "publisher": "University of Illinois Urbana-Champaign",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:df03d2b3fc38f2a4e1978566eca5febec368fe1c5c021f93332e3f55ae8cfa15"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "programme_requires_coursework_without_thesis",
+          "object_value": {
+            "programme": "Master of Computer Science",
+            "credit_hours": 32,
+            "thesis_required": false
+          },
+          "qualifiers": {},
+          "normalized_text": "The MCS requires 32 credit hours of coursework and no thesis.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_berkeley_mids_online_units",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "basic",
+    "task_tags": [
+      "curriculum",
+      "duration"
+    ],
+    "document": {
+      "title": "Master of Information and Data Science",
+      "raw_content": "The 27-unit online program is designed for the working professional and can be completed at a flexible pace.",
+      "source_url": "https://www.ischool.berkeley.edu/programs/mids-online",
+      "publisher": "UC Berkeley School of Information",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:ce07a1fcd8ff70c873a8f08fb83bfb565a13394df25158d6d4ba79e853817bc8"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "online_programme_has_flexible_pace",
+          "object_value": {
+            "units": 27,
+            "delivery": "online",
+            "pace": "flexible"
+          },
+          "qualifiers": {},
+          "normalized_text": "Berkeley's 27-unit online program supports a flexible completion pace.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_columbia_msds_credits",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "basic",
+    "task_tags": [
+      "curriculum"
+    ],
+    "document": {
+      "title": "M.S. in Data Science Curriculum",
+      "raw_content": "The M.S. in Data Science requires students to complete 21 credits of core coursework and a minimum of 9 elective credits",
+      "source_url": "https://datascience.columbia.edu/education/programs/m-s-in-data-science/curriculum/",
+      "publisher": "Columbia University Data Science Institute",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:76d34a25c0c25e638893a8b63a5a4f486b1d7836548e1a1f776b50d88b7b1e98"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "programme_credit_requirements",
+          "object_value": {
+            "core_credits": 21,
+            "minimum_elective_credits": 9
+          },
+          "qualifiers": {},
+          "normalized_text": "Columbia's M.S. in Data Science requires 21 core credits and at least 9 elective credits.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_columbia_gre_optional_2026",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "adversarial",
+    "task_tags": [
+      "admissions"
+    ],
+    "document": {
+      "title": "M.S. in Data Science Admissions",
+      "raw_content": "Official Graduate Record Examination (GRE) General Test Scores are optional for the 2026 applications",
+      "source_url": "https://datascience.columbia.edu/education/programs/m-s-in-data-science/admissions/",
+      "publisher": "Columbia University Data Science Institute",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:30342d482e995bb5500fbe29d4ca9c5056f783bb86c03932a82de5b2360259e7"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "admission_test_optional",
+          "object_value": {
+            "test": "GRE General Test",
+            "application_year": 2026,
+            "required": false
+          },
+          "qualifiers": {},
+          "normalized_text": "GRE General Test scores are optional for Columbia's 2026 M.S. in Data Science applications.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_ut_austin_research_degree_courses",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "curriculum"
+    ],
+    "document": {
+      "title": "Graduate Research Degrees",
+      "raw_content": "Each course counts for three credit hours, and students typically complete 10 courses before focusing fully on research.",
+      "source_url": "https://www.cs.utexas.edu/graduate/research-degrees",
+      "publisher": "The University of Texas at Austin Department of Computer Science",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:0c79ad75be278657337a1c807854ee5221a0b8bec9cebd99c22a79fa1e2aaec0"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "research_degree_course_pattern",
+          "object_value": {
+            "credit_hours_per_course": 3,
+            "typical_course_count": 10
+          },
+          "qualifiers": {},
+          "normalized_text": "Students typically complete ten three-credit courses before focusing fully on research.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_helsinki_data_science_120_credits",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "basic",
+    "task_tags": [
+      "curriculum"
+    ],
+    "document": {
+      "title": "Data Science Degree Structure 2026–2030",
+      "raw_content": "The MSc degree in Data Science consists of 120 credits divided into core courses, data science specialisation courses, and other courses",
+      "source_url": "https://www.helsinki.fi/en/degree-programmes/data-science-masters-programme/data-science-degree-structure-2026-2030",
+      "publisher": "University of Helsinki",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:0bfc6cf365938acb6111c9676aa59a1c9591032f213a27cfc2f0e1710c8c15b1"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "programme_credit_structure",
+          "object_value": {
+            "credits": 120,
+            "components": [
+              "core courses",
+              "data science specialisation courses",
+              "other courses"
+            ]
+          },
+          "qualifiers": {},
+          "normalized_text": "Helsinki's MSc in Data Science totals 120 credits across core, specialisation, and other courses.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_kth_machine_learning_duration",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "basic",
+    "task_tags": [
+      "duration",
+      "curriculum"
+    ],
+    "document": {
+      "title": "MSc Machine Learning",
+      "raw_content": "This is a two year programme (120 ECTS credits) given in English.",
+      "source_url": "https://www.kth.se/studies/master/machine-learning/msc-machine-learning-1.48533",
+      "publisher": "KTH Royal Institute of Technology",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:be1bfb086fd83ed7a82a5c04a9b2f45ba8bbd9a82c1948655dc956958e84f633"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "programme_duration_and_credits",
+          "object_value": {
+            "duration_years": 2,
+            "ects_credits": 120,
+            "language": "English"
+          },
+          "qualifiers": {},
+          "normalized_text": "KTH's machine-learning programme lasts two years, totals 120 ECTS, and is taught in English.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_kth_machine_learning_bachelor_entry",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "basic",
+    "task_tags": [
+      "admissions"
+    ],
+    "document": {
+      "title": "Entry Requirements for Machine Learning",
+      "raw_content": "A Bachelor’s degree, or equivalent, corresponding to 180 ECTS credits",
+      "source_url": "https://www.kth.se/en/studies/master/machine-learning/entry-requirements-machine-learning-1.48539",
+      "publisher": "KTH Royal Institute of Technology",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:835298ea4883ada53b6f5ab6e13f7515baa0a7852f180263c361bbc543381a2c"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "admission_requires_bachelors_degree",
+          "object_value": {
+            "minimum_prior_ects": 180,
+            "degree_level": "bachelor's or equivalent"
+          },
+          "qualifiers": {},
+          "normalized_text": "Admission requires a bachelor's degree or equivalent corresponding to 180 ECTS.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_epfl_data_science_120_ects",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "basic",
+    "task_tags": [
+      "curriculum"
+    ],
+    "document": {
+      "title": "Master in Data Science",
+      "raw_content": "The program consists of two main components: the Master’s cycle (90 ECTS), followed by a Master’s project (30 ECTS), totaling 120 ECTS.",
+      "source_url": "https://www.epfl.ch/schools/ic/education/master/data-science/",
+      "publisher": "EPFL",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:22d40de215fb5dc29113af9d1588ebd8a3afc58b546eeb9e60f1b0e296aff0b2"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "programme_ects_components",
+          "object_value": {
+            "masters_cycle_ects": 90,
+            "project_ects": 30,
+            "total_ects": 120
+          },
+          "qualifiers": {},
+          "normalized_text": "EPFL's data-science master totals 120 ECTS: 90 for the cycle and 30 for the project.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_eth_data_science_duration",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "basic",
+    "task_tags": [
+      "duration",
+      "curriculum"
+    ],
+    "document": {
+      "title": "Master Data Science",
+      "raw_content": "120 ECTS | 2 years",
+      "source_url": "https://ethz.ch/en/studies/master/degree-programmes/engineering-sciences/data-science.html/1000",
+      "publisher": "ETH Zurich",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:1558ebe8e449333ac0775934961381ce48a110b7b4faaa3f26a05577cf210b59"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "programme_duration_and_credits",
+          "object_value": {
+            "ects_credits": 120,
+            "duration_years": 2
+          },
+          "qualifiers": {},
+          "normalized_text": "ETH Zurich lists the data-science master's as 120 ECTS over two years.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_cambridge_mphil_machine_learning_duration",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "basic",
+    "task_tags": [
+      "duration",
+      "programme_status"
+    ],
+    "document": {
+      "title": "MPhil in Machine Learning and Machine Intelligence",
+      "raw_content": "This is an 11-month MPhil programme, taught from within our Information Engineering Division",
+      "source_url": "https://www.postgraduate.study.cam.ac.uk/courses/directory/egegmpmsl",
+      "publisher": "University of Cambridge",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:ff9a386813055da88cba3fbe019d1c71f91d70bdb51d5d191444d95c8c7c5c84"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "programme_duration",
+          "object_value": {
+            "duration_months": 11,
+            "degree": "MPhil"
+          },
+          "qualifiers": {},
+          "normalized_text": "Cambridge's MPhil programme lasts 11 months.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_imperial_mres_ai_duration",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "basic",
+    "task_tags": [
+      "duration",
+      "programme_status"
+    ],
+    "document": {
+      "title": "MRes Artificial Intelligence and Machine Learning",
+      "raw_content": "The MRes AI and Machine Learning is a one-year postgraduate degree",
+      "source_url": "https://www.imperial.ac.uk/computing/prospective-students/courses/pg/mres-artificial-intelligence-and-machine-learning/",
+      "publisher": "Imperial College London",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:786ca1c3ea299eb5fb109ca6603cd42ecf24ff1fdb407c3aad43b6a5832db41d"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "programme_duration",
+          "object_value": {
+            "duration_years": 1,
+            "degree": "MRes"
+          },
+          "qualifiers": {},
+          "normalized_text": "Imperial's MRes in AI and Machine Learning is a one-year postgraduate degree.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_manchester_msds_180_credits",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "basic",
+    "task_tags": [
+      "curriculum"
+    ],
+    "document": {
+      "title": "MSc Data Science (Computer Science Data Informatics)",
+      "raw_content": "A master’s degree is formed of 180 credits.",
+      "source_url": "https://www.manchester.ac.uk/study/masters/courses/list/11552/msc-data-science-computer-science-data-informatics/",
+      "publisher": "The University of Manchester",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:2afcf97344213538ebc12630a21088ee8375174956fd6db93b24df5ad96de2dc"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "masters_degree_total_credits",
+          "object_value": {
+            "credits": 180
+          },
+          "qualifiers": {},
+          "normalized_text": "The master's degree consists of 180 credits.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_manchester_social_analytics_project",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "curriculum"
+    ],
+    "document": {
+      "title": "MSc Data Science (Social Analytics)",
+      "raw_content": "On the MSc Data Science and Artificial Intelligence (Social Analytics pathway), there are six mandatory course units, including an extended research project worth 60 credits.",
+      "source_url": "https://www.manchester.ac.uk/study/masters/courses/list/11424/msc-data-science-social-analytics/",
+      "publisher": "The University of Manchester",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:d4b71c825301fba629cf523cd646f46c9d05fe940eeb450e5efbb3ac47b7aa20"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "programme_mandatory_units_and_project",
+          "object_value": {
+            "mandatory_course_units": 6,
+            "research_project_credits": 60
+          },
+          "qualifiers": {},
+          "normalized_text": "The pathway has six mandatory units, including a 60-credit extended research project.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_edinburgh_ai_optional_credits",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "curriculum"
+    ],
+    "document": {
+      "title": "Artificial Intelligence Degree Programme and Courses",
+      "raw_content": "you must register for another 100 credits of optional taught courses",
+      "source_url": "https://informatics.ed.ac.uk/taught-students/msc-students/taught-msc-handbook-202627/degree-programmes-and-courses/artificial",
+      "publisher": "University of Edinburgh",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:8160e65706feaddde218b24177420b73a7282b78e31001bc4f8eaaf596461d17"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "programme_optional_taught_credits",
+          "object_value": {
+            "optional_taught_credits": 100
+          },
+          "qualifiers": {},
+          "normalized_text": "Students must register for another 100 credits of optional taught courses.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_harvard_data_science_tuition",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "fee"
+    ],
+    "document": {
+      "title": "Data Science Graduate Program",
+      "raw_content": "Our Tuition (2026–27 rate) $3,580 per course",
+      "source_url": "https://extension.harvard.edu/academics/programs/data-science-graduate-program/",
+      "publisher": "Harvard Extension School",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:0bf78c4185d3f1c0009643a200157c0ce034e53bdd9020a3a46a4fa3e859dc26"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "programme_tuition_per_course",
+          "object_value": {
+            "academic_year": "2026-27",
+            "usd_per_course": 3580
+          },
+          "qualifiers": {},
+          "normalized_text": "The 2026–27 tuition rate is $3,580 per course.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_american_online_msds_gpa",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "basic",
+    "task_tags": [
+      "admissions"
+    ],
+    "document": {
+      "title": "Online MS Data Science",
+      "raw_content": "Online MS Data Science candidates must have a bachelor’s degree with a cumulative grade point average of 3.00",
+      "source_url": "https://www.american.edu/programs/shared/data-science/online/",
+      "publisher": "American University",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:050c999116addf3ac43358045a65781d8e7765608ce281c106c6b9a077d2fc87"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "admission_requires_degree_and_gpa",
+          "object_value": {
+            "degree": "bachelor's",
+            "minimum_cumulative_gpa": 3.0
+          },
+          "qualifiers": {},
+          "normalized_text": "Candidates need a bachelor's degree and a cumulative GPA of 3.00.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_ucl_data_science_programming_requirement",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "basic",
+    "task_tags": [
+      "admissions",
+      "skills_demand"
+    ],
+    "document": {
+      "title": "Data Science MSc",
+      "raw_content": "Prior experience in a high-level programming language (e.g. R/matlab/python) is a requirement.",
+      "source_url": "https://www.ucl.ac.uk/prospective-students/graduate/taught/degrees/data-science-msc",
+      "publisher": "University College London",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:357d4b62f10e08909cefebab56113d7b40066237c048e7f7a9a9950bf83f8b7a"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "admission_requires_programming_experience",
+          "object_value": {
+            "required": true,
+            "examples": [
+              "R",
+              "MATLAB",
+              "Python"
+            ]
+          },
+          "qualifiers": {},
+          "normalized_text": "UCL requires prior experience in a high-level programming language.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_ucl_dsml_one_year_scope",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "duration",
+      "curriculum"
+    ],
+    "document": {
+      "title": "Data Science and Machine Learning MSc",
+      "raw_content": "Our one-year Data Science and Machine Learning MSc offers modules spanning artificial intelligence and deep learning to digital finance and probabilistic modelling",
+      "source_url": "https://www.ucl.ac.uk/prospective-students/graduate/taught-degrees/data-science-and-machine-learning-msc",
+      "publisher": "University College London",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:0f041d0266320f113718d9dc77f4b35fe03494430378923647131f613e331355"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "programme_duration_and_module_scope",
+          "object_value": {
+            "duration_years": 1,
+            "topics": [
+              "artificial intelligence",
+              "deep learning",
+              "digital finance",
+              "probabilistic modelling"
+            ]
+          },
+          "qualifiers": {},
+          "normalized_text": "UCL's one-year MSc spans AI, deep learning, digital finance, and probabilistic modelling.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_melbourne_msds_duration_points",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "basic",
+    "task_tags": [
+      "duration",
+      "curriculum"
+    ],
+    "document": {
+      "title": "Master of Data Science Structure",
+      "raw_content": "The Master of Data Science at the University of Melbourne is a 200-point program delivered over two years",
+      "source_url": "https://study.unimelb.edu.au/find/courses/graduate/master-of-data-science/structure",
+      "publisher": "The University of Melbourne",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:ff64e4a9248d52f82245bd27dbd705ec563c8f7bd6b037483f3f273aa75dfe12"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "programme_duration_and_points",
+          "object_value": {
+            "points": 200,
+            "duration_years": 2
+          },
+          "qualifiers": {},
+          "normalized_text": "Melbourne's Master of Data Science is a 200-point, two-year programme.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_bls_operations_research_outlook",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "labour_market"
+    ],
+    "document": {
+      "title": "Operations Research Analysts",
+      "raw_content": "Employment of operations research analysts is projected to grow 12 percent from 2025 to 2035",
+      "source_url": "https://www.bls.gov/ooh/math/operations-research-analysts.htm",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "source_type": "government",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:7608d3e7c6059f269260d9222d554aceb4001bbff68c6d00147fcd450ccd4fc2"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "employment_projected_growth",
+          "object_value": {
+            "occupation": "operations research analysts",
+            "change_percent": 12,
+            "start_year": 2025,
+            "end_year": 2035
+          },
+          "qualifiers": {},
+          "normalized_text": "Operations-research analyst employment is projected to grow 12% from 2025 to 2035.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_bls_market_research_outlook",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "labour_market"
+    ],
+    "document": {
+      "title": "Market Research Analysts",
+      "raw_content": "Employment of market research analysts is projected to grow 7 percent from 2025 to 2035",
+      "source_url": "https://www.bls.gov/ooh/business-and-financial/market-research-analysts.htm",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "source_type": "government",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:d8a186af14fc3b2c61fb4011a02aaaf33fbd25fd18a71ded620ce8f429bbda16"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "employment_projected_growth",
+          "object_value": {
+            "occupation": "market research analysts",
+            "change_percent": 7,
+            "start_year": 2025,
+            "end_year": 2035
+          },
+          "qualifiers": {},
+          "normalized_text": "Market-research analyst employment is projected to grow 7% from 2025 to 2035.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_bls_programmers_decline",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "adversarial",
+    "task_tags": [
+      "labour_market"
+    ],
+    "document": {
+      "title": "Computer Programmers",
+      "raw_content": "Employment of computer programmers is projected to decline 7 percent from 2025 to 2035.",
+      "source_url": "https://www.bls.gov/ooh/computer-and-information-technology/computer-programmers.htm",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "source_type": "government",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:09fbc7eb25cb87d3ed2ae7984fefdd511dcc82d022e72afe9c51870495fdf7a9"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "employment_projected_decline",
+          "object_value": {
+            "occupation": "computer programmers",
+            "change_percent": -7,
+            "start_year": 2025,
+            "end_year": 2035
+          },
+          "qualifiers": {},
+          "normalized_text": "Computer-programmer employment is projected to decline 7% from 2025 to 2035.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_bls_database_outlook",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "labour_market"
+    ],
+    "document": {
+      "title": "Database Administrators and Architects",
+      "raw_content": "Overall employment of database administrators and architects is projected to grow 4 percent from 2025 to 2035",
+      "source_url": "https://www.bls.gov/ooh/computer-and-information-technology/database-administrators.htm",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "source_type": "government",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:5bf32e833d15a959e075dac79f652c136c1e3375101812e767f21c1250d64ec3"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "employment_projected_growth",
+          "object_value": {
+            "occupation": "database administrators and architects",
+            "change_percent": 4,
+            "start_year": 2025,
+            "end_year": 2035
+          },
+          "qualifiers": {},
+          "normalized_text": "Database-administrator and architect employment is projected to grow 4% from 2025 to 2035.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_bls_software_outlook",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "labour_market"
+    ],
+    "document": {
+      "title": "Software Developers, Quality Assurance Analysts, and Testers",
+      "raw_content": "Overall employment of software developers, quality assurance analysts, and testers is projected to grow 10 percent from 2025 to 2035",
+      "source_url": "https://www.bls.gov/ooh/computer-and-information-technology/software-developers.htm",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "source_type": "government",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:3fa69074ded1bfe5d8ec8b37c5f98d7c78b4eeaa18718481e4be735065c8493c"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "employment_projected_growth",
+          "object_value": {
+            "occupation": "software developers, quality assurance analysts, and testers",
+            "change_percent": 10,
+            "start_year": 2025,
+            "end_year": 2035
+          },
+          "qualifiers": {},
+          "normalized_text": "Software-development, QA, and tester employment is projected to grow 10% from 2025 to 2035.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_bls_systems_analysts_outlook",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "labour_market"
+    ],
+    "document": {
+      "title": "Computer Systems Analysts",
+      "raw_content": "Employment of computer systems analysts is projected to grow 8 percent from 2025 to 2035",
+      "source_url": "https://www.bls.gov/ooh/computer-and-information-technology/computer-systems-analysts.htm",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "source_type": "government",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:78890b70c5a6924f392fbb742adaed88bca7cbbcc7232456535b0cc24dd7f039"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "employment_projected_growth",
+          "object_value": {
+            "occupation": "computer systems analysts",
+            "change_percent": 8,
+            "start_year": 2025,
+            "end_year": 2035
+          },
+          "qualifiers": {},
+          "normalized_text": "Computer-systems analyst employment is projected to grow 8% from 2025 to 2035.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_bls_actuaries_outlook",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "labour_market"
+    ],
+    "document": {
+      "title": "Actuaries",
+      "raw_content": "Employment of actuaries is projected to grow 9 percent from 2025 to 2035",
+      "source_url": "https://www.bls.gov/ooh/math/actuaries.htm",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "source_type": "government",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:8dccf9ed0d38e8bd7871856086c5e82ac4ef4bc4ea0687afdbc88ea685997aaa"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "employment_projected_growth",
+          "object_value": {
+            "occupation": "actuaries",
+            "change_percent": 9,
+            "start_year": 2025,
+            "end_year": 2035
+          },
+          "qualifiers": {},
+          "normalized_text": "Actuary employment is projected to grow 9% from 2025 to 2035.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_bls_financial_analysts_outlook",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "labour_market"
+    ],
+    "document": {
+      "title": "Financial Analysts",
+      "raw_content": "Overall employment of financial analysts is projected to grow 7 percent from 2025 to 2035",
+      "source_url": "https://www.bls.gov/ooh/business-and-financial/financial-analysts.htm",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "source_type": "government",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:ae362cedb53ace3f942822f655ab225e7ea177592311ce0dd8934e038e002548"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "employment_projected_growth",
+          "object_value": {
+            "occupation": "financial analysts",
+            "change_percent": 7,
+            "start_year": 2025,
+            "end_year": 2035
+          },
+          "qualifiers": {},
+          "normalized_text": "Financial-analyst employment is projected to grow 7% from 2025 to 2035.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_bls_math_statistics_outlook",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "labour_market"
+    ],
+    "document": {
+      "title": "Mathematicians and Statisticians",
+      "raw_content": "Overall employment of mathematicians and statisticians is projected to grow 10 percent from 2025 to 2035",
+      "source_url": "https://www.bls.gov/ooh/math/mathematicians-and-statisticians.htm",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "source_type": "government",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:5009555b4bca1dfd294b9580e30eb189c23998553ab9711e8affb641beeb9b85"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "employment_projected_growth",
+          "object_value": {
+            "occupation": "mathematicians and statisticians",
+            "change_percent": 10,
+            "start_year": 2025,
+            "end_year": 2035
+          },
+          "qualifiers": {},
+          "normalized_text": "Mathematician and statistician employment is projected to grow 10% from 2025 to 2035.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_bls_web_developers_outlook",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "labour_market"
+    ],
+    "document": {
+      "title": "Web Developers and Digital Designers",
+      "raw_content": "Overall employment of web developers and digital designers is projected to grow 5 percent from 2025 to 2035",
+      "source_url": "https://www.bls.gov/ooh/computer-and-information-technology/web-developers.htm",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "source_type": "government",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:60f17ea145278462fdf580537401205faced56135e360e6c88efc8ba88be09a6"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "employment_projected_growth",
+          "object_value": {
+            "occupation": "web developers and digital designers",
+            "change_percent": 5,
+            "start_year": 2025,
+            "end_year": 2035
+          },
+          "qualifiers": {},
+          "normalized_text": "Web-developer and digital-designer employment is projected to grow 5% from 2025 to 2035.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_bls_network_admin_decline",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "adversarial",
+    "task_tags": [
+      "labour_market"
+    ],
+    "document": {
+      "title": "Network and Computer Systems Administrators",
+      "raw_content": "Employment of network and computer systems administrators is projected to decline 4 percent from 2025 to 2035.",
+      "source_url": "https://www.bls.gov/ooh/computer-and-information-technology/network-and-computer-systems-administrators.htm",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "source_type": "government",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:26525555aefb7d8ce39b3b1029d7558c89daff896bec9197a2a47b88e91279d2"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "employment_projected_decline",
+          "object_value": {
+            "occupation": "network and computer systems administrators",
+            "change_percent": -4,
+            "start_year": 2025,
+            "end_year": 2035
+          },
+          "qualifiers": {},
+          "normalized_text": "Network and computer-systems administrator employment is projected to decline 4% from 2025 to 2035.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_bls_computer_research_outlook",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "labour_market"
+    ],
+    "document": {
+      "title": "Computer and Information Research Scientists",
+      "raw_content": "Employment of computer and information research scientists is projected to grow 22 percent from 2025 to 2035",
+      "source_url": "https://www.bls.gov/ooh/computer-and-information-technology/computer-and-information-research-scientists.htm",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "source_type": "government",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:2a0880cacbaaa6d896b815d0b5ba1a9e177bfc69c442249ef825a8e0f9d8ea59"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "employment_projected_growth",
+          "object_value": {
+            "occupation": "computer and information research scientists",
+            "change_percent": 22,
+            "start_year": 2025,
+            "end_year": 2035
+          },
+          "qualifiers": {},
+          "normalized_text": "Computer and information research scientist employment is projected to grow 22% from 2025 to 2035.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_oecd_ai_skills_job_postings_method",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "methodology_caveat",
+      "research_trend"
+    ],
+    "document": {
+      "title": "Demand for AI Skills in Jobs",
+      "raw_content": "This report presents new evidence about occupations requiring artificial intelligence (AI)-related competencies, based on online job posting data",
+      "source_url": "https://www.oecd.org/en/publications/demand-for-ai-skills-in-jobs_3ed32d94-en.html",
+      "publisher": "OECD",
+      "source_type": "research",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:9921e744e8e731290abce4ac9bb20257a4c7454461513647bdac82f1338983fa"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "report_uses_online_job_postings",
+          "object_value": {
+            "subject": "occupations requiring AI-related competencies",
+            "data_source": "online job postings"
+          },
+          "qualifiers": {},
+          "normalized_text": "The report studies occupations requiring AI competencies using online job-posting data.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_oecd_ai_adoption_skills_barrier",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "adversarial",
+    "task_tags": [
+      "skills_demand",
+      "employer_demand"
+    ],
+    "document": {
+      "title": "AI and Skills",
+      "raw_content": "Around 40% of employers in manufacturing and finance who have not yet adopted AI say that skills are the main reason",
+      "source_url": "https://www.oecd.org/en/publications/ai-and-skills_f843b352-en/full-report.html",
+      "publisher": "OECD",
+      "source_type": "research",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:ff49b8a383d4ac90108d141b59d33be40c92875118b3fc47b206c8a104723e54"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "employers_report_skills_adoption_barrier",
+          "object_value": {
+            "share_percent": 40,
+            "sectors": [
+              "manufacturing",
+              "finance"
+            ],
+            "technology": "AI"
+          },
+          "qualifiers": {},
+          "normalized_text": "Around 40% of non-adopting manufacturing and finance employers identify skills as the main reason.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_oecd_advanced_ai_skills_rare",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "adversarial",
+    "task_tags": [
+      "skills_demand",
+      "research_trend"
+    ],
+    "document": {
+      "title": "Skills in the AI Age",
+      "raw_content": "Advanced AI skills (e.g. machine learning, data science) are in high demand, but workers with such skills remain rare (around 1% of the workforce).",
+      "source_url": "https://www.oecd.org/en/publications/skills-in-the-ai-age_972bd15e-en/full-report/component-4.html",
+      "publisher": "OECD",
+      "source_type": "research",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:7acc620eb69aa0b3aa39ba9410e76e7e1a71535cb6904d0d952b4661013f9f9b"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "advanced_ai_skills_are_rare",
+          "object_value": {
+            "examples": [
+              "machine learning",
+              "data science"
+            ],
+            "approximate_workforce_share_percent": 1,
+            "demand": "high"
+          },
+          "qualifiers": {},
+          "normalized_text": "Advanced AI skills are in high demand but held by around 1% of the workforce.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_oecd_ai_general_skills_scope",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "methodology_caveat",
+      "skills_demand"
+    ],
+    "document": {
+      "title": "Artificial Intelligence and the Changing Demand for Skills in the Labour Market",
+      "raw_content": "This report provides first estimates for the effect of artificial intelligence on the demand for skills in jobs that do not require specialised AI skills.",
+      "source_url": "https://www.oecd.org/en/publications/artificial-intelligence-and-the-changing-demand-for-skills-in-the-labour-market_88684e36-en.html",
+      "publisher": "OECD",
+      "source_type": "research",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:37017e12d0f1dacc75948758fb0b15e7f4df869c2a98920033ff7a46857c1697"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "report_estimates_ai_effect_on_skills",
+          "object_value": {
+            "scope": "jobs not requiring specialised AI skills",
+            "estimate_stage": "first estimates"
+          },
+          "qualifiers": {},
+          "normalized_text": "The report estimates AI's effect on skill demand outside specialised AI jobs.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_oecd_bridging_ai_skills_gap",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "skills_demand"
+    ],
+    "document": {
+      "title": "Bridging the AI Skills Gap",
+      "raw_content": "driving demand for both specialised AI professionals and workers with a more general understanding of AI",
+      "source_url": "https://www.oecd.org/en/publications/bridging-the-ai-skills-gap_66d0702e-en.html",
+      "publisher": "OECD",
+      "source_type": "research",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:d0e6d3f6d8bbaa1c91dac9c00fb8359b36b762081b533fa1d8113cd0fad895dc"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "ai_drives_two_skill_demands",
+          "object_value": {
+            "worker_groups": [
+              "specialised AI professionals",
+              "workers with general AI understanding"
+            ]
+          },
+          "qualifiers": {},
+          "normalized_text": "AI adoption drives demand for specialists and workers with general AI understanding.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_oecd_ai_exposure_skill_demand_fall",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "adversarial",
+    "task_tags": [
+      "skills_demand"
+    ],
+    "document": {
+      "title": "How Is AI Changing the Way Workers Perform Their Jobs and the Skills They Require?",
+      "raw_content": "However, the demand for management, business and digital skills has been falling in the workplaces most exposed to AI.",
+      "source_url": "https://www.oecd.org/en/publications/how-is-ai-changing-the-way-workers-perform-their-jobs-and-the-skills-they-require_8dc62c72-en.html",
+      "publisher": "OECD",
+      "source_type": "research",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:9103b1a2f2dacad08f614aa2cfcb3d2c9d23cc56f462590758bdc807697cbdcd"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "skill_demand_falls_in_ai_exposed_workplaces",
+          "object_value": {
+            "skills": [
+              "management",
+              "business",
+              "digital"
+            ],
+            "trend": "falling",
+            "scope": "workplaces most exposed to AI"
+          },
+          "qualifiers": {},
+          "normalized_text": "Demand for management, business, and digital skills is falling in workplaces most exposed to AI.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_uk_ai_skills_mixed_methods",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "methodology_caveat"
+    ],
+    "document": {
+      "title": "AI Skills for Life and Work: Drivers Analysis",
+      "raw_content": "This drivers’ analysis report synthesises the findings of a mixed methods, quantitative and qualitative research project.",
+      "source_url": "https://www.gov.uk/government/publications/ai-skills-for-life-and-work-drivers-analysis/ai-skills-for-life-and-work-drivers-analysis--2",
+      "publisher": "UK Department for Education",
+      "source_type": "government",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:655b777eb9d08f092e480ddffff8f257b9ee98d6720ae9d7d342dfbd07165432"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "report_uses_mixed_methods",
+          "object_value": {
+            "methods": [
+              "quantitative",
+              "qualitative"
+            ],
+            "design": "mixed methods"
+          },
+          "qualifiers": {},
+          "normalized_text": "The drivers analysis synthesises quantitative and qualitative mixed-methods research.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_uk_ai_job_postings_share_summary",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "labour_market",
+      "skills_demand"
+    ],
+    "document": {
+      "title": "AI Skills for Life and Work: Summary Report",
+      "raw_content": "AI (Artificial Intelligence)-related job postings making up c.1.7% of all UK job postings between 2021 and 2023.",
+      "source_url": "https://www.gov.uk/government/publications/ai-skills-for-life-and-work-summary-report/ai-skills-for-life-and-work-summary-report--2",
+      "publisher": "UK Department for Education",
+      "source_type": "government",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:01821761cb0d97f0d0ec4214c047c75a62789963e28fa5081ed83b0588886d68"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "ai_job_posting_share",
+          "object_value": {
+            "approximate_share_percent": 1.7,
+            "country": "United Kingdom",
+            "start_year": 2021,
+            "end_year": 2023
+          },
+          "qualifiers": {},
+          "normalized_text": "AI-related postings were about 1.7% of UK job postings from 2021 through 2023.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_uk_ai_job_postings_share_projection",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "labour_market",
+      "research_trend"
+    ],
+    "document": {
+      "title": "AI Skills for Life and Work: Labour Market and Skills Projections",
+      "raw_content": "around 1.7% of current job postings were related to AI (Artificial Intelligence)",
+      "source_url": "https://www.gov.uk/government/publications/ai-skills-for-life-and-work-labour-market-and-skills-projections/ai-skills-for-life-and-work-labour-market-and-skills-projections",
+      "publisher": "UK Department for Education",
+      "source_type": "government",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:0c782dd09917866c2e971b6b4162d735fb1e4ef9050c3daec28b8e590df008fd"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "current_job_postings_ai_share",
+          "object_value": {
+            "approximate_share_percent": 1.7,
+            "scope": "current job postings"
+          },
+          "qualifiers": {},
+          "normalized_text": "Around 1.7% of current job postings were related to AI.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_nsf_stem_degree_workforce_share",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "research_trend",
+      "labour_market"
+    ],
+    "document": {
+      "title": "The STEM Labor Force: Scientists, Engineers, and Skilled Technical Workers",
+      "raw_content": "S&E workers (42%) and S&E-related workers (48%) made up 90% of the STEM workforce with a bachelor’s or an advanced degree",
+      "source_url": "https://ncses.nsf.gov/pubs/nsb20261",
+      "publisher": "National Science Foundation",
+      "source_type": "government",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:d5f2fb547aa72c038f536a5836ab3a9d1382e58351df4f42a20ab88d8a4048a3"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "stem_degree_workforce_composition",
+          "object_value": {
+            "science_and_engineering_percent": 42,
+            "science_and_engineering_related_percent": 48,
+            "combined_percent": 90
+          },
+          "qualifiers": {},
+          "normalized_text": "S&E and S&E-related workers formed 90% of the degree-holding STEM workforce.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_nsf_stem_without_bachelors",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "adversarial",
+    "task_tags": [
+      "labour_market",
+      "research_trend"
+    ],
+    "document": {
+      "title": "STEM Labor Force",
+      "raw_content": "About half of the workers in the STEM workforce did not have a bachelor’s degree; of these workers, 63% were employed in STEM middle-skill occupations.",
+      "source_url": "https://www.ncses.nsf.gov/pubs/nsb20261/stem-labor",
+      "publisher": "National Science Foundation",
+      "source_type": "government",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:7eecf899a6f7ca539d9574799c3e73b61635bab7f2adc44282b3879174d7468d"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "stem_workforce_without_bachelors",
+          "object_value": {
+            "share_without_bachelors": "about half",
+            "middle_skill_share_percent": 63
+          },
+          "qualifiers": {},
+          "normalized_text": "About half the STEM workforce lacked a bachelor's degree; 63% of those workers held middle-skill STEM occupations.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_nsf_ai_workforce_data_scarce",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "adversarial",
+    "task_tags": [
+      "methodology_caveat",
+      "research_trend"
+    ],
+    "document": {
+      "title": "The State of U.S. Science and Engineering 2026",
+      "raw_content": "Although reliable data on AI’s impact on the workforce as a whole are scarce thus far",
+      "source_url": "https://ncses.nsf.gov/pubs/nsb20262/assets/nsb20262.pdf",
+      "publisher": "National Science Foundation",
+      "source_type": "government",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:aacb0a211aa1d7ed364aacd3ab39b37bce1a169389c339c9e6928668359000b6"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "ai_workforce_impact_data_are_scarce",
+          "object_value": {
+            "scope": "whole workforce",
+            "data_availability": "scarce"
+          },
+          "qualifiers": {},
+          "normalized_text": "Reliable data on AI's whole-workforce impact remain scarce.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_openai_ml_engineer_multicloud_skills",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "employer_demand",
+      "skills_demand"
+    ],
+    "document": {
+      "title": "Machine Learning Engineer, API Multicloud",
+      "raw_content": "Strong software engineering fundamentals, including data structures, algorithms, systems design, and high-quality production code in Python, Rust, or similar languages.",
+      "source_url": "https://openai.com/careers/machine-learning-engineer-api-multicloud-san-francisco/",
+      "publisher": "OpenAI",
+      "source_type": "industry",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:39560aa7550a8750366832515c790cc80608f3a2bfb2f5ba73231ae4af7d0137"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "job_requires_engineering_fundamentals",
+          "object_value": {
+            "skills": [
+              "data structures",
+              "algorithms",
+              "systems design",
+              "production code"
+            ],
+            "languages": [
+              "Python",
+              "Rust"
+            ]
+          },
+          "qualifiers": {},
+          "normalized_text": "The role seeks software-engineering fundamentals and production coding in Python, Rust, or similar languages.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_openai_ml_integrity_frameworks",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "basic",
+    "task_tags": [
+      "employer_demand",
+      "skills_demand"
+    ],
+    "document": {
+      "title": "Machine Learning Engineer, Integrity",
+      "raw_content": "Proficiency in frameworks like PyTorch or Tensorflow",
+      "source_url": "https://openai.com/careers/machine-learning-engineer-integrity-san-francisco/",
+      "publisher": "OpenAI",
+      "source_type": "industry",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:c390e502475d5b5b2556d5da8c46cf01712f3f888551f6e5077609c12a1385d4"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "job_requires_framework_proficiency",
+          "object_value": {
+            "frameworks": [
+              "PyTorch",
+              "TensorFlow"
+            ]
+          },
+          "qualifiers": {},
+          "normalized_text": "The role seeks proficiency in frameworks such as PyTorch or TensorFlow.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_openai_forecasting_toolchain",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "employer_demand",
+      "skills_demand"
+    ],
+    "document": {
+      "title": "Machine Learning Data Scientist, Forecasting",
+      "raw_content": "Proficiency in Python, SQL, and tools such as scikit-learn, PyTorch/TensorFlow, and forecasting libraries.",
+      "source_url": "https://openai.com/careers/machine-learning-data-scientist-forecasting-san-francisco/",
+      "publisher": "OpenAI",
+      "source_type": "industry",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:851ae6fb38ed1bd709cedabf61c0408e5d1f6866631bfc08bd0ab77f408962f1"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "job_requires_data_science_toolchain",
+          "object_value": {
+            "skills": [
+              "Python",
+              "SQL",
+              "scikit-learn",
+              "PyTorch",
+              "TensorFlow",
+              "forecasting libraries"
+            ]
+          },
+          "qualifiers": {},
+          "normalized_text": "The forecasting role seeks Python, SQL, ML frameworks, and forecasting-library proficiency.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_openai_workload_enablement_languages",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "adversarial",
+    "task_tags": [
+      "employer_demand",
+      "skills_demand"
+    ],
+    "document": {
+      "title": "Software Engineer, Workload Enablement",
+      "raw_content": "Proficiency in Python plus comfort reading/writing performance-critical code (C++/CUDA/HIP is a plus).",
+      "source_url": "https://openai.com/careers/software-engineer-workload-enablement-san-francisco/",
+      "publisher": "OpenAI",
+      "source_type": "industry",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:7d98cc5feae90bf9362a1c6f3f8f92d73da4c25564800354d800304ec2185d2e"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "job_requires_python_with_optional_low_level_languages",
+          "object_value": {
+            "required": [
+              "Python"
+            ],
+            "preferred": [
+              "C++",
+              "CUDA",
+              "HIP"
+            ]
+          },
+          "qualifiers": {},
+          "normalized_text": "Python is required, while C++, CUDA, or HIP experience is a plus.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_openai_codex_agent_python",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "basic",
+    "task_tags": [
+      "employer_demand",
+      "skills_demand"
+    ],
+    "document": {
+      "title": "Applied AI Engineer, Codex Core Agent",
+      "raw_content": "Are strong in Python and comfortable with modern ML tooling.",
+      "source_url": "https://openai.com/careers/applied-ai-engineer-codex-core-agent-san-francisco/",
+      "publisher": "OpenAI",
+      "source_type": "industry",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:ba359364ee9bb9f994c833008615786624343d35460758526005989394e13a1c"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "job_requires_python_and_ml_tooling",
+          "object_value": {
+            "skills": [
+              "Python",
+              "modern ML tooling"
+            ]
+          },
+          "qualifiers": {},
+          "normalized_text": "The role seeks strength in Python and comfort with modern ML tooling.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_amazon_ml_engineer_production_experience",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "employer_demand",
+      "skills_demand"
+    ],
+    "document": {
+      "title": "Machine Learning Engineer, AWS Training & Certification",
+      "raw_content": "2+ years of relevant experience in developing and deploying large-scale machine learning or deep learning models/systems into production",
+      "source_url": "https://prod.gamma.amazon.jobs/en/jobs/2995538/machine-learning-engineer-aws-training-certification",
+      "publisher": "Amazon",
+      "source_type": "industry",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:e5255e8c28f79e045419b9c46fa2875a66d39c5d3a1047abe2e98b826d0902d4"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "job_requires_ml_production_experience",
+          "object_value": {
+            "minimum_years": 2,
+            "scope": "large-scale ML or deep-learning systems in production"
+          },
+          "qualifiers": {},
+          "normalized_text": "The role requires at least two years developing and deploying large-scale ML systems to production.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_amazon_senior_applied_scientist_languages",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "basic",
+    "task_tags": [
+      "employer_demand",
+      "skills_demand"
+    ],
+    "document": {
+      "title": "Senior Applied Scientist, International Machine Learning",
+      "raw_content": "Experience programming in Java, C++, Python or related language",
+      "source_url": "https://amazon.jobs/en/jobs/10513309/senior-applied-scientist-international-machine-learning",
+      "publisher": "Amazon",
+      "source_type": "industry",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:4acde4ef33d1a3f1d7913e5a970b8ab46e748f22624fc6a4f4e43f2a3e61af4d"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "job_requires_programming_experience",
+          "object_value": {
+            "languages": [
+              "Java",
+              "C++",
+              "Python",
+              "related language"
+            ]
+          },
+          "qualifiers": {},
+          "normalized_text": "The role seeks programming experience in Java, C++, Python, or a related language.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_amazon_music_general_language",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "employer_demand",
+      "skills_demand"
+    ],
+    "document": {
+      "title": "Machine Learning Engineer, Amazon Music Catalog Quality",
+      "raw_content": "Experience with at least one general-purpose programming language such as Java, Python, C++, C#, Go, Rust, or TypeScript",
+      "source_url": "https://www.amazon.jobs/en/jobs/10510881/machine-learning-engineer-amazon-music-catalog-quality",
+      "publisher": "Amazon",
+      "source_type": "industry",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:4956c236a51048b73e7b2d153dbd379946ccd687c7d47dbe39865e17a31bfb00"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "job_requires_general_purpose_language",
+          "object_value": {
+            "minimum_language_count": 1,
+            "examples": [
+              "Java",
+              "Python",
+              "C++",
+              "C#",
+              "Go",
+              "Rust",
+              "TypeScript"
+            ]
+          },
+          "qualifiers": {},
+          "normalized_text": "The role seeks experience in at least one general-purpose programming language.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_amazon_cmt_llm_fundamentals",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "intermediate",
+    "task_tags": [
+      "employer_demand",
+      "skills_demand"
+    ],
+    "document": {
+      "title": "Software Development Engineer II, ML, CMT",
+      "raw_content": "Knowledge of Machine Learning and LLM fundamentals, including transformer architecture, training/inference lifecycles, and optimization techniques",
+      "source_url": "https://www.amazon.jobs/en-gb/jobs/10513313/software-development-engineer-ii-ml-cmt",
+      "publisher": "Amazon",
+      "source_type": "industry",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:29ffe3f3c08a9aeada5cafd64320ae422395c4632eb2016de8e5c37a754414e2"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "job_requires_ml_and_llm_fundamentals",
+          "object_value": {
+            "skills": [
+              "machine learning",
+              "LLM fundamentals",
+              "transformer architecture",
+              "training and inference lifecycles",
+              "optimization"
+            ]
+          },
+          "qualifiers": {},
+          "normalized_text": "The role seeks knowledge of ML and LLM fundamentals, including transformer architecture and optimisation.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_amazon_university_talent_languages",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "basic",
+    "task_tags": [
+      "employer_demand",
+      "skills_demand"
+    ],
+    "document": {
+      "title": "Software Development Engineer I, Amazon University Talent Acquisition",
+      "raw_content": "Knowledge of programming languages such as C/C++, Python, Java or Perl",
+      "source_url": "https://www.amazon.jobs/en-gb/jobs/10453457/software-dev-engineer-i-amazon-university-talent-acquisition",
+      "publisher": "Amazon",
+      "source_type": "industry",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:a491bd67f104bd67105cae95bd601b1d3f4f05122358d800dc0f0bee495bf10c"
+    },
+    "gold": {
+      "entities": [],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "job_requires_programming_language_knowledge",
+          "object_value": {
+            "languages": [
+              "C/C++",
+              "Python",
+              "Java",
+              "Perl"
+            ]
+          },
+          "qualifiers": {},
+          "normalized_text": "The role seeks knowledge of languages such as C/C++, Python, Java, or Perl.",
+          "extraction_confidence": 1.0,
+          "evidence": [
+            {
+              "passage_ordinal": 0,
+              "stance": "supports",
+              "directness": 1.0,
+              "extraction_confidence": 1.0,
+              "rationale": "The excerpt directly supports the normalized fact."
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_berkeley_mims_marketing_only",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "adversarial",
+    "task_tags": [
+      "negative_no_claim"
+    ],
+    "document": {
+      "title": "Master of Information Management and Systems",
+      "raw_content": "The Berkeley School of Information is a global bellwether in a world awash in information and data",
+      "source_url": "https://www.ischool.berkeley.edu/programs/mims",
+      "publisher": "UC Berkeley School of Information",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:3e0a181688c639f05c48f04aabc135b5ff490430cd14f552ff524071c88ff240"
+    },
+    "gold": {
+      "entities": [],
+      "claims": []
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_columbia_msds_marketing_only",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "adversarial",
+    "task_tags": [
+      "negative_no_claim"
+    ],
+    "document": {
+      "title": "M.S. in Data Science",
+      "raw_content": "Ours is one of the most highly rated and sought after advanced data science programs in the world.",
+      "source_url": "https://datascience.columbia.edu/education/programs/m-s-in-data-science/",
+      "publisher": "Columbia University Data Science Institute",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:ee379e45a28f0ad040194103d4d8ccead6bd1f8f3adb2a7643ddcbfa55066255"
+    },
+    "gold": {
+      "entities": [],
+      "claims": []
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_michigan_mads_marketing_only",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "adversarial",
+    "task_tags": [
+      "negative_no_claim"
+    ],
+    "document": {
+      "title": "Master of Applied Data Science",
+      "raw_content": "A world-class, high-impact Master’s Degree",
+      "source_url": "https://mads.si.umich.edu/",
+      "publisher": "University of Michigan School of Information",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:ea5af8cf3bd28ad5d3fcd638d7c842d4b4d0924fc61cfa75bea2a65ba3f06952"
+    },
+    "gold": {
+      "entities": [],
+      "claims": []
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_manchester_math_ds_marketing_only",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "adversarial",
+    "task_tags": [
+      "negative_no_claim"
+    ],
+    "document": {
+      "title": "MSc Data Science (Mathematics)",
+      "raw_content": "Our MSc Data Science (Mathematics) course prepares you for a successful career in this high-demand field.",
+      "source_url": "https://www.manchester.ac.uk/study/masters/courses/list/11428/msc-data-science-mathematics/",
+      "publisher": "The University of Manchester",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:e3c5d4ce732087228d655580239efe45aa83a92d1e7a70ccf2ab8de43e8cc8e9"
+    },
+    "gold": {
+      "entities": [],
+      "claims": []
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_imperial_ai_innovation_marketing_only",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "adversarial",
+    "task_tags": [
+      "negative_no_claim"
+    ],
+    "document": {
+      "title": "Artificial Intelligence Applications and Innovation",
+      "raw_content": "Study at I-X, Imperial's prestigious AI research and teaching initiative delivered by world-leading experts",
+      "source_url": "https://www.imperial.ac.uk/study/courses/postgraduate-taught/applications-innovation/",
+      "publisher": "Imperial College London",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:5b5f08d610d781a4e73f09b823195d1071700b50124f21f3c43739168e59ad4a"
+    },
+    "gold": {
+      "entities": [],
+      "claims": []
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_american_ds_certificate_marketing_only",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-05T15:00:00Z",
+    "difficulty": "adversarial",
+    "task_tags": [
+      "negative_no_claim"
+    ],
+    "document": {
+      "title": "Data Science Graduate Certificate",
+      "raw_content": "American University's Graduate Certificate is your key to an exciting and lucrative career in data science.",
+      "source_url": "https://www.american.edu/programs/shared/data-science/certificate.cfm",
+      "publisher": "American University",
+      "source_type": "university",
+      "retrieved_at": "2026-09-05T15:00:00Z",
+      "content_hash": "sha256:61bd3853cd20d5e64c41725604fe20a18ce4819eacb0f3c420e7698e1cb32fe8"
+    },
+    "gold": {
+      "entities": [],
+      "claims": []
+    }
+  }
+]

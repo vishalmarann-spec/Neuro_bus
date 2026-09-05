@@ -10,8 +10,9 @@ This directory contains versioned extraction benchmarks. They are evaluation inp
 | `public_pilot_v1.json` | 10 | Assistant-verified | Real-source schema and curation pilot only |
 | `public_batch_2_v1.json` | 10 | Assistant-verified | Coverage expansion with research, labour-market, temporal, and negative cases |
 | `public_batch_3_v1.json` | 20 | Assistant-verified | Admissions, accreditation, employer-demand, methodology, research-trend, pricing, and negative coverage |
+| `public_batch_4_v1.json` | 60 | Assistant-verified | Programme facts, labour outlooks, AI-skills research, employer requirements, and negative controls |
 
-The three public batches contain 40 official excerpts from 27 publishers across 29 domains and five source types. They cover 15 task categories, three difficulty levels, 12 adversarial cases, and four promotion-only passages with no testable claim. The corpus still has no selection-grade development/validation/holdout manifest, double annotation, inter-reviewer agreement measurement, or candidate-model results. It cannot support production-model selection.
+The four public batches contain 100 official excerpts from 40 publishers across 45 domains and five source types. They cover 15 task categories, three difficulty levels, 27 adversarial cases, and 10 promotion-only passages with no testable claim. The corpus passes the automated size and diversity coverage gate. It still has no human approvals, selection-grade development/validation/holdout manifest, double annotation, inter-reviewer agreement measurement, or candidate-model results, so it cannot support production-model selection.
 
 ## Integrity contract
 
@@ -35,7 +36,8 @@ cd backend
 uv run python -m app.evaluation.coverage_cli \
   --gold evaluation/gold/public_pilot_v1.json \
   --gold evaluation/gold/public_batch_2_v1.json \
-  --gold evaluation/gold/public_batch_3_v1.json
+  --gold evaluation/gold/public_batch_3_v1.json \
+  --gold evaluation/gold/public_batch_4_v1.json
 ```
 
 Add `--require-selection-ready` in CI when auditing a candidate selection corpus. Selection readiness requires at least 100 cases, three source types, six task tags, ten publishers, and at least 10% each adversarial and `negative_no_claim` cases.

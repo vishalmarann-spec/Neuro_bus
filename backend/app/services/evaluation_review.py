@@ -162,6 +162,7 @@ def default_benchmark_review_workspace() -> BenchmarkReviewWorkspace:
             backend_root / "evaluation" / "gold" / "public_pilot_v1.json",
             backend_root / "evaluation" / "gold" / "public_batch_2_v1.json",
             backend_root / "evaluation" / "gold" / "public_batch_3_v1.json",
+            backend_root / "evaluation" / "gold" / "public_batch_4_v1.json",
         ],
         ledger_path=backend_root / "evaluation" / "reviews" / "public_corpus_v1.jsonl",
     )

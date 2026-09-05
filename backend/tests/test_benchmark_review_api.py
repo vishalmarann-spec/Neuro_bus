@@ -14,6 +14,7 @@ PUBLIC_GOLD_PATHS = [
     GOLD_ROOT / "public_pilot_v1.json",
     GOLD_ROOT / "public_batch_2_v1.json",
     GOLD_ROOT / "public_batch_3_v1.json",
+    GOLD_ROOT / "public_batch_4_v1.json",
 ]
 
 
@@ -60,8 +61,8 @@ def test_review_queue_and_append_only_decisions(session_factory, tmp_path: Path)
         assert queue_response.status_code == 200
         queue = queue_response.json()
         assert queue["summary"] == {
-            "total": 40,
-            "pending": 40,
+            "total": 100,
+            "pending": 100,
             "approved": 0,
             "changes_requested": 0,
             "rejected": 0,

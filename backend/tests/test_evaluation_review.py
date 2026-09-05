@@ -25,6 +25,7 @@ from app.evaluation.review import (
 PUBLIC_PILOT_PATH = Path(__file__).parents[1] / "evaluation" / "gold" / "public_pilot_v1.json"
 PUBLIC_BATCH_2_PATH = Path(__file__).parents[1] / "evaluation" / "gold" / "public_batch_2_v1.json"
 PUBLIC_BATCH_3_PATH = Path(__file__).parents[1] / "evaluation" / "gold" / "public_batch_3_v1.json"
+PUBLIC_BATCH_4_PATH = Path(__file__).parents[1] / "evaluation" / "gold" / "public_batch_4_v1.json"
 REVIEWED_AT = datetime(2026, 9, 5, 9, 0, tzinfo=UTC)
 
 
@@ -53,7 +54,9 @@ def review_record(
 
 
 def reviewable_cases(count: int) -> list[GoldCase]:
-    bases = load_gold_case_files([PUBLIC_PILOT_PATH, PUBLIC_BATCH_2_PATH, PUBLIC_BATCH_3_PATH])
+    bases = load_gold_case_files(
+        [PUBLIC_PILOT_PATH, PUBLIC_BATCH_2_PATH, PUBLIC_BATCH_3_PATH, PUBLIC_BATCH_4_PATH]
+    )
     cases = []
     for index in range(count):
         payload = bases[index % len(bases)].model_dump(mode="json")

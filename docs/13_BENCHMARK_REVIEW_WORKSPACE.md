@@ -27,6 +27,9 @@ The default development workspace loads:
 - `backend/evaluation/gold/public_pilot_v1.json`
 - `backend/evaluation/gold/public_batch_2_v1.json`
 - `backend/evaluation/gold/public_batch_3_v1.json`
+- `backend/evaluation/gold/public_batch_4_v1.json`
+
+The queue currently contains 100 assistant-verified cases. Coverage is sufficient for a deterministic 60/20/20 split after human review, but none is promoted automatically.
 
 Decisions are appended to `backend/evaluation/reviews/public_corpus_v1.jsonl`. This file is not created until a human submits a decision.
 
