@@ -8,7 +8,7 @@ Neuro_Bus selects an extraction model using measured evidence quality, not reput
 
 `backend/evaluation/gold/synthetic_smoke_v1.json` contains four synthetic contract tests. Synthetic cases have `source_url: null` and must never appear as product evidence. They verify benchmark mechanics, exact mention offsets, negative/no-claim behaviour, and metric correctness.
 
-`backend/evaluation/gold/public_pilot_v1.json` contains 10 short excerpts manually checked against official pages on 4 September 2026. It covers six university publishers, two government publishers, and one industry report publisher. Each case is labelled `assistant_verified`; no case claims human approval.
+`backend/evaluation/gold/public_pilot_v1.json` contains 10 short excerpts manually checked against official pages on 4 September 2026. It covers seven university publishers, two government publishers, and one industry report publisher. Each case is labelled `assistant_verified`; no case claims human approval.
 
 The schema rejects a non-synthetic case when its URL, publisher, source type, retrieval timestamp, reviewer, review timestamp, or SHA-256 content hash is missing. It also rejects changed text with a stale hash, public excerpts over 25 words, and gold entity mentions or evidence links that do not resolve to the exact stored passage.
 
