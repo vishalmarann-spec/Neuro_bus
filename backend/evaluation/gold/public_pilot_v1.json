@@ -1,0 +1,457 @@
+[
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_cmu_msaii_requirements",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-04T00:00:00Z",
+    "document": {
+      "title": "Master of Science in Artificial Intelligence and Innovation",
+      "raw_content": "To earn the MSAII degree, you must pass courses in the Core Curriculum, the Knowledge Requirements and Electives.",
+      "source_url": "https://www.lti.cs.cmu.edu/academics/masters-programs/msaii.html",
+      "publisher": "Carnegie Mellon University",
+      "source_type": "university",
+      "retrieved_at": "2026-09-04T00:00:00Z",
+      "content_hash": "sha256:fe59e9279b9b7b7860c421c2e8910b5f834a4c02ec7334c183db8e5ea5d417cb"
+    },
+    "gold": {
+      "entities": [
+        {
+          "local_id": "programme_1",
+          "entity_type": "programme",
+          "canonical_name": "MSAII",
+          "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "MSAII", "start_offset": 12, "end_offset": 17, "confidence": 1.0}]
+        },
+        {
+          "local_id": "course_1",
+          "entity_type": "course",
+          "canonical_name": "Core Curriculum",
+          "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "Core Curriculum", "start_offset": 55, "end_offset": 70, "confidence": 1.0}]
+        },
+        {
+          "local_id": "course_2",
+          "entity_type": "course",
+          "canonical_name": "Knowledge Requirements",
+          "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "Knowledge Requirements", "start_offset": 76, "end_offset": 98, "confidence": 1.0}]
+        }
+      ],
+      "claims": [{
+        "subject_local_id": "programme_1",
+        "predicate": "requires_curriculum_components",
+        "object_value": {"components": ["Core Curriculum", "Knowledge Requirements", "Electives"]},
+        "qualifiers": {},
+        "normalized_text": "The MSAII degree requires the Core Curriculum, Knowledge Requirements, and Electives.",
+        "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The excerpt states all three required curriculum components."}]
+      }]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_oxford_previous_course_name",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-04T00:00:00Z",
+    "document": {
+      "title": "MSc in Advanced Computer Science",
+      "raw_content": "This course was previously known as the MSc in Computer Science",
+      "source_url": "https://www.ox.ac.uk/admissions/graduate/courses/msc-advanced-computer-science",
+      "publisher": "University of Oxford",
+      "source_type": "university",
+      "retrieved_at": "2026-09-04T00:00:00Z",
+      "content_hash": "sha256:eae31b0e9d840154d85ab5f553f79041187f1a0530022a5e597d566b1c46697f"
+    },
+    "gold": {
+      "entities": [{
+        "local_id": "programme_1",
+        "entity_type": "programme",
+        "canonical_name": "MSc in Computer Science",
+        "aliases": [],
+        "mentions": [{"passage_ordinal": 0, "surface_text": "MSc in Computer Science", "start_offset": 40, "end_offset": 63, "confidence": 1.0}]
+      }],
+      "claims": [{
+        "subject_local_id": null,
+        "predicate": "states_previous_course_name",
+        "object_value": {"previous_name": "MSc in Computer Science"},
+        "qualifiers": {},
+        "normalized_text": "The previous course name was MSc in Computer Science.",
+        "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The excerpt directly identifies the course's previous name."}]
+      }]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_ucl_data_science_skills",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-04T00:00:00Z",
+    "document": {
+      "title": "Data Science MSc",
+      "raw_content": "Data science brings together computational and statistical skills for data-driven problem solving.",
+      "source_url": "https://www.ucl.ac.uk/prospective-students/graduate/taught-degrees/data-science-msc",
+      "publisher": "University College London",
+      "source_type": "university",
+      "retrieved_at": "2026-09-04T00:00:00Z",
+      "content_hash": "sha256:97b91dd86ae5090e0993ab6e2270a6023520e34a95e74c4a905a43b0f7888fe1"
+    },
+    "gold": {
+      "entities": [
+        {
+          "local_id": "skill_1",
+          "entity_type": "skill",
+          "canonical_name": "Data Science",
+          "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "Data science", "start_offset": 0, "end_offset": 12, "confidence": 1.0}]
+        },
+        {
+          "local_id": "skill_2",
+          "entity_type": "skill",
+          "canonical_name": "Computational and Statistical Skills",
+          "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "computational and statistical skills", "start_offset": 29, "end_offset": 65, "confidence": 1.0}]
+        }
+      ],
+      "claims": [{
+        "subject_local_id": "skill_1",
+        "predicate": "combines_skills_for_problem_solving",
+        "object_value": {"skills": ["computational", "statistical"], "purpose": "data-driven problem solving"},
+        "qualifiers": {},
+        "normalized_text": "Data science combines computational and statistical skills for data-driven problem solving.",
+        "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The excerpt directly describes the skills combined in data science."}]
+      }]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_imperial_ai_expertise",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-04T00:00:00Z",
+    "document": {
+      "title": "Computing (Artificial Intelligence and Machine Learning) MSc",
+      "raw_content": "This course will develop your expertise in AI, ensuring you understand the state-of-the-art and can apply techniques to solve problems and develop applications.",
+      "source_url": "https://www.imperial.ac.uk/study/courses/postgraduate-taught/computing-artificial-intelligence-msc/",
+      "publisher": "Imperial College London",
+      "source_type": "university",
+      "retrieved_at": "2026-09-04T00:00:00Z",
+      "content_hash": "sha256:c5930e5f583a399dccb62f5d5928646eaee1250364145da025b452bf3fead57f"
+    },
+    "gold": {
+      "entities": [{
+        "local_id": "technology_1",
+        "entity_type": "technology",
+        "canonical_name": "Artificial Intelligence",
+        "aliases": ["AI"],
+        "mentions": [{"passage_ordinal": 0, "surface_text": "AI", "start_offset": 43, "end_offset": 45, "confidence": 1.0}]
+      }],
+      "claims": [{
+        "subject_local_id": null,
+        "predicate": "develops_ai_expertise",
+        "object_value": {"outcomes": ["understand the state-of-the-art", "apply techniques"]},
+        "qualifiers": {},
+        "normalized_text": "The course develops AI expertise, including understanding the state of the art and applying techniques.",
+        "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The excerpt directly states the course's AI learning outcomes."}]
+      }]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_edinburgh_ai_systems",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-04T00:00:00Z",
+    "document": {
+      "title": "Artificial Intelligence MSc",
+      "raw_content": "We aim to give you the fundamental knowledge and practical skills needed to design, build, and apply AI systems in your chosen area of specialisation.",
+      "source_url": "https://study.ed.ac.uk/programmes/postgraduate-taught/107-artificial-intelligence",
+      "publisher": "University of Edinburgh",
+      "source_type": "university",
+      "retrieved_at": "2026-09-04T00:00:00Z",
+      "content_hash": "sha256:0ce61918545913e7bf11e8163e9743c9154b3acf65adcd47cc1546ecc7e9af52"
+    },
+    "gold": {
+      "entities": [{
+        "local_id": "technology_1",
+        "entity_type": "technology",
+        "canonical_name": "AI Systems",
+        "aliases": [],
+        "mentions": [{"passage_ordinal": 0, "surface_text": "AI systems", "start_offset": 101, "end_offset": 111, "confidence": 1.0}]
+      }],
+      "claims": [{
+        "subject_local_id": null,
+        "predicate": "teaches_ai_system_lifecycle",
+        "object_value": {"skills": ["design", "build", "apply"]},
+        "qualifiers": {},
+        "normalized_text": "The programme teaches students to design, build, and apply AI systems.",
+        "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The excerpt directly lists design, build, and application skills."}]
+      }]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_gatech_ml_specialization",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-04T00:00:00Z",
+    "document": {
+      "title": "Specialization in Machine Learning",
+      "raw_content": "For a Master of Science in Computer Science, Specialization in Machine Learning (15 hours), students must select from the following:",
+      "source_url": "https://omscs.gatech.edu/specialization-machine-learning",
+      "publisher": "Georgia Institute of Technology",
+      "source_type": "university",
+      "retrieved_at": "2026-09-04T00:00:00Z",
+      "content_hash": "sha256:704c8898c86f6b959a6d082b209f9243885ee3013690cf3f696de899111607a3"
+    },
+    "gold": {
+      "entities": [
+        {
+          "local_id": "programme_1",
+          "entity_type": "programme",
+          "canonical_name": "Master of Science in Computer Science",
+          "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "Master of Science in Computer Science", "start_offset": 6, "end_offset": 43, "confidence": 1.0}]
+        },
+        {
+          "local_id": "skill_1",
+          "entity_type": "skill",
+          "canonical_name": "Machine Learning",
+          "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "Machine Learning", "start_offset": 63, "end_offset": 79, "confidence": 1.0}]
+        },
+        {
+          "local_id": "metric_1",
+          "entity_type": "metric",
+          "canonical_name": "15 Hours",
+          "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "15 hours", "start_offset": 81, "end_offset": 89, "confidence": 1.0}]
+        }
+      ],
+      "claims": [{
+        "subject_local_id": "programme_1",
+        "predicate": "has_specialization_requirement",
+        "object_value": {"specialization": "Machine Learning", "hours": 15},
+        "qualifiers": {},
+        "normalized_text": "The Machine Learning specialization in the MS in Computer Science requires 15 hours.",
+        "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The excerpt directly states the specialization and its hour total."}]
+      }]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_mit_applied_ai_fee_length",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-04T00:00:00Z",
+    "document": {
+      "title": "Applied AI Bundle - Generative and Agentic AI",
+      "raw_content": "Course Length\n\n16 Weeks\n\nCourse Fee\n\n$5,610",
+      "source_url": "https://professional.mit.edu/course-catalog/applied-ai-bundle-generative-and-agentic-ai",
+      "publisher": "MIT Professional Education",
+      "source_type": "university",
+      "retrieved_at": "2026-09-04T00:00:00Z",
+      "content_hash": "sha256:fc6abfe4cb670c8fd301ae0c3502775e42484535fe4ece99f93975b5001eaffb"
+    },
+    "gold": {
+      "entities": [
+        {
+          "local_id": "metric_1",
+          "entity_type": "metric",
+          "canonical_name": "16 Weeks",
+          "aliases": [],
+          "mentions": [{"passage_ordinal": 1, "surface_text": "16 Weeks", "start_offset": 0, "end_offset": 8, "confidence": 1.0}]
+        },
+        {
+          "local_id": "price_1",
+          "entity_type": "price",
+          "canonical_name": "$5,610",
+          "aliases": [],
+          "mentions": [{"passage_ordinal": 3, "surface_text": "$5,610", "start_offset": 0, "end_offset": 6, "confidence": 1.0}]
+        }
+      ],
+      "claims": [
+        {
+          "subject_local_id": null,
+          "predicate": "has_course_length",
+          "object_value": {"value": 16, "unit": "weeks"},
+          "qualifiers": {},
+          "normalized_text": "The course length is 16 weeks.",
+          "extraction_confidence": 1.0,
+          "evidence": [{"passage_ordinal": 1, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The course-length field states 16 weeks."}]
+        },
+        {
+          "subject_local_id": null,
+          "predicate": "has_course_fee",
+          "object_value": {"amount": 5610, "currency": "USD"},
+          "qualifiers": {},
+          "normalized_text": "The course fee is USD 5,610.",
+          "extraction_confidence": 1.0,
+          "evidence": [{"passage_ordinal": 3, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The course-fee field states $5,610."}]
+        }
+      ]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_bls_data_scientist_outlook",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-04T00:00:00Z",
+    "document": {
+      "title": "Data Scientists: Occupational Outlook Handbook",
+      "raw_content": "Employment of data scientists is projected to grow 34 percent from 2024 to 2034, much faster than the average for all occupations.",
+      "source_url": "https://www.bls.gov/ooh/math/data-scientists.htm",
+      "publisher": "U.S. Bureau of Labor Statistics",
+      "source_type": "government",
+      "retrieved_at": "2026-09-04T00:00:00Z",
+      "content_hash": "sha256:43c8ba3d06184afccd390a0d84689772dbc802c022b5c876a4834535f691b62a"
+    },
+    "gold": {
+      "entities": [
+        {
+          "local_id": "metric_1",
+          "entity_type": "metric",
+          "canonical_name": "34 Percent",
+          "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "34 percent", "start_offset": 51, "end_offset": 61, "confidence": 1.0}]
+        },
+        {
+          "local_id": "date_1",
+          "entity_type": "date",
+          "canonical_name": "2024 to 2034",
+          "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "2024 to 2034", "start_offset": 67, "end_offset": 79, "confidence": 1.0}]
+        }
+      ],
+      "claims": [{
+        "subject_local_id": null,
+        "predicate": "projects_employment_growth",
+        "object_value": {"occupation": "data scientists", "growth_percent": 34},
+        "qualifiers": {"start_year": 2024, "end_year": 2034},
+        "normalized_text": "Data scientist employment is projected to grow 34 percent from 2024 to 2034.",
+        "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The excerpt directly states the projected growth rate and period."}]
+      }]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_wef_fastest_growing_skills",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-04T00:00:00Z",
+    "document": {
+      "title": "The Future of Jobs Report 2025: Skills Outlook",
+      "raw_content": "Among these, AI and big data top the list as the fastest-growing skills, followed closely by networks and cybersecurity and technological literacy.",
+      "source_url": "https://www.weforum.org/publications/the-future-of-jobs-report-2025/in-full/3-skills-outlook/",
+      "publisher": "World Economic Forum",
+      "source_type": "industry",
+      "retrieved_at": "2026-09-04T00:00:00Z",
+      "content_hash": "sha256:5c167415fe461cdfb7c5bcb8dfadbf68a22fab26d27b9c2bb4ec233dcf1707fe"
+    },
+    "gold": {
+      "entities": [
+        {
+          "local_id": "skill_1",
+          "entity_type": "skill",
+          "canonical_name": "AI and Big Data",
+          "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "AI and big data", "start_offset": 13, "end_offset": 28, "confidence": 1.0}]
+        },
+        {
+          "local_id": "skill_2",
+          "entity_type": "skill",
+          "canonical_name": "Networks and Cybersecurity",
+          "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "networks and cybersecurity", "start_offset": 93, "end_offset": 119, "confidence": 1.0}]
+        },
+        {
+          "local_id": "skill_3",
+          "entity_type": "skill",
+          "canonical_name": "Technological Literacy",
+          "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "technological literacy", "start_offset": 124, "end_offset": 146, "confidence": 1.0}]
+        }
+      ],
+      "claims": [{
+        "subject_local_id": "skill_1",
+        "predicate": "ranks_as_fastest_growing_skill",
+        "object_value": {"followed_by": ["Networks and Cybersecurity", "Technological Literacy"]},
+        "qualifiers": {"report_year": 2025},
+        "normalized_text": "AI and big data rank first among fastest-growing skills, followed by networks and cybersecurity and technological literacy.",
+        "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The excerpt directly gives the growth ranking of the three skills."}]
+      }]
+    }
+  },
+  {
+    "schema_version": "gold-case.v1",
+    "case_id": "public_indiaai_fellowship_purpose",
+    "fixture_type": "public_excerpt",
+    "excerpt_policy": "short_public_excerpt",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_web_verification",
+    "reviewed_at": "2026-09-04T00:00:00Z",
+    "document": {
+      "title": "IndiaAI Fellowship",
+      "raw_content": "It’s a student-focused initiative under the IndiaAI Mission to support students involved in AI related projects/research studies and to build an AI-skilled workforce.",
+      "source_url": "https://fellowship.indiaai.gov.in/",
+      "publisher": "IndiaAI Mission",
+      "source_type": "government",
+      "retrieved_at": "2026-09-04T00:00:00Z",
+      "content_hash": "sha256:fb8069a5fd74276f6d91fa3b11da41bf323f788a720063ac27205b072dffcbf7"
+    },
+    "gold": {
+      "entities": [
+        {
+          "local_id": "organization_1",
+          "entity_type": "organization",
+          "canonical_name": "IndiaAI Mission",
+          "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "IndiaAI Mission", "start_offset": 44, "end_offset": 59, "confidence": 1.0}]
+        },
+        {
+          "local_id": "skill_1",
+          "entity_type": "skill",
+          "canonical_name": "AI-related Projects and Research",
+          "aliases": [],
+          "mentions": [{"passage_ordinal": 0, "surface_text": "AI related projects/research studies", "start_offset": 92, "end_offset": 128, "confidence": 1.0}]
+        }
+      ],
+      "claims": [{
+        "subject_local_id": "organization_1",
+        "predicate": "supports_ai_students",
+        "object_value": {"activities": ["AI related projects", "research studies"], "purpose": "build an AI-skilled workforce"},
+        "qualifiers": {},
+        "normalized_text": "The IndiaAI Mission initiative supports students in AI projects and research to build an AI-skilled workforce.",
+        "extraction_confidence": 1.0,
+        "evidence": [{"passage_ordinal": 0, "stance": "supports", "directness": 1.0, "extraction_confidence": 1.0, "rationale": "The excerpt directly states the initiative's audience, activities, and workforce goal."}]
+      }]
+    }
+  }
+]

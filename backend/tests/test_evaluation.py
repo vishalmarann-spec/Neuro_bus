@@ -1,15 +1,19 @@
 import asyncio
 from pathlib import Path
 
+import pytest
+from pydantic import ValidationError
+
 from app.domain.extraction import validate_provenance
-from app.domain.provenance import segment_passages
+from app.domain.provenance import segment_passages, sha256_text
 from app.evaluation.io import load_gold_cases
 from app.evaluation.metrics import score_models
-from app.evaluation.models import ModelPrediction
+from app.evaluation.models import GoldCase, ModelPrediction
 from app.evaluation.runner import run_case
 from app.providers.models import FakeModelProvider
 
 GOLD_PATH = Path(__file__).parents[1] / "evaluation" / "gold" / "synthetic_smoke_v1.json"
+PUBLIC_PILOT_PATH = Path(__file__).parents[1] / "evaluation" / "gold" / "public_pilot_v1.json"
 
 
 def test_synthetic_gold_set_is_explicit_and_provenance_valid() -> None:
@@ -21,6 +25,66 @@ def test_synthetic_gold_set_is_explicit_and_provenance_valid() -> None:
     for case in cases:
         spans = segment_passages(case.document.raw_content)
         assert validate_provenance(case.gold, spans) == []
+
+
+def test_public_pilot_has_verified_metadata_hashes_and_provenance() -> None:
+    cases = load_gold_cases(PUBLIC_PILOT_PATH)
+
+    assert len(cases) == 10
+    assert len({case.document.source_url for case in cases}) == 10
+    assert {case.document.source_type.value for case in cases} >= {
+        "university",
+        "government",
+        "industry",
+    }
+    for case in cases:
+        assert case.fixture_type == "public_excerpt"
+        assert case.excerpt_policy == "short_public_excerpt"
+        assert case.review_status == "assistant_verified"
+        assert case.reviewer == "codex_web_verification"
+        assert case.document.source_url is not None
+        assert case.document.source_url.startswith("https://")
+        assert case.document.publisher
+        assert case.document.retrieved_at is not None
+        assert case.reviewed_at is not None
+        assert len(case.document.raw_content.split()) <= 25
+        assert case.document.content_hash == sha256_text(case.document.raw_content)
+        spans = segment_passages(case.document.raw_content)
+        assert validate_provenance(case.gold, spans) == []
+
+
+def test_public_case_rejects_changed_excerpt_with_stale_hash() -> None:
+    payload = load_gold_cases(PUBLIC_PILOT_PATH)[0].model_dump(mode="json")
+    payload["document"]["raw_content"] += " Changed."
+
+    with pytest.raises(ValidationError, match="content_hash does not match"):
+        GoldCase.model_validate(payload)
+
+
+def test_public_case_rejects_missing_verification_metadata() -> None:
+    payload = load_gold_cases(PUBLIC_PILOT_PATH)[0].model_dump(mode="json")
+    payload["document"]["retrieved_at"] = None
+
+    with pytest.raises(ValidationError, match="retrieved_at"):
+        GoldCase.model_validate(payload)
+
+
+def test_public_case_rejects_excerpt_over_word_limit() -> None:
+    payload = load_gold_cases(PUBLIC_PILOT_PATH)[0].model_dump(mode="json")
+    payload["document"]["raw_content"] = " ".join(["word"] * 26)
+    payload["document"]["content_hash"] = sha256_text(payload["document"]["raw_content"])
+    payload["gold"] = {"entities": [], "claims": []}
+
+    with pytest.raises(ValidationError, match="at most 25 words"):
+        GoldCase.model_validate(payload)
+
+
+def test_gold_case_rejects_invalid_mention_offsets() -> None:
+    payload = load_gold_cases(PUBLIC_PILOT_PATH)[0].model_dump(mode="json")
+    payload["gold"]["entities"][0]["mentions"][0]["start_offset"] = 0
+
+    with pytest.raises(ValidationError, match="Gold provenance is invalid"):
+        GoldCase.model_validate(payload)
 
 
 def test_perfect_predictions_receive_perfect_quality_scores() -> None:

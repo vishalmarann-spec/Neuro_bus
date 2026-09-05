@@ -4,11 +4,23 @@
 
 Neuro_Bus selects an extraction model using measured evidence quality, not reputation or a single attractive demo. The same gold cases, prompt version, parser version, and metric implementation must be used for each candidate.
 
-## Current benchmark
+## Current benchmarks
 
 `backend/evaluation/gold/synthetic_smoke_v1.json` contains four synthetic contract tests. Synthetic cases have `source_url: null` and must never appear as product evidence. They verify benchmark mechanics, exact mention offsets, negative/no-claim behaviour, and metric correctness.
 
-This smoke set is not sufficient to select a production model.
+`backend/evaluation/gold/public_pilot_v1.json` contains 10 short excerpts manually checked against official pages on 4 September 2026. It covers six university publishers, two government publishers, and one industry report publisher. Each case is labelled `assistant_verified`; no case claims human approval.
+
+The schema rejects a non-synthetic case when its URL, publisher, source type, retrieval timestamp, reviewer, review timestamp, or SHA-256 content hash is missing. It also rejects changed text with a stale hash, public excerpts over 25 words, and gold entity mentions or evidence links that do not resolve to the exact stored passage.
+
+Neither the smoke set nor the pilot is sufficient to select a production model. The pilot exists to prove that real-source curation and integrity enforcement work before paying for candidate-model runs.
+
+### Pilot source policy
+
+- Use only the short excerpt needed to label a claim; public cases are capped at 25 whitespace-delimited words.
+- Store the canonical official URL and exact retrieved text. Do not silently clean, paraphrase, or repair the excerpt.
+- Recompute `content_hash` from the UTF-8 excerpt after every intentional text change.
+- Record `assistant_verified` honestly until a named human reviewer checks the source, labels, offsets, and claim structure.
+- Revisit time-sensitive pages before model comparison. A valid historical snapshot can remain in a versioned set, but its retrieval date must not be presented as current truth.
 
 ## Production evaluation dataset
 
@@ -80,5 +92,6 @@ uv run python -m app.evaluation.cli \
   --output evaluation/scorecards.json
 ```
 
-Generated predictions and scorecards should be kept out of production evidence tables. Commit only small, intentional benchmark artifacts with no secrets or restricted content.
+To exercise the real-source pilot, replace the `--gold` value with `evaluation/gold/public_pilot_v1.json`. Candidate scores from this pilot are diagnostic only and must not be used as the production selection decision.
 
+Generated predictions and scorecards should be kept out of production evidence tables. Commit only small, intentional benchmark artifacts with no secrets or restricted content.

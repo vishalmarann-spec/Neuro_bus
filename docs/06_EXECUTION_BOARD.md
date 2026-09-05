@@ -49,6 +49,8 @@ Exit: every accepted claim cites an exact stored passage; invalid model output i
 - [x] Entity, mention, claim, evidence, validity, latency, token, and cost metrics
 - [x] Model usage metadata in audit records
 - [x] Offline comparison CLI
+- [x] Curate a 10-case assistant-verified public-source pilot with integrity checks
+- [ ] Obtain human sign-off for the public-source pilot
 - [ ] Curate the real, reviewable university-domain evaluation set
 - [ ] Run candidate models and select the production adapter
 

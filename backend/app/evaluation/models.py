@@ -1,8 +1,11 @@
+import re
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, field_validator, model_validator
 
-from app.domain.extraction import ExtractionEnvelope
+from app.core.models import SourceType
+from app.domain.extraction import ExtractionEnvelope, validate_provenance
+from app.domain.provenance import canonicalize_url, segment_passages, sha256_text
 
 
 class EvaluationModel(BaseModel):
@@ -13,13 +16,73 @@ class BenchmarkDocument(EvaluationModel):
     title: str
     raw_content: str = Field(min_length=1)
     source_url: str | None = None
+    publisher: str | None = Field(default=None, min_length=1, max_length=255)
+    source_type: SourceType | None = None
+    retrieved_at: AwareDatetime | None = None
+    content_hash: str | None = Field(
+        default=None,
+        pattern=r"^sha256:[0-9a-f]{64}$",
+    )
+
+    @field_validator("source_url")
+    @classmethod
+    def validate_and_canonicalize_source_url(cls, value: str | None) -> str | None:
+        return canonicalize_url(value) if value is not None else None
 
 
 class GoldCase(EvaluationModel):
+    schema_version: Literal["gold-case.v1"] = "gold-case.v1"
     case_id: str = Field(pattern=r"^[a-z0-9_-]+$")
     fixture_type: Literal["synthetic", "licensed", "public_excerpt"]
+    excerpt_policy: Literal["synthetic", "licensed", "short_public_excerpt"] = "synthetic"
+    review_status: Literal["synthetic", "assistant_verified", "human_verified"] = "synthetic"
+    reviewer: str | None = Field(default=None, min_length=1, max_length=160)
+    reviewed_at: AwareDatetime | None = None
     document: BenchmarkDocument
     gold: ExtractionEnvelope
+
+    @model_validator(mode="after")
+    def validate_fixture_integrity(self) -> "GoldCase":
+        if self.fixture_type == "synthetic":
+            if self.document.source_url is not None:
+                raise ValueError("Synthetic cases must not contain a source URL.")
+            if self.excerpt_policy != "synthetic" or self.review_status != "synthetic":
+                raise ValueError("Synthetic cases must retain synthetic policy labels.")
+        else:
+            required_metadata = {
+                "source_url": self.document.source_url,
+                "publisher": self.document.publisher,
+                "source_type": self.document.source_type,
+                "retrieved_at": self.document.retrieved_at,
+                "content_hash": self.document.content_hash,
+                "reviewer": self.reviewer,
+                "reviewed_at": self.reviewed_at,
+            }
+            missing = [name for name, value in required_metadata.items() if value is None]
+            if missing:
+                raise ValueError(
+                    "Non-synthetic cases require verified metadata: " + ", ".join(missing)
+                )
+            if self.document.content_hash != sha256_text(self.document.raw_content):
+                raise ValueError("Document content_hash does not match raw_content.")
+            if self.review_status == "synthetic":
+                raise ValueError("Non-synthetic cases require an explicit review status.")
+
+        if self.fixture_type == "public_excerpt":
+            if self.excerpt_policy != "short_public_excerpt":
+                raise ValueError("Public excerpts require the short_public_excerpt policy.")
+            if len(re.findall(r"\S+", self.document.raw_content)) > 25:
+                raise ValueError("Public benchmark excerpts may contain at most 25 words.")
+        elif self.fixture_type == "licensed" and self.excerpt_policy != "licensed":
+            raise ValueError("Licensed fixtures require the licensed excerpt policy.")
+
+        provenance_errors = validate_provenance(
+            self.gold,
+            segment_passages(self.document.raw_content),
+        )
+        if provenance_errors:
+            raise ValueError("Gold provenance is invalid: " + " ".join(provenance_errors))
+        return self
 
 
 class ModelPrediction(EvaluationModel):

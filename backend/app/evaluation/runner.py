@@ -18,7 +18,7 @@ async def run_case(
     request = ExtractionRequest(
         document_id=uuid5(NAMESPACE_URL, f"neuro-bus-evaluation:{case.case_id}"),
         title=case.document.title,
-        canonical_url=case.document.source_url or f"fixture:{case.case_id}",
+        canonical_url=str(case.document.source_url or f"fixture:{case.case_id}"),
         passages=tuple(
             ExtractionPassage(
                 ordinal=span.ordinal,
