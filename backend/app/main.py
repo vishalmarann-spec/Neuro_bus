@@ -13,16 +13,15 @@ from app.api.routes.reasoning import router as reasoning_router
 from app.api.routes.storage import router as storage_router
 from app.core.config import Settings, get_settings
 from app.core.database import SessionFactory, create_database
-from app.domain.source_policy import SourceFetchPolicy
 from app.providers.factory import create_model_provider
-from app.providers.http_source import SafeSourceFetcher
 from app.providers.models import ExtractionModelProvider
 from app.services.evaluation_review import (
     BenchmarkReviewWorkspace,
     default_benchmark_review_workspace,
 )
 from app.services.readiness import ReadinessProbe, database_probe
-from app.services.web_connector import HostRateLimiter, PublicWebConnector
+from app.services.web_connector import PublicWebConnector
+from app.services.web_connector_factory import create_public_web_connector
 
 
 def create_app(
@@ -47,19 +46,7 @@ def create_app(
         app.state.readiness_probe = readiness_probe or database_probe(resolved_session_factory)
         app.state.model_provider = model_provider or create_model_provider(resolved_settings)
         if web_connector is None:
-            source_policy = SourceFetchPolicy(
-                timeout_seconds=resolved_settings.source_fetch_timeout_seconds,
-                max_redirects=resolved_settings.source_fetch_max_redirects,
-                max_response_bytes=resolved_settings.source_fetch_max_response_bytes,
-            )
-            app.state.web_connector = PublicWebConnector(
-                fetcher=SafeSourceFetcher(policy=source_policy),
-                rate_limiter=HostRateLimiter(resolved_settings.source_fetch_host_interval_seconds),
-                source_policy=source_policy,
-                max_attempts=resolved_settings.source_fetch_max_attempts,
-                retry_base_seconds=resolved_settings.source_fetch_retry_base_seconds,
-                max_crawl_delay_seconds=(resolved_settings.source_fetch_max_crawl_delay_seconds),
-            )
+            app.state.web_connector = create_public_web_connector(resolved_settings)
         else:
             app.state.web_connector = web_connector
         app.state.benchmark_review_workspace = (

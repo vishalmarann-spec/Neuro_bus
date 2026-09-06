@@ -112,9 +112,9 @@ class DocumentCapture(APIModel):
 class SourceRead(APIModel):
     id: UUID
     canonical_domain: str
-    publisher: str
+    publisher: str | None
     publisher_family: str | None
-    source_type: SourceType
+    source_type: SourceType | None
     trust_profile: dict[str, Any]
     created_at: datetime
 
@@ -189,9 +189,18 @@ class ConnectorJobRead(APIModel):
     document_id: UUID | None
     connector: str
     requested_url: str
+    publisher: str
+    publisher_family: str | None
+    source_type: SourceType
+    title: str | None
+    published_at: datetime | None
+    request_hash: str | None
     status: ConnectorJobStatus
     attempts: int
     max_attempts: int
+    claim_count: int
+    available_at: datetime
+    lease_expires_at: datetime | None
     robots_url: str | None
     robots_allowed: bool | None
     final_url: str | None
@@ -209,6 +218,7 @@ class ConnectorJobRead(APIModel):
 class WebSourceFetchRead(APIModel):
     job: ConnectorJobRead
     capture: DocumentCaptureRead | None = None
+    idempotent: bool = False
 
 
 class DocumentProvenanceLinkCreate(APIModel):

@@ -1,26 +1,21 @@
-from dataclasses import replace
 from typing import Annotated
 from uuid import UUID
 
-from fastapi import APIRouter, HTTPException, Path, Request, status
+from fastapi import APIRouter, Header, HTTPException, Path, Request, Response, status
 
 from app.api.schemas import (
     ConnectorJobRead,
-    DocumentCapture,
-    DocumentCaptureRead,
     WebSourceFetchCreate,
     WebSourceFetchRead,
 )
 from app.core.database import DatabaseSession
-from app.core.models import ConnectorJobStatus
 from app.services.connector_jobs import (
+    IdempotencyConflict,
     create_connector_job,
-    finish_connector_job,
     get_connector_job,
     list_connector_jobs,
-    start_connector_job,
 )
-from app.services.storage import SourceMetadataConflict, capture_document, get_run
+from app.services.storage import get_run
 from app.services.web_connector import PublicWebConnector
 
 router = APIRouter(tags=["public-web-connector"])
@@ -37,64 +32,39 @@ def not_found(resource: str) -> HTTPException:
 @router.post(
     "/runs/{run_id}/connector-jobs",
     response_model=WebSourceFetchRead,
-    status_code=status.HTTP_201_CREATED,
+    status_code=status.HTTP_202_ACCEPTED,
 )
 async def create_public_web_connector_job(
     run_id: ResourceID,
     payload: WebSourceFetchCreate,
     request: Request,
+    response: Response,
     session: DatabaseSession,
+    idempotency_key: Annotated[
+        str | None, Header(alias="Idempotency-Key", min_length=1, max_length=200)
+    ] = None,
 ) -> WebSourceFetchRead:
     run = await get_run(session, run_id)
     if run is None:
         raise not_found("Analysis run")
     connector: PublicWebConnector = request.app.state.web_connector
-    job = await create_connector_job(
-        session,
-        run,
-        str(payload.url),
-        connector.max_attempts,
+    try:
+        job, idempotent = await create_connector_job(
+            session, run, payload, connector.max_attempts, idempotency_key
+        )
+    except IdempotencyConflict:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail={
+                "code": "IDEMPOTENCY_KEY_REUSED",
+                "message": "The idempotency key was already used for another request.",
+            },
+        ) from None
+    if idempotent:
+        response.status_code = status.HTTP_200_OK
+    return WebSourceFetchRead(
+        job=ConnectorJobRead.model_validate(job), capture=None, idempotent=idempotent
     )
-    await start_connector_job(session, run, job)
-    outcome = await connector.collect(str(payload.url))
-    capture: DocumentCaptureRead | None = None
-    document_id: UUID | None = None
-
-    if outcome.status == ConnectorJobStatus.SUCCEEDED:
-        assert outcome.final_url is not None
-        assert outcome.text is not None
-        try:
-            source, document, passages, duplicate = await capture_document(
-                session,
-                run,
-                DocumentCapture(
-                    url=outcome.final_url,
-                    publisher=payload.publisher,
-                    publisher_family=payload.publisher_family,
-                    source_type=payload.source_type,
-                    title=payload.title or outcome.title,
-                    raw_content=outcome.text,
-                    published_at=payload.published_at,
-                ),
-            )
-        except SourceMetadataConflict:
-            outcome = replace(
-                outcome,
-                status=ConnectorJobStatus.UNAVAILABLE,
-                error_code="source_metadata_conflict",
-                error_message="Source metadata conflicts with an existing source record.",
-            )
-        else:
-            document_id = document.id
-            capture = DocumentCaptureRead(
-                source=source,
-                document=document,
-                passages=passages,
-                duplicate=duplicate,
-            )
-
-    await finish_connector_job(session, job, outcome, document_id)
-    return WebSourceFetchRead(job=ConnectorJobRead.model_validate(job), capture=capture)
 
 
 @router.get("/connector-jobs/{job_id}", response_model=ConnectorJobRead)

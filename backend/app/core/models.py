@@ -191,7 +191,7 @@ class Source(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
     )
 
     canonical_domain: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
-    publisher: Mapped[str] = mapped_column(String(255), nullable=False)
+    publisher: Mapped[str | None] = mapped_column(String(255))
     source_type: Mapped[SourceType] = mapped_column(
         Enum(SourceType, native_enum=False, length=32), nullable=False
     )
@@ -256,6 +256,16 @@ class ConnectorJob(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
             "redirect_count IS NULL OR redirect_count >= 0",
             name="ck_connector_job_redirect_count_nonnegative",
         ),
+        CheckConstraint(
+            "claim_count >= 0",
+            name="ck_connector_job_claim_count_nonnegative",
+        ),
+        UniqueConstraint(
+            "run_id",
+            "connector",
+            "idempotency_hash",
+            name="uq_connector_job_idempotency",
+        ),
     )
 
     run_id: Mapped[UUID] = mapped_column(
@@ -266,6 +276,15 @@ class ConnectorJob(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
     )
     connector: Mapped[str] = mapped_column(String(64), nullable=False, default="public_web.v1")
     requested_url: Mapped[str] = mapped_column(Text, nullable=False)
+    publisher: Mapped[str] = mapped_column(String(255), nullable=False)
+    publisher_family: Mapped[str | None] = mapped_column(String(255))
+    source_type: Mapped[SourceType | None] = mapped_column(
+        Enum(SourceType, native_enum=False, length=32)
+    )
+    title: Mapped[str | None] = mapped_column(String(500))
+    published_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    request_hash: Mapped[str | None] = mapped_column(String(71))
+    idempotency_hash: Mapped[str | None] = mapped_column(String(71))
     status: Mapped[ConnectorJobStatus] = mapped_column(
         Enum(ConnectorJobStatus, native_enum=False, length=32),
         nullable=False,
@@ -274,6 +293,12 @@ class ConnectorJob(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
     )
     attempts: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     max_attempts: Mapped[int] = mapped_column(Integer, nullable=False)
+    claim_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    available_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, default=utc_now, index=True
+    )
+    lease_owner: Mapped[str | None] = mapped_column(String(160), index=True)
+    lease_expires_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), index=True)
     robots_url: Mapped[str | None] = mapped_column(Text)
     robots_allowed: Mapped[bool | None] = mapped_column(Boolean)
     final_url: Mapped[str | None] = mapped_column(Text)

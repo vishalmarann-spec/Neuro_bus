@@ -10,7 +10,8 @@ Use a modular monolith plus a separate worker process. This keeps deployment and
 2. **FastAPI application:** projects, sources, evidence, claims, insights, review actions.
 3. **Worker:** document fetching, parsing, chunking, extraction, embedding, and analysis jobs.
 4. **PostgreSQL + pgvector:** transactional data, provenance, graph-like relationships, and semantic retrieval.
-5. **Redis:** job queue and short-lived coordination only; never the authoritative evidence store.
+5. **Redis (later):** optional short-lived distributed coordination; never the authoritative evidence
+   or job store.
 6. **Blob storage adapter:** immutable raw captures. Local storage in development; S3-compatible storage later.
 7. **Model adapter:** structured extraction through a configured provider; the rest of the system remains provider-independent.
 
@@ -57,8 +58,9 @@ Each stage records start time, finish time, input/output counts, error code, ret
 - Embeddings help retrieve and cluster candidates; they never decide truth.
 - Raw captures and their hashes are immutable. Corrections create new versions/audit records.
 - Model output enters the database only after schema and provenance validation.
-- Public-web connector execution is inline during the MVP, but its durable queued/running/terminal
-  job record is independent of the executor so the same service can move to the worker later.
+- Public-web connector submissions commit a durable database job and return immediately. A separate
+  worker claims eligible jobs with an expiring lease, performs collection, and records the terminal
+  result. An abandoned running job becomes eligible after its lease expires.
 
 ## Failure behavior
 
@@ -70,6 +72,7 @@ Each stage records start time, finish time, input/output counts, error code, ret
 
 ## Deployment phases
 
-- Development: local API, worker, PostgreSQL/pgvector, Redis.
-- Demo: one container host plus managed PostgreSQL and Redis.
+- Development: local API, worker, and PostgreSQL/pgvector.
+- Demo: one container host plus managed PostgreSQL; Redis is needed only after multiple connector
+  workers require shared host-rate coordination.
 - Later production: separate API/worker scaling, object storage, authentication, backups, monitoring.

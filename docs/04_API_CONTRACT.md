@@ -26,7 +26,7 @@ Creating a run accepts optional seed URLs and a source policy. It returns immedi
 ## Sources and documents
 
 - `POST /runs/{run_id}/sources` — manually capture source metadata and immutable text; returns the source, document, exact passages, and duplicate status.
-- `POST /runs/{run_id}/connector-jobs` — synchronously execute the MVP public-web connector and persist its complete job lifecycle; returns a terminal job plus an optional document capture.
+- `POST /runs/{run_id}/connector-jobs` — enqueue a durable public-web connector job and return `202`; an optional `Idempotency-Key` header safely deduplicates client retries.
 - `GET /runs/{run_id}/connector-jobs` — list connector attempts and terminal outcomes for a run.
 - `GET /connector-jobs/{job_id}` — inspect robots status, attempt count, raw-response fingerprint, linked document, and sanitized failure details.
 - `POST /documents/{document_id}/provenance-links` — record an idempotent `upstream_study` or `syndicated_from` relationship with a canonical URL, actor, and rationale.
@@ -90,6 +90,8 @@ Insight generation returns `409 REASONING_REQUIRED` before scoring and `409 INSU
 - All externally supplied IDs are validated.
 - Lists use cursor pagination.
 - Writes accept an idempotency key where retries are likely.
+- Reusing a connector idempotency key with the same request returns the existing job; reuse with a
+  different request returns `409 IDEMPOTENCY_KEY_REUSED`. Only the key's SHA-256 hash is retained.
 - Scores include their version and component explanation.
 - Timestamps are UTC ISO 8601.
 - An API response never invents absent source metadata; absent data is `null` with a reason when relevant.

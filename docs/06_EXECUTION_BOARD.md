@@ -101,7 +101,7 @@ Exit: citation correctness >= 0.95 on the evaluation set.
 ## Milestone 5: demo hardening
 
 - [ ] end-to-end observability
-- [ ] retry/idempotency tests
+- [x] retry/idempotency tests
 - [x] source policy and SSRF safeguards
 - [x] first public-web connector with robots policy, per-host rate limiting, bounded retries, and durable job outcomes
 - [ ] accessibility and responsive UI
@@ -113,8 +113,10 @@ IP address, each redirect, MIME types, declared and streamed byte counts, and to
 network transport dials the validated numeric public address while retaining the original hostname
 for HTTP and TLS, preventing DNS rebinding between validation and connection. The first connector
 now uses this boundary, checks robots rules, records the raw response fingerprint and parsed
-document separately, and preserves every terminal outcome. Worker execution, distributed rate
-coordination, PDF parsing, and operator verification of source terms/licensing remain open.
+document separately, and preserves every terminal outcome. Connector execution now runs through a
+database-backed worker with atomic claims, expiring leases, abandoned-job recovery, sanitized
+unexpected failures, and hashed request-idempotency keys. Distributed rate coordination, PDF
+parsing, and operator verification of source terms/licensing remain open.
 
 ## Deferred backlog
 

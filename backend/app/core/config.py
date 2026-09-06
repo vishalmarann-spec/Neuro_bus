@@ -31,6 +31,8 @@ class Settings(BaseSettings):
     source_fetch_retry_base_seconds: float = Field(default=0.5, ge=0, le=10)
     source_fetch_host_interval_seconds: float = Field(default=1.0, ge=0, le=60)
     source_fetch_max_crawl_delay_seconds: float = Field(default=10.0, ge=0, le=60)
+    connector_worker_poll_seconds: float = Field(default=1.0, gt=0, le=60)
+    connector_worker_lease_seconds: int = Field(default=300, ge=30, le=3600)
     model_provider: Literal["disabled", "openai"] = "disabled"
     model_name: str = ""
     model_api_key: str = Field(default="", repr=False)

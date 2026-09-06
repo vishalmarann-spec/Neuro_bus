@@ -20,8 +20,8 @@
 ## Public-source fetch boundary
 
 `SafeSourceFetcher` is the required network boundary for web connectors. The first public-web
-connector is exposed through a synchronous MVP job API; manual document capture still makes no
-outbound network requests.
+connector is submitted through an asynchronous job API and executed by a database-claiming worker;
+manual document capture still makes no outbound network requests.
 
 The default policy:
 
@@ -42,6 +42,10 @@ code, status, media type, byte count, and redirect count when available, but nev
 response bodies. The public-web connector checks `robots.txt`, honors a bounded crawl delay,
 spaces requests per host including redirect targets, and retries only transient failures. Source
 terms and licensing remain operator checks before a URL is submitted.
+
+Connector idempotency keys are stored only as SHA-256 hashes. Worker claims expire so abandoned
+jobs can be recovered, and terminal updates require the current lease owner. Worker logs use job
+identifiers rather than requested URLs and unexpected exception details are not returned by the API.
 
 ## Audit requirements
 

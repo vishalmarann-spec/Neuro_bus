@@ -6,9 +6,9 @@ provider. It uses `SafeSourceFetcher`; no connector may replace or bypass that n
 ## API and lifecycle
 
 `POST /api/v1/runs/{run_id}/connector-jobs` requires the URL, declared publisher, and optional
-publisher family, source type, title, and publication timestamp. During the MVP the request runs
-inline, but a durable job is committed as `queued`, changed to `running`, and then finished in
-exactly one terminal state:
+publisher family, source type, title, and publication timestamp. It commits a durable `queued` job
+and returns `202` without waiting for the network. A separate worker claims it as `running` and
+then records exactly one terminal state:
 
 | Status | Meaning | Document created |
 |---|---|---|
@@ -24,6 +24,23 @@ The response fingerprint covers the exact decoded response bytes returned by the
 linked `Document.content_hash` covers the inert text passed to deterministic passage segmentation.
 Keeping both hashes makes the raw-to-parsed boundary explicit.
 
+## Queue, leases, and idempotency
+
+Run the worker with `python -m app.workers.connector`. A claim records a non-secret worker ID,
+claim count, and expiring lease in PostgreSQL. The worker performs network activity outside the
+claim transaction. If a process exits before recording its outcome, another worker can reclaim the
+job after the lease expires. Document capture is idempotent, so recovery does not intentionally
+create a second evidence record.
+
+Clients may send `Idempotency-Key` when creating a job. The server stores only its SHA-256 hash.
+Repeating the same key and request returns the original job with `idempotent: true`; using that key
+for different request metadata returns a `409` conflict. Without the header, each submission is a
+new collection job.
+
+The initial deployment must run one connector worker. Database claims are safe across workers, but
+the host-rate limiter is still process-local. Multiple workers become supported only when a shared
+rate-reservation adapter is in place.
+
 ## Robots policy
 
 The connector requests the target origin's `/robots.txt` through the same SSRF-safe fetcher.
@@ -34,7 +51,7 @@ The connector requests the target origin's `/robots.txt` through the same SSRF-s
 - A successful robots response must be `text/plain`.
 - Matching `Disallow` rules block collection.
 - `Crawl-delay` is honored up to 10 seconds. A larger delay is recorded as unavailable instead of
-  leaving an inline request open indefinitely.
+  holding a worker indefinitely.
 
 ## Rate limiting and retries
 
@@ -49,7 +66,7 @@ The connector makes at most three source attempts. It retries DNS, network, and 
 plus HTTP 408, 425, 429, 500, 502, 503, and 504. Backoff starts at 0.5 seconds and doubles. Other
 failures stop immediately. Robots verification itself is not retried in v1.
 
-Before multiple worker processes are enabled, the process-local limiter must be replaced with a
+Before multiple connector worker processes are enabled, the process-local limiter must be replaced with a
 shared Redis-backed reservation mechanism so the per-host policy remains global.
 
 ## Parsing boundary
