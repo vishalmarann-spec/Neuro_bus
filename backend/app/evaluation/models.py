@@ -4,7 +4,7 @@ from typing import Literal
 
 from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, field_validator, model_validator
 
-from app.core.models import SourceType
+from app.core.models import ClusterLabel, EvidenceStance, SourceType
 from app.domain.extraction import ExtractionEnvelope, validate_provenance
 from app.domain.provenance import canonicalize_url, segment_passages, sha256_text
 
@@ -208,3 +208,84 @@ class ModelScorecard(EvaluationModel):
     total_input_tokens: int | None
     total_output_tokens: int | None
     total_cost_usd: float | None
+
+
+class ReasoningEvidenceReference(EvaluationModel):
+    case_id: str = Field(pattern=r"^[a-z0-9_-]+$")
+    case_fingerprint: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
+    claim_index: int = Field(ge=0)
+    evidence_index: int = Field(default=0, ge=0)
+    stance: EvidenceStance
+    annotation_rationale: str = Field(min_length=3, max_length=2_000)
+
+
+class ReasoningScenario(EvaluationModel):
+    schema_version: Literal["reasoning-scenario.v1"] = "reasoning-scenario.v1"
+    scenario_id: str = Field(pattern=r"^[a-z0-9_-]+$")
+    target_claim: str = Field(min_length=3, max_length=1_000)
+    review_status: Literal["assistant_verified", "human_verified"]
+    reviewer: str = Field(min_length=2, max_length=160)
+    reviewed_at: AwareDatetime
+    evidence: list[ReasoningEvidenceReference] = Field(min_length=1)
+    expected_label: ClusterLabel
+    expected_supporting_independent_sources: int = Field(ge=0)
+    rationale: str = Field(min_length=3, max_length=2_000)
+
+    @field_validator("reviewer")
+    @classmethod
+    def normalize_reasoning_reviewer(cls, value: str) -> str:
+        return " ".join(value.split())
+
+    @model_validator(mode="after")
+    def validate_scenario(self) -> "ReasoningScenario":
+        references = [
+            (item.case_id, item.claim_index, item.evidence_index) for item in self.evidence
+        ]
+        if len(set(references)) != len(references):
+            raise ValueError("Reasoning evidence references must be unique within a scenario.")
+        if (
+            self.expected_label == ClusterLabel.WELL_SUPPORTED
+            and self.expected_supporting_independent_sources < 2
+        ):
+            raise ValueError("well_supported scenarios require at least two independent sources.")
+        if self.review_status == "human_verified" and self.reviewer.casefold() in {
+            "assistant",
+            "automation",
+            "chatgpt",
+            "codex",
+            "codex_reasoning_curation",
+            "model",
+        }:
+            raise ValueError("human_verified scenarios require a named human reviewer.")
+        return self
+
+
+class ReasoningScenarioResult(EvaluationModel):
+    scenario_id: str
+    expected_label: ClusterLabel
+    actual_label: ClusterLabel
+    expected_supporting_independent_sources: int = Field(ge=0)
+    actual_supporting_independent_sources: int = Field(ge=0)
+    support_strength: float = Field(ge=0, le=1)
+    contradiction_strength: float = Field(ge=0, le=1)
+    confidence: float = Field(ge=0, le=1)
+    passed: bool
+    contributions: list[dict]
+
+
+class ReasoningEvaluationReport(EvaluationModel):
+    schema_version: Literal["reasoning-evaluation.v1"] = "reasoning-evaluation.v1"
+    scoring_version: str
+    diagnostic_only: bool
+    scenarios_total: int = Field(ge=0)
+    scenarios_passed: int = Field(ge=0)
+    label_accuracy: float = Field(ge=0, le=1)
+    results: list[ReasoningScenarioResult]
+
+    @model_validator(mode="after")
+    def validate_report_totals(self) -> "ReasoningEvaluationReport":
+        if self.scenarios_total != len(self.results):
+            raise ValueError("scenarios_total must match the number of results.")
+        if self.scenarios_passed != sum(result.passed for result in self.results):
+            raise ValueError("scenarios_passed must match passing results.")
+        return self

@@ -16,6 +16,8 @@ The schema rejects a non-synthetic case when its URL, publisher, source type, re
 
 Neither the smoke set nor the assistant-verified public corpus is sufficient to select a production model. The 100-case corpus proves that real-source curation, integrity enforcement, and coverage gating work before human review and paid candidate-model runs.
 
+The same boundary applies to deterministic reasoning validation. `backend/evaluation/reasoning/real_diagnostic_v1.json` references existing public cases by exact fingerprint and currently exercises supported, well-supported, disputed, and weak outcomes. Its 4/4 result is a regression diagnostic, not human validation; the reasoning CLI marks the report diagnostic-only and provides a strict human-verification gate.
+
 ### Pilot source policy
 
 - Use only the short excerpt needed to label a claim; public cases are capped at 25 whitespace-delimited words.

@@ -75,9 +75,10 @@ Goal: combine at least five documents from three independent domains.
 - [x] Versioned, deterministic score explanations
 - [x] Disputed-cluster API for conflict review
 - [x] Idempotent reasoning reruns
+- [x] Fingerprint-bound real-source reasoning diagnostic and human-only promotion gate
 - [ ] Validate supported, disputed, and weak labels on the real labelled set
 
-Exit: the demo topic produces supported, disputed, and weak claims correctly on a labelled sample. Dependency-aware grouping now handles exact copies, same-source material, declared publisher families, and shared upstream studies without a model; real-set label validation remains open.
+Exit: the demo topic produces supported, disputed, and weak claims correctly on a labelled sample. Dependency-aware grouping handles exact copies, same-source material, declared publisher families, and shared upstream studies without a model. Four assistant-verified real-source scenarios currently pass the deterministic diagnostic, covering supported, well-supported, disputed, and weak outputs. The exit remains open until named humans approve both the underlying source cases and reasoning annotations.
 
 ## Milestone 4: cited insight report
 

@@ -45,4 +45,15 @@ Every result exposes support strength, contradiction strength, confidence, label
 
 ## Validation boundary
 
-Synthetic tests cover independent corroboration, exact-copy discounting, publisher-family grouping, shared upstream-study grouping, transitive dependencies, contradiction, freshness, missing inputs, conservative alias handling, API output, and idempotency. The milestone exit condition remains open until these rules produce the expected supported, disputed, and weak labels on the curated real evaluation set.
+Synthetic tests cover independent corroboration, exact-copy discounting, publisher-family grouping, shared upstream-study grouping, transitive dependencies, contradiction, freshness, missing inputs, conservative alias handling, API output, and idempotency.
+
+`evaluation/reasoning/real_diagnostic_v1.json` adds four fingerprint-bound scenarios built from the existing public-source corpus:
+
+- repeated evidence from one publisher remains `supported` with one independent source;
+- direct evidence from two employers becomes `well_supported`;
+- conflicting AI-demand indicators become `disputed`;
+- contextual-only material remains `weak`.
+
+Run `python -m app.evaluation.reasoning_cli` with all four public gold files and the scenario file. The report records expected and actual labels, source counts, strengths, confidence, quality inputs, exact case fingerprints, and contribution-level explanations. It exits non-zero on a mismatch, refuses accidental output overwrite, and rejects stale case fingerprints or missing claim/evidence references.
+
+The current result is 4/4, but it is explicitly `diagnostic_only: true`. `--require-human-verified` fails before writing a report until every scenario and referenced source case has named human verification. The milestone exit condition therefore remains open.

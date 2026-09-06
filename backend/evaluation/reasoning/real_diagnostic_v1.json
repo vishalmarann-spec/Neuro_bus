@@ -1,0 +1,110 @@
+[
+  {
+    "schema_version": "reasoning-scenario.v1",
+    "scenario_id": "real_same_publisher_python_demand_supported",
+    "target_claim": "OpenAI machine-learning engineering roles seek Python skills.",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_reasoning_curation",
+    "reviewed_at": "2026-09-06T00:00:00Z",
+    "evidence": [
+      {
+        "case_id": "public_openai_ml_engineer_skills",
+        "case_fingerprint": "sha256:db5f390621caa9015977efe638b075fab54cabc39ae97539b811e67a441d8a5c",
+        "claim_index": 0,
+        "evidence_index": 0,
+        "stance": "supports",
+        "annotation_rationale": "The role explicitly seeks Python proficiency."
+      },
+      {
+        "case_id": "public_openai_ml_engineer_multicloud_skills",
+        "case_fingerprint": "sha256:6fc124d0f854e38c5e3eda3d9e17af339d085e486da7ad521ee8f661cd7dad7c",
+        "claim_index": 0,
+        "evidence_index": 0,
+        "stance": "supports",
+        "annotation_rationale": "The second OpenAI role also names production Python coding."
+      }
+    ],
+    "expected_label": "supported",
+    "expected_supporting_independent_sources": 1,
+    "rationale": "Two job pages from one publisher corroborate the claim but remain one independent source."
+  },
+  {
+    "schema_version": "reasoning-scenario.v1",
+    "scenario_id": "real_cross_publisher_python_demand_well_supported",
+    "target_claim": "AI and machine-learning technical roles seek Python programming experience.",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_reasoning_curation",
+    "reviewed_at": "2026-09-06T00:00:00Z",
+    "evidence": [
+      {
+        "case_id": "public_openai_ml_engineer_skills",
+        "case_fingerprint": "sha256:db5f390621caa9015977efe638b075fab54cabc39ae97539b811e67a441d8a5c",
+        "claim_index": 0,
+        "evidence_index": 0,
+        "stance": "supports",
+        "annotation_rationale": "The OpenAI role explicitly seeks Python proficiency."
+      },
+      {
+        "case_id": "public_amazon_applied_scientist_languages",
+        "case_fingerprint": "sha256:7fc475bd3be5cc8eae990c2bcc78e0eaa906c0e00158a8a0a71f7708d232d4df",
+        "claim_index": 0,
+        "evidence_index": 0,
+        "stance": "supports",
+        "annotation_rationale": "The Amazon role lists Python among accepted programming languages."
+      }
+    ],
+    "expected_label": "well_supported",
+    "expected_supporting_independent_sources": 2,
+    "rationale": "Two separately controlled employers provide direct evidence for the shared skills claim."
+  },
+  {
+    "schema_version": "reasoning-scenario.v1",
+    "scenario_id": "real_ai_skill_demand_disputed",
+    "target_claim": "Demand for AI skills is currently increasing.",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_reasoning_curation",
+    "reviewed_at": "2026-09-06T00:00:00Z",
+    "evidence": [
+      {
+        "case_id": "public_wef_fastest_growing_skills",
+        "case_fingerprint": "sha256:ba962b87bd49246d12b3483852927f18a5416e46c3424e7687d23c5f7b840b07",
+        "claim_index": 0,
+        "evidence_index": 0,
+        "stance": "supports",
+        "annotation_rationale": "The report ranks AI and big data first among fastest-growing skills."
+      },
+      {
+        "case_id": "public_govuk_ai_demand_trend",
+        "case_fingerprint": "sha256:85b15c010ee198fe168453beae4c5d80ff0f0afc73a81f09157eafaca44acf46",
+        "claim_index": 0,
+        "evidence_index": 0,
+        "stance": "contradicts",
+        "annotation_rationale": "The UK vacancy analysis reports that demand declined in 2023."
+      }
+    ],
+    "expected_label": "disputed",
+    "expected_supporting_independent_sources": 1,
+    "rationale": "The sources use different timeframes and measures, so the broad current-demand claim must surface disagreement rather than hide it."
+  },
+  {
+    "schema_version": "reasoning-scenario.v1",
+    "scenario_id": "real_ai_course_demand_context_only_weak",
+    "target_claim": "University demand for AI security courses is increasing.",
+    "review_status": "assistant_verified",
+    "reviewer": "codex_reasoning_curation",
+    "reviewed_at": "2026-09-06T00:00:00Z",
+    "evidence": [
+      {
+        "case_id": "public_nsf_ai_workforce_data_scarce",
+        "case_fingerprint": "sha256:5b9d08995b0ca64d4ddb88f0f85e8dd1d353b4db0ce307282cc1a7d7dd624a9f",
+        "claim_index": 0,
+        "evidence_index": 0,
+        "stance": "contextual",
+        "annotation_rationale": "Workforce-data scarcity is relevant context but does not establish university course demand."
+      }
+    ],
+    "expected_label": "weak",
+    "expected_supporting_independent_sources": 0,
+    "rationale": "A contextual source without direct supporting evidence must not raise confidence."
+  }
+]

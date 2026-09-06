@@ -4,7 +4,13 @@ from typing import TypeVar
 
 from pydantic import BaseModel
 
-from app.evaluation.models import BenchmarkRunArtifact, GoldCase, ModelPrediction
+from app.evaluation.models import (
+    BenchmarkRunArtifact,
+    GoldCase,
+    ModelPrediction,
+    ReasoningEvaluationReport,
+    ReasoningScenario,
+)
 
 ModelT = TypeVar("ModelT", bound=BaseModel)
 
@@ -65,3 +71,25 @@ def save_benchmark_run(
     mode = "w" if overwrite else "x"
     with path.open(mode, encoding="utf-8") as destination:
         destination.write(artifact.model_dump_json(indent=2) + "\n")
+
+
+def load_reasoning_scenarios(path: Path) -> list[ReasoningScenario]:
+    scenarios = _validate_records(path, ReasoningScenario)
+    if not scenarios:
+        raise ValueError("Reasoning evaluation requires at least one scenario.")
+    scenario_ids = [scenario.scenario_id for scenario in scenarios]
+    if len(set(scenario_ids)) != len(scenario_ids):
+        raise ValueError("Reasoning scenario_id values must be unique.")
+    return scenarios
+
+
+def save_reasoning_report(
+    path: Path,
+    report: ReasoningEvaluationReport,
+    *,
+    overwrite: bool = False,
+) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    mode = "w" if overwrite else "x"
+    with path.open(mode, encoding="utf-8") as destination:
+        destination.write(report.model_dump_json(indent=2) + "\n")
