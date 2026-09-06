@@ -5,14 +5,47 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 
-from app.api.schemas import DocumentCapture
-from app.core.models import AnalysisRun, Document, Passage, Project, ResearchQuestion, Source
+from app.api.schemas import DocumentCapture, DocumentProvenanceLinkCreate
+from app.core.models import (
+    AnalysisRun,
+    Document,
+    DocumentProvenanceLink,
+    Passage,
+    Project,
+    ResearchQuestion,
+    Source,
+)
 from app.domain.provenance import (
     canonical_domain,
     canonicalize_url,
     segment_passages,
     sha256_text,
 )
+
+
+class SourceMetadataConflict(ValueError):
+    pass
+
+
+class InvalidProvenanceLink(ValueError):
+    pass
+
+
+def normalize_publisher_family(value: str | None) -> str | None:
+    return " ".join(value.split()) if value is not None else None
+
+
+def apply_publisher_family(source: Source, declared_family: str | None) -> None:
+    normalized = normalize_publisher_family(declared_family)
+    if normalized is None:
+        return
+    if source.publisher_family is None:
+        source.publisher_family = normalized
+        return
+    if source.publisher_family.casefold() != normalized.casefold():
+        raise SourceMetadataConflict(
+            "The source already belongs to a different declared publisher family."
+        )
 
 
 async def get_project(session: AsyncSession, project_id: UUID) -> Project | None:
@@ -36,6 +69,51 @@ async def get_document(session: AsyncSession, document_id: UUID) -> Document | N
     return result.scalar_one_or_none()
 
 
+async def list_provenance_links(
+    session: AsyncSession, document_id: UUID
+) -> list[DocumentProvenanceLink]:
+    result = await session.execute(
+        select(DocumentProvenanceLink)
+        .where(DocumentProvenanceLink.document_id == document_id)
+        .order_by(DocumentProvenanceLink.created_at, DocumentProvenanceLink.id)
+    )
+    return list(result.scalars())
+
+
+async def record_provenance_link(
+    session: AsyncSession,
+    document: Document,
+    payload: DocumentProvenanceLinkCreate,
+) -> tuple[DocumentProvenanceLink, bool]:
+    upstream_url = canonicalize_url(str(payload.upstream_url))
+    if upstream_url == document.canonical_url:
+        raise InvalidProvenanceLink("A document cannot declare itself as its upstream source.")
+
+    result = await session.execute(
+        select(DocumentProvenanceLink).where(
+            DocumentProvenanceLink.document_id == document.id,
+            DocumentProvenanceLink.relation == payload.relation,
+            DocumentProvenanceLink.upstream_url == upstream_url,
+        )
+    )
+    existing = result.scalar_one_or_none()
+    if existing is not None:
+        return existing, True
+
+    link = DocumentProvenanceLink(
+        document_id=document.id,
+        relation=payload.relation,
+        upstream_url=upstream_url,
+        upstream_domain=canonical_domain(upstream_url),
+        rationale=payload.rationale,
+        actor=payload.actor,
+    )
+    session.add(link)
+    await session.commit()
+    await session.refresh(link)
+    return link, False
+
+
 async def capture_document(
     session: AsyncSession,
     run: AnalysisRun,
@@ -57,6 +135,9 @@ async def capture_document(
     )
     existing = existing_result.scalar_one_or_none()
     if existing is not None:
+        apply_publisher_family(existing.source, payload.publisher_family)
+        await session.commit()
+        await session.refresh(existing.source)
         return existing.source, existing, list(existing.passages), True
 
     source_result = await session.execute(
@@ -71,10 +152,13 @@ async def capture_document(
         source = Source(
             canonical_domain=domain,
             publisher=payload.publisher.strip(),
+            publisher_family=normalize_publisher_family(payload.publisher_family),
             source_type=payload.source_type,
         )
         session.add(source)
         await session.flush()
+    else:
+        apply_publisher_family(source, payload.publisher_family)
 
     document = Document(
         run_id=run.id,

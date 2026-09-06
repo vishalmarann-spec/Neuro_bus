@@ -6,6 +6,9 @@ from fastapi import APIRouter, HTTPException, Path, status
 from app.api.schemas import (
     DocumentCapture,
     DocumentCaptureRead,
+    DocumentProvenanceLinkCaptureRead,
+    DocumentProvenanceLinkCreate,
+    DocumentProvenanceLinkRead,
     DocumentRead,
     PassageRead,
     ProjectCreate,
@@ -19,11 +22,15 @@ from app.core.database import DatabaseSession
 from app.core.models import AnalysisRun, Project, ResearchQuestion
 from app.domain.provenance import InvalidSourceURL
 from app.services.storage import (
+    InvalidProvenanceLink,
+    SourceMetadataConflict,
     capture_document,
     get_document,
     get_project,
     get_question,
     get_run,
+    list_provenance_links,
+    record_provenance_link,
 )
 
 router = APIRouter(tags=["evidence-storage"])
@@ -125,8 +132,10 @@ async def create_source_capture(
         source, document, passages, duplicate = await capture_document(session, run, payload)
     except InvalidSourceURL as exc:
         raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail=str(exc)
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=str(exc)
         ) from exc
+    except SourceMetadataConflict as exc:
+        raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail=str(exc)) from exc
     return DocumentCaptureRead(
         source=source,
         document=document,
@@ -141,6 +150,38 @@ async def read_document(document_id: ResourceID, session: DatabaseSession):
     if document is None:
         raise not_found("Document")
     return document
+
+
+@router.post(
+    "/documents/{document_id}/provenance-links",
+    response_model=DocumentProvenanceLinkCaptureRead,
+    status_code=status.HTTP_201_CREATED,
+)
+async def create_document_provenance_link(
+    document_id: ResourceID,
+    payload: DocumentProvenanceLinkCreate,
+    session: DatabaseSession,
+) -> DocumentProvenanceLinkCaptureRead:
+    document = await get_document(session, document_id)
+    if document is None:
+        raise not_found("Document")
+    try:
+        link, duplicate = await record_provenance_link(session, document, payload)
+    except (InvalidSourceURL, InvalidProvenanceLink) as exc:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_CONTENT, detail=str(exc)
+        ) from exc
+    return DocumentProvenanceLinkCaptureRead(link=link, duplicate=duplicate)
+
+
+@router.get(
+    "/documents/{document_id}/provenance-links",
+    response_model=list[DocumentProvenanceLinkRead],
+)
+async def read_document_provenance_links(document_id: ResourceID, session: DatabaseSession):
+    if await get_document(session, document_id) is None:
+        raise not_found("Document")
+    return await list_provenance_links(session, document_id)
 
 
 @router.get("/documents/{document_id}/passages", response_model=list[PassageRead])

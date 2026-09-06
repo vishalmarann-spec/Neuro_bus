@@ -61,6 +61,11 @@ class SourceType(StrEnum):
     OTHER = "other"
 
 
+class DocumentProvenanceRelation(StrEnum):
+    UPSTREAM_STUDY = "upstream_study"
+    SYNDICATED_FROM = "syndicated_from"
+
+
 class EntityType(StrEnum):
     UNIVERSITY = "university"
     PROGRAMME = "programme"
@@ -178,6 +183,7 @@ class Source(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
     source_type: Mapped[SourceType] = mapped_column(
         Enum(SourceType, native_enum=False, length=32), nullable=False
     )
+    publisher_family: Mapped[str | None] = mapped_column(String(255), index=True)
     trust_profile: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
 
     documents: Mapped[list["Document"]] = relationship(back_populates="source")
@@ -214,6 +220,36 @@ class Document(UUIDPrimaryKeyMixin, Base):
     model_executions: Mapped[list["ModelExecution"]] = relationship(
         back_populates="document", cascade="all, delete-orphan"
     )
+    provenance_links: Mapped[list["DocumentProvenanceLink"]] = relationship(
+        back_populates="document",
+        cascade="all, delete-orphan",
+        order_by="DocumentProvenanceLink.created_at",
+    )
+
+
+class DocumentProvenanceLink(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
+    __tablename__ = "document_provenance_links"
+    __table_args__ = (
+        UniqueConstraint(
+            "document_id",
+            "relation",
+            "upstream_url",
+            name="uq_document_provenance_link",
+        ),
+    )
+
+    document_id: Mapped[UUID] = mapped_column(
+        ForeignKey("documents.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    relation: Mapped[DocumentProvenanceRelation] = mapped_column(
+        Enum(DocumentProvenanceRelation, native_enum=False, length=32), nullable=False
+    )
+    upstream_url: Mapped[str] = mapped_column(Text, nullable=False)
+    upstream_domain: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
+    rationale: Mapped[str] = mapped_column(Text, nullable=False)
+    actor: Mapped[str] = mapped_column(String(160), nullable=False)
+
+    document: Mapped[Document] = relationship(back_populates="provenance_links")
 
 
 class Passage(UUIDPrimaryKeyMixin, Base):

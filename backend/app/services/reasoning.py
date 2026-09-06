@@ -1,5 +1,5 @@
 import json
-from collections import Counter, defaultdict
+from collections import defaultdict
 from dataclasses import dataclass
 from datetime import UTC, datetime
 
@@ -13,6 +13,7 @@ from app.core.models import (
     ClaimClusterScore,
     ClaimReviewStatus,
     Document,
+    DocumentProvenanceLink,
     Entity,
     EvidenceLink,
     ModelExecution,
@@ -20,6 +21,7 @@ from app.core.models import (
     Source,
     ValidationStatus,
 )
+from app.domain.independence import IndependenceDocument, assign_independence_groups
 from app.domain.provenance import sha256_text
 from app.domain.scoring import (
     SCORING_VERSION,
@@ -75,8 +77,28 @@ async def reason_over_run(session: AsyncSession, run_id) -> list[ReasoningRecord
         .order_by(Claim.created_at, EvidenceLink.id)
     )
     rows = query_result.all()
-    unique_documents = {(document.content_hash, document.id) for _, _, _, document, _, _ in rows}
-    content_counts = Counter(content_hash for content_hash, _ in unique_documents)
+    documents = {document.id: (document, source) for _, _, _, document, source, _ in rows}
+    upstream_by_document: dict = defaultdict(set)
+    provenance_link_count = 0
+    if documents:
+        provenance_result = await session.execute(
+            select(DocumentProvenanceLink).where(DocumentProvenanceLink.document_id.in_(documents))
+        )
+        for provenance_link in provenance_result.scalars():
+            upstream_by_document[provenance_link.document_id].add(provenance_link.upstream_url)
+            provenance_link_count += 1
+    independence_assignments = assign_independence_groups(
+        [
+            IndependenceDocument(
+                document_id=document.id,
+                source_id=source.id,
+                content_hash=document.content_hash,
+                publisher_family=source.publisher_family,
+                upstream_urls=tuple(sorted(upstream_by_document[document.id])),
+            )
+            for document, source in documents.values()
+        ]
+    )
 
     grouped_rows = defaultdict(list)
     for row in rows:
@@ -158,18 +180,15 @@ async def reason_over_run(session: AsyncSession, run_id) -> list[ReasoningRecord
             }
             link.quality_score = quality.value
             link.quality_components = components
-            independence_group = (
-                f"content:{document.content_hash}"
-                if content_counts[document.content_hash] > 1
-                else f"source:{source.id}"
-            )
+            independence = independence_assignments[document.id]
             evidence_inputs.append(
                 EvidenceInput(
                     link_id=link.id,
                     stance=link.stance,
-                    independence_group=independence_group,
+                    independence_group=independence.group,
                     quality=quality.value,
                     components=components,
+                    independence_reasons=independence.reasons,
                 )
             )
 
@@ -207,6 +226,17 @@ async def reason_over_run(session: AsyncSession, run_id) -> list[ReasoningRecord
                 "included_claim_count": len(active_claim_ids),
                 "excluded_claim_count": len(all_claims) - len(active_claim_ids),
                 "evidence_link_count": len(rows),
+                "independence_group_count": len(
+                    {assignment.group for assignment in independence_assignments.values()}
+                ),
+                "explicit_dependency_link_count": provenance_link_count,
+                "publisher_family_count": len(
+                    {
+                        source.publisher_family.casefold()
+                        for _, source in documents.values()
+                        if source.publisher_family
+                    }
+                ),
                 "calculated_at": datetime.now(UTC).isoformat(),
             },
         }

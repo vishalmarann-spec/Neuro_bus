@@ -70,14 +70,14 @@ Goal: combine at least five documents from three independent domains.
 - [x] Conservative exact-name and exact-alias entity resolution
 - [x] Deterministic claim normalization and clustering
 - [x] Exact-content duplicate detection and same-publisher grouping
-- [ ] Upstream citation and publisher-family detection
+- [x] Explicit upstream citation and publisher-family independence detection
 - [x] Support/contradiction aggregation
 - [x] Versioned, deterministic score explanations
 - [x] Disputed-cluster API for conflict review
 - [x] Idempotent reasoning reruns
 - [ ] Validate supported, disputed, and weak labels on the real labelled set
 
-Exit: the demo topic produces supported, disputed, and weak claims correctly on a labelled sample.
+Exit: the demo topic produces supported, disputed, and weak claims correctly on a labelled sample. Dependency-aware grouping now handles exact copies, same-source material, declared publisher families, and shared upstream studies without a model; real-set label validation remains open.
 
 ## Milestone 4: cited insight report
 

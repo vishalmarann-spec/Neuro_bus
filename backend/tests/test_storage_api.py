@@ -37,6 +37,7 @@ def test_complete_storage_vertical_slice_is_traceable_and_idempotent(client: Tes
     payload = {
         "url": "https://Example.EDU/programmes/ai-security/?utm_source=newsletter#overview",
         "publisher": "Example University",
+        "publisher_family": "Example Education Group",
         "source_type": "university",
         "title": "Postgraduate AI Security",
         "raw_content": raw_content,
@@ -50,6 +51,7 @@ def test_complete_storage_vertical_slice_is_traceable_and_idempotent(client: Tes
     document_id = capture["document"]["id"]
     assert capture["duplicate"] is False
     assert capture["source"]["canonical_domain"] == "example.edu"
+    assert capture["source"]["publisher_family"] == "Example Education Group"
     assert capture["document"]["canonical_url"] == ("https://example.edu/programmes/ai-security")
     assert capture["document"]["content_hash"] == sha256_text(raw_content)
     assert len(capture["passages"]) == 2
@@ -66,6 +68,81 @@ def test_complete_storage_vertical_slice_is_traceable_and_idempotent(client: Tes
     assert duplicate_response.status_code == 201
     assert duplicate_response.json()["duplicate"] is True
     assert duplicate_response.json()["document"]["id"] == document_id
+
+    provenance_payload = {
+        "relation": "upstream_study",
+        "upstream_url": "https://Research.Example/study/42?utm_source=press#results",
+        "rationale": "The captured article explicitly reports results from this study.",
+        "actor": "Vishal",
+    }
+    provenance_response = client.post(
+        f"/api/v1/documents/{document_id}/provenance-links", json=provenance_payload
+    )
+    assert provenance_response.status_code == 201
+    provenance = provenance_response.json()
+    assert provenance["duplicate"] is False
+    assert provenance["link"]["upstream_url"] == "https://research.example/study/42"
+    assert provenance["link"]["upstream_domain"] == "research.example"
+
+    repeated = client.post(
+        f"/api/v1/documents/{document_id}/provenance-links", json=provenance_payload
+    )
+    assert repeated.status_code == 201
+    assert repeated.json()["duplicate"] is True
+    assert repeated.json()["link"]["id"] == provenance["link"]["id"]
+
+    listed = client.get(f"/api/v1/documents/{document_id}/provenance-links")
+    assert listed.status_code == 200
+    assert listed.json() == [provenance["link"]]
+
+
+def test_capture_rejects_conflicting_publisher_family(client: TestClient) -> None:
+    _, _, run_id = create_research_run(client)
+    base = {
+        "url": "https://news.example/report-a",
+        "publisher": "Example News",
+        "publisher_family": "First Group",
+        "source_type": "news",
+        "raw_content": "First report.",
+    }
+    assert client.post(f"/api/v1/runs/{run_id}/sources", json=base).status_code == 201
+
+    conflict = client.post(
+        f"/api/v1/runs/{run_id}/sources",
+        json={
+            **base,
+            "url": "https://news.example/report-b",
+            "publisher_family": "Second Group",
+            "raw_content": "Second report.",
+        },
+    )
+
+    assert conflict.status_code == 409
+    assert "different declared publisher family" in conflict.json()["detail"]
+
+
+def test_provenance_link_rejects_self_reference(client: TestClient) -> None:
+    _, _, run_id = create_research_run(client)
+    capture = client.post(
+        f"/api/v1/runs/{run_id}/sources",
+        json={
+            "url": "https://example.edu/report",
+            "publisher": "Example University",
+            "raw_content": "A report.",
+        },
+    ).json()
+
+    response = client.post(
+        f"/api/v1/documents/{capture['document']['id']}/provenance-links",
+        json={
+            "relation": "syndicated_from",
+            "upstream_url": "https://example.edu/report#copy",
+            "rationale": "Invalid self-reference.",
+        },
+    )
+
+    assert response.status_code == 422
+    assert "cannot declare itself" in response.json()["detail"]
 
 
 def test_records_survive_a_new_api_application_instance(session_factory) -> None:

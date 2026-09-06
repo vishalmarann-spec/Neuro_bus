@@ -7,8 +7,9 @@
 | Project | id, name, vertical, owner, created_at |
 | ResearchQuestion | id, project_id, text, scope, status |
 | AnalysisRun | id, question_id, state, versions, timestamps, metrics |
-| Source | id, canonical_domain, publisher, type, trust_profile |
+| Source | id, canonical_domain, publisher, publisher_family, type, trust_profile |
 | Document | id, source_id, canonical_url, retrieved_at, published_at, content_hash, storage_uri, parser_version |
+| DocumentProvenanceLink | id, document_id, relation, upstream_url, upstream_domain, actor, rationale, created_at |
 | Passage | id, document_id, ordinal, start_offset, end_offset, exact_text, text_hash |
 | Entity | id, type, canonical_name, normalized_name, aliases |
 | EntityMention | id, entity_id, passage_id, surface_text, offsets, confidence |

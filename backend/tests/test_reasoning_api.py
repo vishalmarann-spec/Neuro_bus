@@ -74,12 +74,14 @@ def capture_and_extract(
     url: str,
     publisher: str,
     content: str,
+    publisher_family: str | None = None,
 ) -> str:
     capture = client.post(
         f"/api/v1/runs/{run_id}/sources",
         json={
             "url": url,
             "publisher": publisher,
+            "publisher_family": publisher_family,
             "source_type": "research",
             "raw_content": content,
         },
@@ -137,7 +139,7 @@ def test_multi_source_support_and_contradiction_create_disputed_cluster(
         assert cluster["evidence_count"] == 3
         assert len(cluster["explanation"]["contributions"]) == 3
         metrics = client.get(f"/api/v1/runs/{run_id}").json()["metrics"]["reasoning"]
-        assert metrics["scoring_version"] == "claim-confidence.v1"
+        assert metrics["scoring_version"] == "claim-confidence.v2"
         assert metrics["cluster_count"] == 1
         assert metrics["included_claim_count"] == 3
         assert metrics["evidence_link_count"] == 3
@@ -183,6 +185,88 @@ def test_exact_copy_across_domains_counts_as_one_independent_source(session_fact
         groups = {item["independence_group"] for item in cluster["explanation"]["contributions"]}
         assert len(groups) == 1
         assert next(iter(groups)).startswith("content:sha256:")
+
+
+def test_declared_publisher_family_counts_as_one_independent_source(session_factory) -> None:
+    app = create_app(
+        settings=Settings(app_env="test"),
+        session_factory=session_factory,
+        model_provider=PassageAwareProvider(),
+    )
+    with TestClient(app) as client:
+        run_id = seed_run(client)
+        capture_and_extract(
+            client,
+            run_id,
+            url="https://campus-news.example/report",
+            publisher="Campus News",
+            publisher_family="Education Media Group",
+            content="Demand for AI security education is increasing.",
+        )
+        capture_and_extract(
+            client,
+            run_id,
+            url="https://education-daily.example/analysis",
+            publisher="Education Daily",
+            publisher_family="education media group",
+            content="A survey reports increasing demand for AI security education.",
+        )
+
+        cluster = client.post(f"/api/v1/runs/{run_id}/reason").json()["clusters"][0]
+
+        assert cluster["supporting_independent_sources"] == 1
+        contributions = cluster["explanation"]["contributions"]
+        assert sorted(item["independence_weight"] for item in contributions) == [0.25, 1.0]
+        assert {item["independence_group"] for item in contributions} == {
+            "publisher-family:education media group"
+        }
+
+
+def test_shared_upstream_study_counts_as_one_independent_source(session_factory) -> None:
+    app = create_app(
+        settings=Settings(app_env="test"),
+        session_factory=session_factory,
+        model_provider=PassageAwareProvider(),
+    )
+    with TestClient(app) as client:
+        run_id = seed_run(client)
+        first_document = capture_and_extract(
+            client,
+            run_id,
+            url="https://source-one.example/report",
+            publisher="Source One",
+            content="Demand for AI security education is increasing.",
+        )
+        second_document = capture_and_extract(
+            client,
+            run_id,
+            url="https://source-two.example/analysis",
+            publisher="Source Two",
+            content="A survey reports increasing demand for AI security education.",
+        )
+        upstream = "https://research.example/studies/demand-2026"
+        for document_id in (first_document, second_document):
+            response = client.post(
+                f"/api/v1/documents/{document_id}/provenance-links",
+                json={
+                    "relation": "upstream_study",
+                    "upstream_url": upstream,
+                    "rationale": "The document reports findings from the same named study.",
+                    "actor": "test-reviewer",
+                },
+            )
+            assert response.status_code == 201
+
+        cluster = client.post(f"/api/v1/runs/{run_id}/reason").json()["clusters"][0]
+
+        assert cluster["supporting_independent_sources"] == 1
+        contributions = cluster["explanation"]["contributions"]
+        expected_group = f"upstream:{upstream}"
+        assert {item["independence_group"] for item in contributions} == {expected_group}
+        assert all(expected_group in item["independence_reasons"] for item in contributions)
+        metrics = client.get(f"/api/v1/runs/{run_id}").json()["metrics"]["reasoning"]
+        assert metrics["explicit_dependency_link_count"] == 2
+        assert metrics["independence_group_count"] == 1
 
 
 def test_rejected_claim_removes_stale_derived_cluster(session_factory) -> None:

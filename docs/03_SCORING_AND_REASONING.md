@@ -44,6 +44,8 @@ Evidence items share an independence group when they have the same canonical doc
 
 Within a group, the strongest evidence receives weight `1.0`; additional items receive at most `0.25`. This prevents copied articles from masquerading as corroboration.
 
+`claim-confidence.v2` applies these rules transitively using immutable content hashes plus explicit publisher-family and upstream-link metadata. The explanation preserves every shared signal. It does not infer ownership or upstream studies from prose without a recorded provenance assertion.
+
 ## Claim aggregation v1
 
 For quality values `q` after independence weighting:

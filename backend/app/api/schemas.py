@@ -7,6 +7,7 @@ from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator, mod
 from app.core.models import (
     ClaimReviewStatus,
     ClusterLabel,
+    DocumentProvenanceRelation,
     EntityType,
     EvidenceStance,
     InsightStatus,
@@ -83,6 +84,7 @@ class RunRead(APIModel):
 class DocumentCapture(APIModel):
     url: HttpUrl
     publisher: str = Field(min_length=1, max_length=255)
+    publisher_family: str | None = Field(default=None, min_length=1, max_length=255)
     source_type: SourceType = SourceType.OTHER
     title: str | None = Field(default=None, max_length=500)
     raw_content: str = Field(min_length=1)
@@ -95,11 +97,22 @@ class DocumentCapture(APIModel):
             raise ValueError("value cannot be blank")
         return value
 
+    @field_validator("publisher_family")
+    @classmethod
+    def normalize_optional_publisher_family(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        normalized = " ".join(value.split())
+        if not normalized:
+            raise ValueError("publisher_family cannot be blank")
+        return normalized
+
 
 class SourceRead(APIModel):
     id: UUID
     canonical_domain: str
     publisher: str
+    publisher_family: str | None
     source_type: SourceType
     trust_profile: dict[str, Any]
     created_at: datetime
@@ -132,6 +145,37 @@ class DocumentCaptureRead(APIModel):
     source: SourceRead
     document: DocumentRead
     passages: list[PassageRead]
+    duplicate: bool
+
+
+class DocumentProvenanceLinkCreate(APIModel):
+    relation: DocumentProvenanceRelation
+    upstream_url: HttpUrl
+    rationale: str = Field(min_length=3, max_length=2_000)
+    actor: str = Field(default="local_analyst", min_length=1, max_length=160)
+
+    @field_validator("rationale", "actor")
+    @classmethod
+    def strip_provenance_text(cls, value: str) -> str:
+        normalized = value.strip()
+        if not normalized:
+            raise ValueError("value cannot be blank")
+        return normalized
+
+
+class DocumentProvenanceLinkRead(APIModel):
+    id: UUID
+    document_id: UUID
+    relation: DocumentProvenanceRelation
+    upstream_url: str
+    upstream_domain: str
+    rationale: str
+    actor: str
+    created_at: datetime
+
+
+class DocumentProvenanceLinkCaptureRead(APIModel):
+    link: DocumentProvenanceLinkRead
     duplicate: bool
 
 

@@ -6,7 +6,7 @@ from uuid import UUID
 
 from app.core.models import ClusterLabel, EvidenceStance
 
-SCORING_VERSION = "claim-confidence.v1"
+SCORING_VERSION = "claim-confidence.v2"
 SOURCE_TRUST_WEIGHTS = {
     "identity_accountability": 0.25,
     "primary_source_proximity": 0.25,
@@ -37,6 +37,7 @@ class EvidenceInput:
     independence_group: str
     quality: float
     components: dict[str, Any]
+    independence_reasons: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -166,6 +167,7 @@ def aggregate_cluster(evidence: list[EvidenceInput]) -> ClusterScoreResult:
                     "link_id": str(item.link_id),
                     "stance": stance.value,
                     "independence_group": group,
+                    "independence_reasons": list(item.independence_reasons),
                     "independence_weight": independence_weight,
                     "quality": item.quality,
                     "weighted_quality": weighted_quality,

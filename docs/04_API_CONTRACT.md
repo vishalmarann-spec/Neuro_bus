@@ -26,6 +26,8 @@ Creating a run accepts optional seed URLs and a source policy. It returns immedi
 ## Sources and documents
 
 - `POST /runs/{run_id}/sources` — manually capture source metadata and immutable text; returns the source, document, exact passages, and duplicate status.
+- `POST /documents/{document_id}/provenance-links` — record an idempotent `upstream_study` or `syndicated_from` relationship with a canonical URL, actor, and rationale.
+- `GET /documents/{document_id}/provenance-links` — inspect the exact dependency assertions used by independence scoring.
 - `GET /runs/{run_id}/sources`
 - `GET /documents/{document_id}`
 - `GET /documents/{document_id}/passages`
@@ -89,4 +91,6 @@ Insight generation returns `409 REASONING_REQUIRED` before scoring and `409 INSU
 - Timestamps are UTC ISO 8601.
 - An API response never invents absent source metadata; absent data is `null` with a reason when relevant.
 - Re-submitting the same canonical URL and content hash within a run is idempotent and returns the existing capture.
+- A conflicting publisher-family declaration for an existing source returns `409` instead of silently changing its independence group.
+- Self-referential upstream provenance returns `422`; repeated identical provenance links return the existing record with `duplicate: true`.
 - Benchmark approvals require all checklist attestations and the current case fingerprint. These local file-writing routes are disabled outside development unless explicitly injected.
