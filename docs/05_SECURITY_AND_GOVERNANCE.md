@@ -17,6 +17,31 @@
 - Validate model output against strict schemas.
 - Keep secrets in environment/secret management only.
 
+## Public-source fetch boundary
+
+`SafeSourceFetcher` is the required network boundary for future web connectors. It is not yet
+exposed as an API route or background job. Manual document capture does not make outbound network
+requests.
+
+The default policy:
+
+- permits only HTTP and HTTPS on their standard ports and rejects embedded credentials;
+- rejects localhost and internal-use host suffixes before a request is made;
+- resolves every connection immediately before dialing, rejects the entire DNS answer if any
+  address is non-public, and connects to the validated numeric address to prevent DNS rebinding;
+- disables environment proxy inheritance and Unix-socket connections;
+- follows at most three manually validated redirects, detects loops, and blocks HTTPS-to-HTTP
+  downgrades;
+- accepts only HTML, plain text, XML, JSON, XHTML, and PDF responses;
+- rejects missing or invalid content types, oversized `Content-Length` values, and decoded bodies
+  above 5 MiB; and
+- applies a 15-second wall-clock limit to the complete redirect chain.
+
+Failures expose a stable error code and a sanitized message. Logs include the target host, failure
+code, status, media type, byte count, and redirect count when available, but never URL queries or
+response bodies. Connectors must still enforce robots policy, source terms, licensing, and
+connector-specific rate limits before this fetcher is wired to production workflows.
+
 ## Audit requirements
 
 Record who/what changed claim status, entity resolution, trust profile, thresholds, prompts, and model versions. Analyst corrections append events and never rewrite historical model output.
@@ -28,4 +53,3 @@ The analyst can inspect evidence, override machine classifications with a reason
 ## Later requirements
 
 Before multi-user production: authentication, tenant isolation, authorization tests, deletion/export policy, encrypted backups, retention controls, abuse monitoring, and incident response.
-

@@ -12,7 +12,11 @@ class InvalidSourceURL(ValueError):
 
 
 def sha256_text(value: str) -> str:
-    return f"sha256:{hashlib.sha256(value.encode('utf-8')).hexdigest()}"
+    return sha256_bytes(value.encode("utf-8"))
+
+
+def sha256_bytes(value: bytes) -> str:
+    return f"sha256:{hashlib.sha256(value).hexdigest()}"
 
 
 def canonicalize_url(value: str) -> str:

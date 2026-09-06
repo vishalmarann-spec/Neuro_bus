@@ -100,12 +100,18 @@ Exit: citation correctness >= 0.95 on the evaluation set.
 
 ## Milestone 5: demo hardening
 
-- end-to-end observability
-- retry/idempotency tests
-- source policy and SSRF safeguards
-- accessibility and responsive UI
-- deployment, backups, and demo fixtures
-- evaluation report
+- [ ] end-to-end observability
+- [ ] retry/idempotency tests
+- [x] source policy and SSRF safeguards
+- [ ] accessibility and responsive UI
+- [ ] deployment, backups, and demo fixtures
+- [ ] evaluation report
+
+The outbound source boundary now validates schemes, credentials, ports, hostnames, every resolved
+IP address, each redirect, MIME types, declared and streamed byte counts, and total duration. Its
+network transport dials the validated numeric public address while retaining the original hostname
+for HTTP and TLS, preventing DNS rebinding between validation and connection. Real connector jobs
+remain open and must use this boundary plus robots, licensing, and rate-limit controls.
 
 ## Deferred backlog
 
