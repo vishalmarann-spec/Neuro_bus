@@ -108,6 +108,7 @@ async def test_pinned_network_backend_rejects_mixed_public_private_dns_answer() 
 @pytest.mark.asyncio
 async def test_fetcher_validates_redirects_and_returns_bounded_content() -> None:
     seen_urls: list[str] = []
+    rate_limited_hosts: list[str] = []
 
     def handler(request: httpx.Request) -> httpx.Response:
         seen_urls.append(str(request.url))
@@ -119,8 +120,11 @@ async def test_fetcher_validates_redirects_and_returns_bounded_content() -> None
             content=b"<main>Evidence</main>",
         )
 
+    async def before_request(target) -> None:
+        rate_limited_hosts.append(target.host)
+
     result = await SafeSourceFetcher(transport=httpx.MockTransport(handler)).fetch(
-        "https://evidence.example/start"
+        "https://evidence.example/start", before_request=before_request
     )
 
     assert seen_urls == [
@@ -132,6 +136,7 @@ async def test_fetcher_validates_redirects_and_returns_bounded_content() -> None
     assert result.content == b"<main>Evidence</main>"
     assert result.redirect_count == 1
     assert result.content_hash.startswith("sha256:")
+    assert rate_limited_hosts == ["evidence.example", "evidence.example"]
 
 
 @pytest.mark.asyncio

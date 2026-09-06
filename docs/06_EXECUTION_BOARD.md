@@ -103,6 +103,7 @@ Exit: citation correctness >= 0.95 on the evaluation set.
 - [ ] end-to-end observability
 - [ ] retry/idempotency tests
 - [x] source policy and SSRF safeguards
+- [x] first public-web connector with robots policy, per-host rate limiting, bounded retries, and durable job outcomes
 - [ ] accessibility and responsive UI
 - [ ] deployment, backups, and demo fixtures
 - [ ] evaluation report
@@ -110,8 +111,10 @@ Exit: citation correctness >= 0.95 on the evaluation set.
 The outbound source boundary now validates schemes, credentials, ports, hostnames, every resolved
 IP address, each redirect, MIME types, declared and streamed byte counts, and total duration. Its
 network transport dials the validated numeric public address while retaining the original hostname
-for HTTP and TLS, preventing DNS rebinding between validation and connection. Real connector jobs
-remain open and must use this boundary plus robots, licensing, and rate-limit controls.
+for HTTP and TLS, preventing DNS rebinding between validation and connection. The first connector
+now uses this boundary, checks robots rules, records the raw response fingerprint and parsed
+document separately, and preserves every terminal outcome. Worker execution, distributed rate
+coordination, PDF parsing, and operator verification of source terms/licensing remain open.
 
 ## Deferred backlog
 

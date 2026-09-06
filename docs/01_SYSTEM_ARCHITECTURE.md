@@ -57,6 +57,8 @@ Each stage records start time, finish time, input/output counts, error code, ret
 - Embeddings help retrieve and cluster candidates; they never decide truth.
 - Raw captures and their hashes are immutable. Corrections create new versions/audit records.
 - Model output enters the database only after schema and provenance validation.
+- Public-web connector execution is inline during the MVP, but its durable queued/running/terminal
+  job record is independent of the executor so the same service can move to the worker later.
 
 ## Failure behavior
 
@@ -71,4 +73,3 @@ Each stage records start time, finish time, input/output counts, error code, ret
 - Development: local API, worker, PostgreSQL/pgvector, Redis.
 - Demo: one container host plus managed PostgreSQL and Redis.
 - Later production: separate API/worker scaling, object storage, authentication, backups, monitoring.
-

@@ -24,6 +24,13 @@ class Settings(BaseSettings):
         repr=False,
     )
     redis_url: str = Field(default="redis://localhost:6379/0", repr=False)
+    source_fetch_timeout_seconds: float = Field(default=15.0, gt=0, le=60)
+    source_fetch_max_redirects: int = Field(default=3, ge=0, le=5)
+    source_fetch_max_response_bytes: int = Field(default=5 * 1024 * 1024, ge=1024)
+    source_fetch_max_attempts: int = Field(default=3, ge=1, le=5)
+    source_fetch_retry_base_seconds: float = Field(default=0.5, ge=0, le=10)
+    source_fetch_host_interval_seconds: float = Field(default=1.0, ge=0, le=60)
+    source_fetch_max_crawl_delay_seconds: float = Field(default=10.0, ge=0, le=60)
     model_provider: Literal["disabled", "openai"] = "disabled"
     model_name: str = ""
     model_api_key: str = Field(default="", repr=False)

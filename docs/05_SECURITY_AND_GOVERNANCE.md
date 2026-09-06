@@ -19,9 +19,9 @@
 
 ## Public-source fetch boundary
 
-`SafeSourceFetcher` is the required network boundary for future web connectors. It is not yet
-exposed as an API route or background job. Manual document capture does not make outbound network
-requests.
+`SafeSourceFetcher` is the required network boundary for web connectors. The first public-web
+connector is exposed through a synchronous MVP job API; manual document capture still makes no
+outbound network requests.
 
 The default policy:
 
@@ -39,8 +39,9 @@ The default policy:
 
 Failures expose a stable error code and a sanitized message. Logs include the target host, failure
 code, status, media type, byte count, and redirect count when available, but never URL queries or
-response bodies. Connectors must still enforce robots policy, source terms, licensing, and
-connector-specific rate limits before this fetcher is wired to production workflows.
+response bodies. The public-web connector checks `robots.txt`, honors a bounded crawl delay,
+spaces requests per host including redirect targets, and retries only transient failures. Source
+terms and licensing remain operator checks before a URL is submitted.
 
 ## Audit requirements
 

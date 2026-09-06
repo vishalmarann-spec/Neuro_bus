@@ -14,20 +14,23 @@ from app.domain.provenance import sha256_bytes
 from app.domain.source_policy import (
     SourceFetchPolicy,
     SourcePolicyViolation,
+    ValidatedSourceTarget,
     validate_public_address,
 )
 
 logger = logging.getLogger(__name__)
 
 AddressResolver = Callable[[str, int], Awaitable[Sequence[str]]]
+BeforeRequest = Callable[[ValidatedSourceTarget], Awaitable[None]]
 
 
 class SourceFetchUnavailable(RuntimeError):
     """A source fetch failed without exposing remote response content."""
 
-    def __init__(self, code: str, message: str) -> None:
+    def __init__(self, code: str, message: str, status_code: int | None = None) -> None:
         super().__init__(message)
         self.code = code
+        self.status_code = status_code
 
 
 async def resolve_host_addresses(host: str, port: int) -> tuple[str, ...]:
@@ -187,7 +190,9 @@ class SafeSourceFetcher:
     transport: httpx.AsyncBaseTransport | None = field(default=None, repr=False)
     user_agent: str = "Neuro_Bus/0.1 public-source-fetcher"
 
-    async def fetch(self, url: str) -> SourceFetchResult:
+    async def fetch(
+        self, url: str, *, before_request: BeforeRequest | None = None
+    ) -> SourceFetchResult:
         try:
             requested = self.policy.validate_target(url)
         except SourcePolicyViolation as error:
@@ -207,7 +212,9 @@ class SafeSourceFetcher:
                         "User-Agent": self.user_agent,
                     },
                 ) as client:
-                    return await self._fetch_redirect_chain(client, requested.url)
+                    return await self._fetch_redirect_chain(
+                        client, requested.url, before_request=before_request
+                    )
         except SourcePolicyViolation as error:
             logger.warning(
                 "source_fetch_blocked",
@@ -247,11 +254,16 @@ class SafeSourceFetcher:
             raise unavailable from error
 
     async def _fetch_redirect_chain(
-        self, client: httpx.AsyncClient, requested_url: str
+        self,
+        client: httpx.AsyncClient,
+        requested_url: str,
+        before_request: BeforeRequest | None,
     ) -> SourceFetchResult:
         current = self.policy.validate_target(requested_url)
         visited = {current.url}
         for redirect_count in range(self.policy.max_redirects + 1):
+            if before_request is not None:
+                await before_request(current)
             logger.info(
                 "source_fetch_requested",
                 extra={"host": current.host, "redirect_count": redirect_count},
@@ -284,6 +296,7 @@ class SafeSourceFetcher:
                     raise SourceFetchUnavailable(
                         "http_error",
                         f"Source returned HTTP {response.status_code}.",
+                        status_code=response.status_code,
                     )
                 media_type = self.policy.validate_media_type(response.headers.get("content-type"))
                 self.policy.validate_content_length(response.headers.get("content-length"))

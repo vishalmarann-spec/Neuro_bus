@@ -7,6 +7,7 @@ from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_validator, mod
 from app.core.models import (
     ClaimReviewStatus,
     ClusterLabel,
+    ConnectorJobStatus,
     DocumentProvenanceRelation,
     EntityType,
     EvidenceStance,
@@ -146,6 +147,68 @@ class DocumentCaptureRead(APIModel):
     document: DocumentRead
     passages: list[PassageRead]
     duplicate: bool
+
+
+class WebSourceFetchCreate(APIModel):
+    url: HttpUrl
+    publisher: str = Field(min_length=1, max_length=255)
+    publisher_family: str | None = Field(default=None, min_length=1, max_length=255)
+    source_type: SourceType = SourceType.OTHER
+    title: str | None = Field(default=None, max_length=500)
+    published_at: datetime | None = None
+
+    @field_validator("url")
+    @classmethod
+    def reject_url_credentials(cls, value: HttpUrl) -> HttpUrl:
+        if value.username or value.password:
+            raise ValueError("url must not contain credentials")
+        return value
+
+    @field_validator("publisher")
+    @classmethod
+    def strip_publisher(cls, value: str) -> str:
+        normalized = " ".join(value.split())
+        if not normalized:
+            raise ValueError("publisher cannot be blank")
+        return normalized
+
+    @field_validator("publisher_family")
+    @classmethod
+    def strip_optional_publisher_family(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        normalized = " ".join(value.split())
+        if not normalized:
+            raise ValueError("publisher_family cannot be blank")
+        return normalized
+
+
+class ConnectorJobRead(APIModel):
+    id: UUID
+    run_id: UUID
+    document_id: UUID | None
+    connector: str
+    requested_url: str
+    status: ConnectorJobStatus
+    attempts: int
+    max_attempts: int
+    robots_url: str | None
+    robots_allowed: bool | None
+    final_url: str | None
+    response_media_type: str | None
+    response_hash: str | None
+    response_bytes: int | None
+    redirect_count: int | None
+    error_code: str | None
+    error_message: str | None
+    started_at: datetime | None
+    finished_at: datetime | None
+    created_at: datetime
+
+
+class WebSourceFetchRead(APIModel):
+    job: ConnectorJobRead
+    capture: DocumentCaptureRead | None = None
 
 
 class DocumentProvenanceLinkCreate(APIModel):

@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from sqlalchemy.ext.asyncio import AsyncEngine
 
 from app.api.routes.benchmark_reviews import router as benchmark_reviews_router
+from app.api.routes.connectors import router as connectors_router
 from app.api.routes.extraction import router as extraction_router
 from app.api.routes.health import router as health_router
 from app.api.routes.insights import router as insights_router
@@ -12,13 +13,16 @@ from app.api.routes.reasoning import router as reasoning_router
 from app.api.routes.storage import router as storage_router
 from app.core.config import Settings, get_settings
 from app.core.database import SessionFactory, create_database
+from app.domain.source_policy import SourceFetchPolicy
 from app.providers.factory import create_model_provider
+from app.providers.http_source import SafeSourceFetcher
 from app.providers.models import ExtractionModelProvider
 from app.services.evaluation_review import (
     BenchmarkReviewWorkspace,
     default_benchmark_review_workspace,
 )
 from app.services.readiness import ReadinessProbe, database_probe
+from app.services.web_connector import HostRateLimiter, PublicWebConnector
 
 
 def create_app(
@@ -26,6 +30,7 @@ def create_app(
     readiness_probe: ReadinessProbe | None = None,
     session_factory: SessionFactory | None = None,
     model_provider: ExtractionModelProvider | None = None,
+    web_connector: PublicWebConnector | None = None,
     benchmark_review_workspace: BenchmarkReviewWorkspace | None = None,
 ) -> FastAPI:
     resolved_settings = settings or get_settings()
@@ -41,6 +46,22 @@ def create_app(
         app.state.session_factory = resolved_session_factory
         app.state.readiness_probe = readiness_probe or database_probe(resolved_session_factory)
         app.state.model_provider = model_provider or create_model_provider(resolved_settings)
+        if web_connector is None:
+            source_policy = SourceFetchPolicy(
+                timeout_seconds=resolved_settings.source_fetch_timeout_seconds,
+                max_redirects=resolved_settings.source_fetch_max_redirects,
+                max_response_bytes=resolved_settings.source_fetch_max_response_bytes,
+            )
+            app.state.web_connector = PublicWebConnector(
+                fetcher=SafeSourceFetcher(policy=source_policy),
+                rate_limiter=HostRateLimiter(resolved_settings.source_fetch_host_interval_seconds),
+                source_policy=source_policy,
+                max_attempts=resolved_settings.source_fetch_max_attempts,
+                retry_base_seconds=resolved_settings.source_fetch_retry_base_seconds,
+                max_crawl_delay_seconds=(resolved_settings.source_fetch_max_crawl_delay_seconds),
+            )
+        else:
+            app.state.web_connector = web_connector
         app.state.benchmark_review_workspace = (
             benchmark_review_workspace
             if benchmark_review_workspace is not None
@@ -64,6 +85,7 @@ def create_app(
     )
     application.include_router(health_router, prefix=resolved_settings.api_v1_prefix)
     application.include_router(storage_router, prefix=resolved_settings.api_v1_prefix)
+    application.include_router(connectors_router, prefix=resolved_settings.api_v1_prefix)
     application.include_router(extraction_router, prefix=resolved_settings.api_v1_prefix)
     application.include_router(reasoning_router, prefix=resolved_settings.api_v1_prefix)
     application.include_router(insights_router, prefix=resolved_settings.api_v1_prefix)

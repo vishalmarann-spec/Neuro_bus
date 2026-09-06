@@ -4,6 +4,7 @@ from uuid import UUID, uuid4
 
 from sqlalchemy import (
     JSON,
+    Boolean,
     CheckConstraint,
     DateTime,
     Enum,
@@ -59,6 +60,14 @@ class SourceType(StrEnum):
     INDUSTRY = "industry"
     DISCUSSION = "discussion"
     OTHER = "other"
+
+
+class ConnectorJobStatus(StrEnum):
+    QUEUED = "queued"
+    RUNNING = "running"
+    SUCCEEDED = "succeeded"
+    BLOCKED = "blocked"
+    UNAVAILABLE = "unavailable"
 
 
 class DocumentProvenanceRelation(StrEnum):
@@ -170,6 +179,9 @@ class AnalysisRun(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
     insights: Mapped[list["Insight"]] = relationship(
         back_populates="run", cascade="all, delete-orphan"
     )
+    connector_jobs: Mapped[list["ConnectorJob"]] = relationship(
+        back_populates="run", cascade="all, delete-orphan"
+    )
 
 
 class Source(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
@@ -225,6 +237,57 @@ class Document(UUIDPrimaryKeyMixin, Base):
         cascade="all, delete-orphan",
         order_by="DocumentProvenanceLink.created_at",
     )
+    connector_jobs: Mapped[list["ConnectorJob"]] = relationship(back_populates="document")
+
+
+class ConnectorJob(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
+    __tablename__ = "connector_jobs"
+    __table_args__ = (
+        CheckConstraint("attempts >= 0", name="ck_connector_job_attempts_nonnegative"),
+        CheckConstraint(
+            "max_attempts >= 1 AND max_attempts <= 5",
+            name="ck_connector_job_max_attempts",
+        ),
+        CheckConstraint(
+            "response_bytes IS NULL OR response_bytes >= 0",
+            name="ck_connector_job_response_bytes_nonnegative",
+        ),
+        CheckConstraint(
+            "redirect_count IS NULL OR redirect_count >= 0",
+            name="ck_connector_job_redirect_count_nonnegative",
+        ),
+    )
+
+    run_id: Mapped[UUID] = mapped_column(
+        ForeignKey("analysis_runs.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    document_id: Mapped[UUID | None] = mapped_column(
+        ForeignKey("documents.id", ondelete="SET NULL"), index=True
+    )
+    connector: Mapped[str] = mapped_column(String(64), nullable=False, default="public_web.v1")
+    requested_url: Mapped[str] = mapped_column(Text, nullable=False)
+    status: Mapped[ConnectorJobStatus] = mapped_column(
+        Enum(ConnectorJobStatus, native_enum=False, length=32),
+        nullable=False,
+        default=ConnectorJobStatus.QUEUED,
+        index=True,
+    )
+    attempts: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    max_attempts: Mapped[int] = mapped_column(Integer, nullable=False)
+    robots_url: Mapped[str | None] = mapped_column(Text)
+    robots_allowed: Mapped[bool | None] = mapped_column(Boolean)
+    final_url: Mapped[str | None] = mapped_column(Text)
+    response_media_type: Mapped[str | None] = mapped_column(String(120))
+    response_hash: Mapped[str | None] = mapped_column(String(71), index=True)
+    response_bytes: Mapped[int | None] = mapped_column(Integer)
+    redirect_count: Mapped[int | None] = mapped_column(Integer)
+    error_code: Mapped[str | None] = mapped_column(String(80), index=True)
+    error_message: Mapped[str | None] = mapped_column(Text)
+    started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+    run: Mapped[AnalysisRun] = relationship(back_populates="connector_jobs")
+    document: Mapped[Document | None] = relationship(back_populates="connector_jobs")
 
 
 class DocumentProvenanceLink(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):

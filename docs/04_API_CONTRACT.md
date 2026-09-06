@@ -26,6 +26,9 @@ Creating a run accepts optional seed URLs and a source policy. It returns immedi
 ## Sources and documents
 
 - `POST /runs/{run_id}/sources` — manually capture source metadata and immutable text; returns the source, document, exact passages, and duplicate status.
+- `POST /runs/{run_id}/connector-jobs` — synchronously execute the MVP public-web connector and persist its complete job lifecycle; returns a terminal job plus an optional document capture.
+- `GET /runs/{run_id}/connector-jobs` — list connector attempts and terminal outcomes for a run.
+- `GET /connector-jobs/{job_id}` — inspect robots status, attempt count, raw-response fingerprint, linked document, and sanitized failure details.
 - `POST /documents/{document_id}/provenance-links` — record an idempotent `upstream_study` or `syndicated_from` relationship with a canonical URL, actor, and rationale.
 - `GET /documents/{document_id}/provenance-links` — inspect the exact dependency assertions used by independence scoring.
 - `GET /runs/{run_id}/sources`
@@ -93,4 +96,5 @@ Insight generation returns `409 REASONING_REQUIRED` before scoring and `409 INSU
 - Re-submitting the same canonical URL and content hash within a run is idempotent and returns the existing capture.
 - A conflicting publisher-family declaration for an existing source returns `409` instead of silently changing its independence group.
 - Self-referential upstream provenance returns `422`; repeated identical provenance links return the existing record with `duplicate: true`.
+- Connector failures return a persisted `blocked` or `unavailable` job and never fabricate a document. A successful job links its fetched-response audit record to the parsed evidence document.
 - Benchmark approvals require all checklist attestations and the current case fingerprint. These local file-writing routes are disabled outside development unless explicitly injected.
