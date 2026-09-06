@@ -31,6 +31,9 @@ class Settings(BaseSettings):
     source_fetch_retry_base_seconds: float = Field(default=0.5, ge=0, le=10)
     source_fetch_host_interval_seconds: float = Field(default=1.0, ge=0, le=60)
     source_fetch_max_crawl_delay_seconds: float = Field(default=10.0, ge=0, le=60)
+    pdf_parse_max_pages: int = Field(default=100, ge=1, le=1_000)
+    pdf_parse_max_output_characters: int = Field(default=2_000_000, ge=1_000, le=10_000_000)
+    pdf_parse_timeout_seconds: float = Field(default=10.0, gt=0, le=60)
     connector_worker_poll_seconds: float = Field(default=1.0, gt=0, le=60)
     connector_worker_lease_seconds: int = Field(default=300, ge=30, le=3600)
     model_provider: Literal["disabled", "openai"] = "disabled"

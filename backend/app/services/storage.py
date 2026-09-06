@@ -170,6 +170,7 @@ async def capture_document(
         content_hash=content_hash,
         retrieved_at=datetime.now(UTC),
         published_at=payload.published_at,
+        parser_version=payload.parser_version,
     )
     session.add(document)
     await session.flush()

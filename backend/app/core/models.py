@@ -191,7 +191,7 @@ class Source(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
     )
 
     canonical_domain: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
-    publisher: Mapped[str | None] = mapped_column(String(255))
+    publisher: Mapped[str] = mapped_column(String(255), nullable=False)
     source_type: Mapped[SourceType] = mapped_column(
         Enum(SourceType, native_enum=False, length=32), nullable=False
     )
@@ -260,6 +260,19 @@ class ConnectorJob(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
             "claim_count >= 0",
             name="ck_connector_job_claim_count_nonnegative",
         ),
+        CheckConstraint(
+            "source_page_count IS NULL OR source_page_count >= 0",
+            name="ck_connector_job_source_page_count_nonnegative",
+        ),
+        CheckConstraint(
+            "extracted_page_count IS NULL OR extracted_page_count >= 0",
+            name="ck_connector_job_extracted_page_count_nonnegative",
+        ),
+        CheckConstraint(
+            "source_page_count IS NULL OR extracted_page_count IS NULL "
+            "OR extracted_page_count <= source_page_count",
+            name="ck_connector_job_extracted_pages_within_source",
+        ),
         UniqueConstraint(
             "run_id",
             "connector",
@@ -276,7 +289,7 @@ class ConnectorJob(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
     )
     connector: Mapped[str] = mapped_column(String(64), nullable=False, default="public_web.v1")
     requested_url: Mapped[str] = mapped_column(Text, nullable=False)
-    publisher: Mapped[str] = mapped_column(String(255), nullable=False)
+    publisher: Mapped[str | None] = mapped_column(String(255))
     publisher_family: Mapped[str | None] = mapped_column(String(255))
     source_type: Mapped[SourceType | None] = mapped_column(
         Enum(SourceType, native_enum=False, length=32)
@@ -306,6 +319,9 @@ class ConnectorJob(UUIDPrimaryKeyMixin, CreatedAtMixin, Base):
     response_hash: Mapped[str | None] = mapped_column(String(71), index=True)
     response_bytes: Mapped[int | None] = mapped_column(Integer)
     redirect_count: Mapped[int | None] = mapped_column(Integer)
+    parser_version: Mapped[str | None] = mapped_column(String(64))
+    source_page_count: Mapped[int | None] = mapped_column(Integer)
+    extracted_page_count: Mapped[int | None] = mapped_column(Integer)
     error_code: Mapped[str | None] = mapped_column(String(80), index=True)
     error_message: Mapped[str | None] = mapped_column(Text)
     started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))

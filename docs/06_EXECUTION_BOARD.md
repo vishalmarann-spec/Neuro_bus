@@ -104,6 +104,7 @@ Exit: citation correctness >= 0.95 on the evaluation set.
 - [x] retry/idempotency tests
 - [x] source policy and SSRF safeguards
 - [x] first public-web connector with robots policy, per-host rate limiting, bounded retries, and durable job outcomes
+- [x] bounded text-based PDF extraction with parser provenance and explicit no-OCR outcomes
 - [ ] accessibility and responsive UI
 - [ ] deployment, backups, and demo fixtures
 - [ ] evaluation report
@@ -115,8 +116,10 @@ for HTTP and TLS, preventing DNS rebinding between validation and connection. Th
 now uses this boundary, checks robots rules, records the raw response fingerprint and parsed
 document separately, and preserves every terminal outcome. Connector execution now runs through a
 database-backed worker with atomic claims, expiring leases, abandoned-job recovery, sanitized
-unexpected failures, and hashed request-idempotency keys. Distributed rate coordination, PDF
-parsing, and operator verification of source terms/licensing remain open.
+unexpected failures, and hashed request-idempotency keys. Text-based PDFs now preserve raw-response
+and parsed-text hashes separately, record parser/page metadata, and fail explicitly for encrypted,
+malformed, over-limit, or scanned inputs. Distributed rate coordination, OCR, process-level parser
+isolation, and operator verification of source terms/licensing remain open.
 
 ## Deferred backlog
 

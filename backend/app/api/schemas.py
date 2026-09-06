@@ -90,6 +90,7 @@ class DocumentCapture(APIModel):
     title: str | None = Field(default=None, max_length=500)
     raw_content: str = Field(min_length=1)
     published_at: datetime | None = None
+    parser_version: str = Field(default="text.v1", min_length=1, max_length=64)
 
     @field_validator("publisher", "raw_content")
     @classmethod
@@ -189,9 +190,9 @@ class ConnectorJobRead(APIModel):
     document_id: UUID | None
     connector: str
     requested_url: str
-    publisher: str
+    publisher: str | None
     publisher_family: str | None
-    source_type: SourceType
+    source_type: SourceType | None
     title: str | None
     published_at: datetime | None
     request_hash: str | None
@@ -208,6 +209,9 @@ class ConnectorJobRead(APIModel):
     response_hash: str | None
     response_bytes: int | None
     redirect_count: int | None
+    parser_version: str | None
+    source_page_count: int | None
+    extracted_page_count: int | None
     error_code: str | None
     error_message: str | None
     started_at: datetime | None

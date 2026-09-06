@@ -76,8 +76,11 @@ templates, and noscript content removed. The page title is stored as metadata ra
 text. Plain text and JSON are decoded as UTF-8 with replacement for invalid bytes. Empty results do
 not create documents.
 
-PDF downloads are safely fingerprinted but finish as `parser_unavailable`; PDF text extraction is
-a separate checkpoint. The connector never invents fallback content.
+Text-based PDFs are parsed locally with `pypdf` under page, output-character, and wait limits. The
+job records parser version, source page count, extracted page count, and the exact response hash;
+the linked document independently hashes the parsed evidence text. Encrypted, malformed,
+over-limit, and image-only/scanned PDFs finish explicitly as unavailable. OCR is not enabled and
+the connector never invents fallback content. See [PDF text extraction v1](15_PDF_EXTRACTION.md).
 
 Terms, licensing, paywall status, and permission to retain content require operator verification
 before submission. The connector only automates network and robots controls.

@@ -97,6 +97,7 @@ class ConnectorWorker:
                                 title=job.title or outcome.title,
                                 raw_content=outcome.text,
                                 published_at=job.published_at,
+                                parser_version=outcome.parser_version or "text.v1",
                             ),
                         )
                     except SourceMetadataConflict:

@@ -43,6 +43,12 @@ response bodies. The public-web connector checks `robots.txt`, honors a bounded 
 spaces requests per host including redirect targets, and retries only transient failures. Source
 terms and licensing remain operator checks before a URL is submitted.
 
+Text-based PDF extraction uses local `pypdf` parsing with page-count, output-character, and wait
+limits. Encrypted, malformed, over-limit, and image-only documents are recorded as unavailable;
+OCR is not silently substituted. The exact PDF response hash remains distinct from the parsed-text
+document hash. Process-level parser isolation and memory quotas remain required before hostile,
+high-volume production use.
+
 Connector idempotency keys are stored only as SHA-256 hashes. Worker claims expire so abandoned
 jobs can be recovered, and terminal updates require the current lease owner. Worker logs use job
 identifiers rather than requested URLs and unexpected exception details are not returned by the API.

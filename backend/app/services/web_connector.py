@@ -15,6 +15,7 @@ from app.domain.source_policy import (
     ValidatedSourceTarget,
 )
 from app.providers.http_source import BeforeRequest, SourceFetchResult, SourceFetchUnavailable
+from app.services.pdf_parser import PDFParseFailure, PDFParser
 
 logger = logging.getLogger(__name__)
 
@@ -88,8 +89,22 @@ class WebConnectorOutcome:
     response_hash: str | None = None
     response_bytes: int | None = None
     redirect_count: int | None = None
+    parser_version: str | None = None
+    source_page_count: int | None = None
+    extracted_page_count: int | None = None
     title: str | None = None
     text: str | None = None
+    error_code: str | None = None
+    error_message: str | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class ParsedSourceContent:
+    text: str | None = None
+    title: str | None = None
+    parser_version: str | None = None
+    source_page_count: int | None = None
+    extracted_page_count: int | None = None
     error_code: str | None = None
     error_message: str | None = None
 
@@ -188,6 +203,8 @@ class PublicWebConnector:
     max_attempts: int = 3
     retry_base_seconds: float = 0.5
     max_crawl_delay_seconds: float = 10.0
+    pdf_parser: PDFParser | None = None
+    pdf_parse_timeout_seconds: float = 10.0
     sleep: Sleeper = asyncio.sleep
 
     def __post_init__(self) -> None:
@@ -197,6 +214,8 @@ class PublicWebConnector:
             raise ValueError("Web connector retry delay cannot be negative.")
         if self.max_crawl_delay_seconds < 0:
             raise ValueError("Maximum robots crawl delay cannot be negative.")
+        if self.pdf_parse_timeout_seconds <= 0:
+            raise ValueError("PDF parse timeout must be positive.")
 
     async def collect(self, url: str) -> WebConnectorOutcome:
         try:
@@ -271,8 +290,8 @@ class PublicWebConnector:
                     error_message=str(error),
                 )
 
-            text, title, parsing_error = self._extract_text(response)
-            if parsing_error is not None:
+            parsed = await self._extract_content(response)
+            if parsed.error_code is not None:
                 return WebConnectorOutcome(
                     status=ConnectorJobStatus.UNAVAILABLE,
                     requested_url=target.url,
@@ -284,9 +303,13 @@ class PublicWebConnector:
                     response_hash=response.content_hash,
                     response_bytes=len(response.content),
                     redirect_count=response.redirect_count,
-                    error_code=parsing_error[0],
-                    error_message=parsing_error[1],
+                    parser_version=parsed.parser_version,
+                    source_page_count=parsed.source_page_count,
+                    extracted_page_count=parsed.extracted_page_count,
+                    error_code=parsed.error_code,
+                    error_message=parsed.error_message,
                 )
+            assert parsed.text is not None
             return WebConnectorOutcome(
                 status=ConnectorJobStatus.SUCCEEDED,
                 requested_url=target.url,
@@ -298,8 +321,11 @@ class PublicWebConnector:
                 response_hash=response.content_hash,
                 response_bytes=len(response.content),
                 redirect_count=response.redirect_count,
-                title=title,
-                text=text,
+                parser_version=parsed.parser_version,
+                source_page_count=parsed.source_page_count,
+                extracted_page_count=parsed.extracted_page_count,
+                title=parsed.title,
+                text=parsed.text,
             )
 
         raise AssertionError("attempt loop must return")
@@ -377,20 +403,10 @@ class PublicWebConnector:
     def _decode_text(content: bytes) -> str:
         return content.decode("utf-8", errors="replace")
 
-    @classmethod
-    def _extract_text(
-        cls, response: SourceFetchResult
-    ) -> tuple[str | None, str | None, tuple[str, str] | None]:
+    async def _extract_content(self, response: SourceFetchResult) -> ParsedSourceContent:
         if response.media_type == "application/pdf":
-            return (
-                None,
-                None,
-                (
-                    "parser_unavailable",
-                    "PDF parsing is not enabled for the public web connector.",
-                ),
-            )
-        decoded = cls._decode_text(response.content)
+            return await self._extract_pdf(response.content)
+        decoded = self._decode_text(response.content)
         if response.media_type in MARKUP_MEDIA_TYPES:
             parser = _MarkupTextParser()
             try:
@@ -400,13 +416,80 @@ class PublicWebConnector:
                 logger.warning(
                     "web_connector_parse_failed", extra={"media_type": response.media_type}
                 )
-                return None, None, ("parse_failed", "Source content could not be parsed.")
+                return ParsedSourceContent(
+                    error_code="parse_failed",
+                    error_message="Source content could not be parsed.",
+                )
+            parser_version = "markup.text.v1"
         else:
             text = decoded.strip()
             title = None
+            parser_version = "text.v1"
         if not text:
-            return None, title, ("empty_content", "Source contained no extractable text.")
-        return text, title, None
+            return ParsedSourceContent(
+                title=title,
+                parser_version=parser_version,
+                error_code="empty_content",
+                error_message="Source contained no extractable text.",
+            )
+        return ParsedSourceContent(text=text, title=title, parser_version=parser_version)
+
+    async def _extract_pdf(self, content: bytes) -> ParsedSourceContent:
+        if self.pdf_parser is None:
+            return ParsedSourceContent(
+                error_code="parser_unavailable",
+                error_message="PDF parsing is not enabled for the public web connector.",
+            )
+        try:
+            parsed = await asyncio.wait_for(
+                asyncio.to_thread(self.pdf_parser.parse, content),
+                timeout=self.pdf_parse_timeout_seconds,
+            )
+        except TimeoutError:
+            logger.warning("pdf_parse_timed_out")
+            return ParsedSourceContent(
+                parser_version=self.pdf_parser.parser_version,
+                error_code="pdf_parse_timeout",
+                error_message="PDF text extraction exceeded the configured time limit.",
+            )
+        except PDFParseFailure as error:
+            logger.info(
+                "pdf_parse_unavailable",
+                extra={
+                    "error_code": error.code,
+                    "page_count": error.page_count,
+                    "extracted_page_count": error.extracted_page_count,
+                },
+            )
+            return ParsedSourceContent(
+                parser_version=getattr(self.pdf_parser, "parser_version", None),
+                source_page_count=error.page_count,
+                extracted_page_count=error.extracted_page_count,
+                error_code=error.code,
+                error_message=str(error),
+            )
+        except Exception as error:
+            logger.warning("pdf_parse_failed", extra={"error_type": type(error).__name__})
+            return ParsedSourceContent(
+                parser_version=self.pdf_parser.parser_version,
+                error_code="pdf_parse_failed",
+                error_message="PDF text could not be extracted safely.",
+            )
+        logger.info(
+            "pdf_parse_completed",
+            extra={
+                "page_count": parsed.page_count,
+                "extracted_page_count": parsed.extracted_page_count,
+                "parser_version": parsed.parser_version,
+            },
+        )
+        return ParsedSourceContent(
+            text=parsed.text,
+            title=parsed.title,
+            parser_version=parsed.parser_version,
+            source_page_count=parsed.page_count,
+            extracted_page_count=parsed.extracted_page_count,
+        )
 
     @staticmethod
     def _is_retryable(error: SourceFetchUnavailable) -> bool:

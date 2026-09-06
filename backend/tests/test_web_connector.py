@@ -1,3 +1,4 @@
+import time
 from collections.abc import Sequence
 
 import pytest
@@ -6,6 +7,7 @@ from app.core.models import ConnectorJobStatus
 from app.domain.provenance import sha256_bytes
 from app.domain.source_policy import SourceFetchPolicy
 from app.providers.http_source import BeforeRequest, SourceFetchResult, SourceFetchUnavailable
+from app.services.pdf_parser import PDFParseFailure, PDFParser, PDFParseResult
 from app.services.web_connector import HostRateLimiter, PublicWebConnector, SourceFetcher
 
 
@@ -68,6 +70,8 @@ def connector(
     limiter: HostRateLimiter | None = None,
     max_attempts: int = 3,
     retry_base_seconds: float = 0,
+    pdf_parser: PDFParser | None = None,
+    pdf_parse_timeout_seconds: float = 10.0,
 ) -> PublicWebConnector:
     return PublicWebConnector(
         fetcher=fetcher,
@@ -75,7 +79,51 @@ def connector(
         source_policy=SourceFetchPolicy(),
         max_attempts=max_attempts,
         retry_base_seconds=retry_base_seconds,
+        pdf_parser=pdf_parser,
+        pdf_parse_timeout_seconds=pdf_parse_timeout_seconds,
     )
+
+
+class SuccessfulPDFParser:
+    parser_version = "test.pdf.v1"
+
+    def parse(self, content: bytes) -> PDFParseResult:
+        assert content == b"%PDF-test"
+        return PDFParseResult(
+            text="Page one evidence.\n\nPage two evidence.",
+            title="PDF evidence",
+            page_count=2,
+            extracted_page_count=2,
+            parser_version=self.parser_version,
+        )
+
+
+class EmptyPDFParser:
+    parser_version = "test.pdf.v1"
+
+    def parse(self, content: bytes) -> PDFParseResult:
+        del content
+        raise PDFParseFailure(
+            "pdf_no_extractable_text",
+            "PDF contains no extractable text; OCR is not enabled.",
+            page_count=3,
+            extracted_page_count=0,
+        )
+
+
+class SlowPDFParser:
+    parser_version = "test.pdf.v1"
+
+    def parse(self, content: bytes) -> PDFParseResult:
+        del content
+        time.sleep(0.05)
+        return PDFParseResult(
+            text="late text",
+            title=None,
+            page_count=1,
+            extracted_page_count=1,
+            parser_version=self.parser_version,
+        )
 
 
 @pytest.mark.asyncio
@@ -235,6 +283,69 @@ async def test_pdf_response_records_parser_unavailable_without_fake_text() -> No
     assert outcome.error_code == "parser_unavailable"
     assert outcome.text is None
     assert outcome.response_hash == sha256_bytes(b"%PDF-1.7")
+
+
+@pytest.mark.asyncio
+async def test_pdf_response_uses_configured_parser_and_preserves_audit_metadata() -> None:
+    source_url = "https://evidence.example/report.pdf"
+    body = b"%PDF-test"
+    fetcher = SequenceFetcher(
+        [
+            fetched("https://evidence.example/robots.txt", b"User-agent: *\nAllow: /"),
+            fetched(source_url, body, "application/pdf"),
+        ]
+    )
+
+    outcome = await connector(fetcher, pdf_parser=SuccessfulPDFParser()).collect(source_url)
+
+    assert outcome.status == ConnectorJobStatus.SUCCEEDED
+    assert outcome.text == "Page one evidence.\n\nPage two evidence."
+    assert outcome.title == "PDF evidence"
+    assert outcome.parser_version == "test.pdf.v1"
+    assert outcome.source_page_count == 2
+    assert outcome.extracted_page_count == 2
+    assert outcome.response_hash == sha256_bytes(body)
+
+
+@pytest.mark.asyncio
+async def test_pdf_failure_keeps_page_counts_and_never_returns_text() -> None:
+    source_url = "https://evidence.example/scanned.pdf"
+    fetcher = SequenceFetcher(
+        [
+            fetched("https://evidence.example/robots.txt", b"User-agent: *\nAllow: /"),
+            fetched(source_url, b"%PDF-scanned", "application/pdf"),
+        ]
+    )
+
+    outcome = await connector(fetcher, pdf_parser=EmptyPDFParser()).collect(source_url)
+
+    assert outcome.status == ConnectorJobStatus.UNAVAILABLE
+    assert outcome.error_code == "pdf_no_extractable_text"
+    assert outcome.text is None
+    assert outcome.parser_version == "test.pdf.v1"
+    assert outcome.source_page_count == 3
+    assert outcome.extracted_page_count == 0
+
+
+@pytest.mark.asyncio
+async def test_pdf_parser_timeout_is_explicit_and_does_not_return_late_text() -> None:
+    source_url = "https://evidence.example/slow.pdf"
+    fetcher = SequenceFetcher(
+        [
+            fetched("https://evidence.example/robots.txt", b"User-agent: *\nAllow: /"),
+            fetched(source_url, b"%PDF-slow", "application/pdf"),
+        ]
+    )
+
+    outcome = await connector(
+        fetcher,
+        pdf_parser=SlowPDFParser(),
+        pdf_parse_timeout_seconds=0.001,
+    ).collect(source_url)
+
+    assert outcome.status == ConnectorJobStatus.UNAVAILABLE
+    assert outcome.error_code == "pdf_parse_timeout"
+    assert outcome.text is None
 
 
 @pytest.mark.asyncio

@@ -12,6 +12,7 @@ from app.domain.provenance import sha256_bytes, sha256_text
 from app.domain.source_policy import SourceFetchPolicy
 from app.main import create_app
 from app.providers.http_source import BeforeRequest, SourceFetchResult
+from app.services.pdf_parser import PDFParser, PDFParseResult
 from app.services.web_connector import HostRateLimiter, PublicWebConnector
 from app.workers.connector import ConnectorWorker
 
@@ -51,6 +52,7 @@ def fetched(url: str, content: bytes, media_type: str) -> SourceFetchResult:
 def connector_client(
     session_factory,
     results: Sequence[SourceFetchResult],
+    pdf_parser: PDFParser | None = None,
 ) -> TestClient:
     policy = SourceFetchPolicy()
     connector = PublicWebConnector(
@@ -58,6 +60,7 @@ def connector_client(
         rate_limiter=HostRateLimiter(0),
         source_policy=policy,
         retry_base_seconds=0,
+        pdf_parser=pdf_parser,
     )
     app = create_app(
         settings=Settings(app_env="test"),
@@ -65,6 +68,20 @@ def connector_client(
         web_connector=connector,
     )
     return TestClient(app)
+
+
+class WorkerPDFParser:
+    parser_version = "test.worker.pdf.v1"
+
+    def parse(self, content: bytes) -> PDFParseResult:
+        assert content == b"%PDF-worker-test"
+        return PDFParseResult(
+            text="PDF demand evidence.\n\nSecond source page.",
+            title="University PDF report",
+            page_count=3,
+            extracted_page_count=2,
+            parser_version=self.parser_version,
+        )
 
 
 def create_run(client: TestClient) -> str:
@@ -177,6 +194,50 @@ def test_connector_job_persists_robots_block_without_document(session_factory) -
         assert job["error_code"] == "robots_disallowed"
         assert job["attempts"] == 0
         assert job["document_id"] is None
+
+
+def test_pdf_job_persists_parser_audit_and_traceable_document(session_factory) -> None:
+    source_url = "https://evidence.example/report.pdf"
+    raw_response = b"%PDF-worker-test"
+    with connector_client(
+        session_factory,
+        [
+            fetched(
+                "https://evidence.example/robots.txt",
+                b"User-agent: *\nAllow: /",
+                "text/plain",
+            ),
+            fetched(source_url, raw_response, "application/pdf"),
+        ],
+        pdf_parser=WorkerPDFParser(),
+    ) as client:
+        run_id = create_run(client)
+        queued = client.post(
+            f"/api/v1/runs/{run_id}/connector-jobs",
+            json={
+                "url": source_url,
+                "publisher": "Evidence University",
+                "source_type": "university",
+            },
+        ).json()["job"]
+        worker = ConnectorWorker(
+            session_factory, client.app.state.web_connector, "pdf-worker", lease_seconds=60
+        )
+
+        assert asyncio.run(worker.run_once()) is True
+        job = client.get(f"/api/v1/connector-jobs/{queued['id']}").json()
+        assert job["status"] == "succeeded"
+        assert job["response_hash"] == sha256_bytes(raw_response)
+        assert job["parser_version"] == "test.worker.pdf.v1"
+        assert job["source_page_count"] == 3
+        assert job["extracted_page_count"] == 2
+        document = client.get(f"/api/v1/documents/{job['document_id']}").json()
+        passages = client.get(f"/api/v1/documents/{job['document_id']}/passages").json()
+        assert document["parser_version"] == "test.worker.pdf.v1"
+        assert document["title"] == "University PDF report"
+        assert "\n\n".join(item["exact_text"] for item in passages) == (
+            "PDF demand evidence.\n\nSecond source page."
+        )
 
 
 def test_connector_job_requires_existing_run(session_factory) -> None:

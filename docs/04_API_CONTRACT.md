@@ -28,7 +28,7 @@ Creating a run accepts optional seed URLs and a source policy. It returns immedi
 - `POST /runs/{run_id}/sources` — manually capture source metadata and immutable text; returns the source, document, exact passages, and duplicate status.
 - `POST /runs/{run_id}/connector-jobs` — enqueue a durable public-web connector job and return `202`; an optional `Idempotency-Key` header safely deduplicates client retries.
 - `GET /runs/{run_id}/connector-jobs` — list connector attempts and terminal outcomes for a run.
-- `GET /connector-jobs/{job_id}` — inspect robots status, attempt count, raw-response fingerprint, linked document, and sanitized failure details.
+- `GET /connector-jobs/{job_id}` — inspect robots status, attempt count, raw-response fingerprint, parser version, PDF page counts, linked document, and sanitized failure details.
 - `POST /documents/{document_id}/provenance-links` — record an idempotent `upstream_study` or `syndicated_from` relationship with a canonical URL, actor, and rationale.
 - `GET /documents/{document_id}/provenance-links` — inspect the exact dependency assertions used by independence scoring.
 - `GET /runs/{run_id}/sources`
